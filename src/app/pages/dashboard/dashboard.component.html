@@ -1,0 +1,94 @@
+<div class="main-content">
+  <div class="section-banner">
+    <div class="h-100">
+
+      <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+        <ol class="carousel-indicators">
+          <li data-target="#carouselExampleIndicators" attr.data-slide-to="{{i}}"
+            *ngFor="let item of listImgBanner; index as i; first as isFirst" [ngClass]="{'active': isFirst}"></li>
+        </ol>
+        <div class="carousel-inner">
+          <div class="carousel-item" *ngFor="let item of listImgBanner; let first = first;"
+            [ngClass]="{'active': first}">
+            <div class="item-wrap">
+              <img [routerLink]="['/pandas']" routerLinkActive="router-link-active" class="main-img" [src]="item.image"
+                alt="banner-home">
+            </div>
+          </div>
+        </div>
+        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="sr-only">PREVIOUS</span>
+        </a>
+        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="sr-only">NEXT</span>
+        </a>
+      </div>
+    </div>
+
+  </div>
+  <div class="medium mt-5">
+    <h3>TẠO TÀI KHOẢN</h3><br>
+    <div class="">
+      <div class="create">
+        <div class="user">
+          <button>NGƯỜI CHỈ XEM</button>
+        </div>
+        <div class="bee">
+          <button>BEE - NGƯỜI CUNG CẤP DỊCH VỤ</button>
+        </div>
+      </div>
+
+    </div>
+    <div class="description">
+      <p><b>Beauty Garden</b> - một nền tảng cung cấp dịch vụ đặt lịch gọi điện trực tuyến giúp kết nối những người yêu
+        thích làm đẹp với những beaty vlogger hàng đầu trong các lĩnh vực chăm sóc sắc đẹp. Những beauty vlogger có thể
+        đăng ký trở thành BEE, cung cấp dịch vụ trên nền tảng như gọi video tư vấn trực tiếp cho những người đã đặt lịch
+        với họ.</p>
+    </div>
+  </div>
+  <div class="highlight">
+    <h4>BEE NỔI BẬT</h4>
+    <div class="row row-avatar">
+      <div class="col-md-4 col-sm-4 each-item" *ngFor="let panda of listHightlightBees">
+        <div class="box-avatar">
+          <button class="btn btn-outline-secondary btn-follow follow">
+            <span class="wrap-icon">
+              <i class="fa fa-heart-o" aria-hidden="true"></i>
+              <!-- <svg-icon src="assets/icons/heart.svg" [svgStyle]="{'height.px':21.7, 'width.px':24.11,'fill':checkColor(panda), 'margin-right.px':5}" (click)="followFunction(panda)"></svg-icon> -->
+            </span>
+          </button>
+          <div class="item-avatar" [routerLink]="['/panda',panda.name,panda.id]" routerLinkActive="router-link-active">
+            <img class="main-img" [src]="panda.avatar" alt="logo">
+          </div>
+          <div class="item-bottom" [routerLink]="['/panda',panda.name,panda.id]">
+            <div class="wrap-panda-name">
+              <p class='panda-name'>{{ panda.name }}</p>
+              <i class="icon non-transition"
+                [ngClass]="{'icon-male': panda.gender == 'male', 'icon-female' : panda.gender == 'female' }"></i>
+              <div class="age white pl-3">
+                <i class="fa fa-birthday-cake" aria-hidden="true"></i>
+                <span> {{panda.age}}</span>
+              </div>
+              <div class="d-flex flex-row align-items-center justify-content-end">
+                <span class="status"
+                  [ngClass]="{'online': panda.online_status == '1', 'offline':panda.online_status == '0', 'busy':panda.online_status == '2' }"></span>
+                <span class="status-text white pl-1" *ngIf="panda.online_status == '1'">online</span>
+                <span class="status-text white pl-1" *ngIf="panda.online_status == '0'">offline</span>
+                <span class="status-text white pl-1" *ngIf="panda.online_status == '2'">busy</span>
+              </div>
+            </div>
+            <div class="d-flex rating-team white">
+              <p class="mb-2"><i class="fa fa-star" aria-hidden="true"></i> {{panda.review_score}}</p>
+              <p class="pl-3 mb-2"><i class="fa fa-user icon-user" aria-hidden="true"></i> {{panda.followed_count}}</p>
+            </div>
+            <p class='panda-details'>
+              <span *ngFor="let tag of panda.tag_name; let i = index;" [hidden]="i >= 3"> {{ tag }}</span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

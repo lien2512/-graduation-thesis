@@ -1,0 +1,121 @@
+<!-- <div class="main-content">
+    <div class="container mb-3">
+        
+    </div>
+</div> -->
+<header class="header">
+    <nav class="navbar navbar-expand-lg">
+      <a class="navbar-brand" [routerLink]="['']" routerLinkActive="router-link-active">
+        <div class="logo-container">
+            <img src="assets/images/beauty-logo.png">
+        </div>
+      </a>
+  
+      <div class="wrap-avatar-header avatar-mobile">
+        <div class="dropdown dropdown-user-profile" >
+          <button class="btn dropdown-toggle pl-1" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Anna
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" (click)="redirectToUserSetting()" [ngClass]="{'seperate-line': this.userInfo.role != 'pandas'}">Tài khoản của tôi</a>
+            <a class="dropdown-item pandas-account" *ngIf="userInfo.role == 'pandas'" (click)="redirectToBeeSetting()">Tài khoản dịch vụ của tôi</a>
+            <a class="dropdown-item" (click)="redirectToTestDevice()">Kiểm tra thiết bị</a>
+            <a class="dropdown-item" (click)="signOut()">Đăng xuất</a>
+          </div>
+        </div>
+      </div>
+  
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" (click)="hideModalFilter()">
+        <span class="navbar-toggler-icon">
+          <i class="fa fa-bars"></i>
+        </span>
+      </button>
+  
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <div class="collapse-wrap">
+      <div class="header-right" [ngClass]="{'responeBecome': userInfo?.role != 'bee'}">
+        <ul class="navbar-nav">
+          <li class="nav-item active position-relative meetpandas">
+            <a id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link" [routerLink]="['/pandas']" routerLinkActive="router-link-active">Gặp gỡ chuyên gia <i class="fa fa-caret-down pl-2" aria-hidden="true"></i></a>
+            <ul class="dropdown-list dropdown-menu" aria-labelledby="dropdownMenuLink">
+              <li><a [routerLink]="['/bees']">Toàn bộ Bee</a></li>
+              <li><a [routerLink]="['/bees']" [queryParams]="{p:'skin'}">Chăm sóc da</a></li>
+              <li><a [routerLink]="['/bees']" [queryParams]="{p:'hair'}">Chăm sóc tóc</a></li>
+              <li><a [routerLink]="['/bees']" [queryParams]="{p:'body'}">Chăm sóc body</a></li>
+            </ul>
+          </li>
+        </ul>
+        <div class="relative wrap-search" spkpandasClickOutside (clickOutside)="clickOutside()">
+        <form class="form-inline my-2 my-lg-0 form-search" (keyup.arrowup)="move('UP')"  (keyup.arrowdown)="move('DOWN')" [ngClass]="{'show-search': isSearch === true}">
+             <div class="input-with-icon">
+               <input autocomplete="off" type="text" (keyup.enter)="onEnter()" name="new-password" [(ngModel)]="searchKey" (focus)="shouldShowResults()" (ngModelChange)="onSearchBoxChange()" placeholder="Tìm kiếm..." class="form-control mr-sm-2 input-search">
+               <i class="icon icon-search"></i>
+               <div class="search-result " *ngIf="showResult">
+                 <div>
+                  <ul class="list-group shadow" *ngIf="showSearchLoading">
+                    <li class="list-group-item event-cta">
+                     <span><i class="fa fa-spinner fa-pulse" aria-hidden="true"></i></span>
+                    </li>
+                  </ul>
+                  <ul class="list-group shadow" *ngIf="noResultFound">
+                    <li class="list-group-item event-cta">
+                     <span>Không có kết quả</span>
+                    </li>
+                  </ul>
+                   <p class="search-list-title" *ngIf="listBee && listBee.length > 0">Bee</p>
+                   <ul class="list-group shadow" *ngIf="listBee && listBee.length > 0">
+                     <li class="list-group-item event-cta"
+                         style="cursor: pointer" *ngFor="let result of listBee;let i = index"
+                         (click)="onClickResultDetail(result)"
+                         [class.active]="activeRow ===i"
+                     >
+                       <img src="assets/images/avatar-default.jpg">
+                       <span>hahaha</span>
+                     </li>
+                   </ul>
+                 </div>
+               </div>
+             </div>
+        </form>
+        <button class="btn btn-clear btn-search" (click)="toogleSearch()"><i class="icon icon-search"></i></button>
+        </div>
+        <div class="d-flex flex-row align-items-center">
+          <button *ngIf="!this.userInfo || showBecomePandaBtn" (click)="redirectBecomeBee()" routerLinkActive="router-link-active" class="btn btn-around white mx-2">TRở thành Bee</button>
+          <div class="d-flex flex-row align-items-center" *ngIf="this.userInfo">
+            <button class="btn btn-clear relative">
+              <i class="icon icon-noti"></i>
+              <span class="noti-number" *ngIf="unreadNotification > 0"> {{ unreadNotification }} </span>
+  
+            </button>
+          <button  class="btn btn-clear relative">
+            <i class="icon icon-comment" (click)="openBoxChat()"></i>
+            <span class="noti-number" *ngIf="unreadMessage > 0"> {{ unreadMessage }} </span>
+          </button>
+          </div>
+          <!-- <button class="btn btn-primary" (click)="openLoginModal()" *ngIf="!this.userInfo" >{{ 'Common.sign_in' | translate }}</button> -->
+          <button class="btn btn-primary" (click)="openLoginModal('signin')">Đăng nhập</button>
+        </div>
+        <div class="wrap-avatar-header avatar-desktop">
+  
+          <div class="dropdown dropdown-user-profile" *ngIf="this.userInfo">
+            <button class="btn dropdown-toggle pl-1" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false" *ngIf="this.userInfo?.name">
+              {{ this.userInfo.name }}
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <a class="dropdown-item" (click)="redirectToUserSetting()" [ngClass]="{'seperate-line': this.userInfo.role != 'pandas'}">Tài khoản của tôi</a>
+              <a class="dropdown-item pandas-account" *ngIf="userInfo.role == 'pandas'" (click)="redirectToBeeSetting()">Tài khoản dịch vụ của tôi</a>
+              <a class="dropdown-item" (click)="redirectToTestDevice()">Kiểm tra thiết bị</a>
+              <a class="dropdown-item" (click)="signOut()">Đăng xuất</a>
+            </div>
+          </div>
+          <!-- <div class="avatar" *ngIf="this.userInfo">
+            <img src="{{this.userInfo.avatar}}" alt="avatar" class="{{this.userInfo.avatar}}">
+          </div> -->
+        </div>
+        </div>
+      </div>
+  
+    </div>
+  </nav>
+  </header>

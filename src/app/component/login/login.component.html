@@ -1,0 +1,136 @@
+<div class="flip-card" [ngClass]="back ? 'flip-back' : 'flip-front'">
+    <div class="flip-card-inner " [ngClass]="back?'flip-next':'flip-back'">
+      <div class="flip-card-front">
+        <div class="modal-login">
+          <div class="modal-header">
+            <button type="button" class="close pull-right" aria-label="Close" (click)="closeLoginModal()">
+              <span aria-hidden="true" class="white">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            
+            <form method="post" [formGroup]="formLogin">
+              <div class="form-group">
+                <label for="InputEmail1">Email</label>
+                <input type="email" class="form-control" id="InputEmail1" aria-describedby="emailHelp" [pattern]="emailPattern" formControlName="email">
+                <small class="text-danger error-form" *ngIf=" formLogin.controls.email.touched &&  formLogin.controls.email.errors?.required ">
+                  Vui lòng nhập email
+                </small>
+                <small class="text-danger error-form" *ngIf="formLogin?.controls?.email?.errors?.pattern">
+                  Email không hợp lệ
+                </small>
+              </div>
+              <div class="form-group form-with-icon">
+                <label for="input-password2">Mật khẩu</label>
+                <div class="wrap-input">
+                  <input type="password" class="form-control" id="input-password2" formControlName="password">
+                  <i [ngClass]="!isShowPass? 'fa fa-eye-slash icon-eye':'fa fa-eye icon-eye'" (click)="showPassword()"></i>
+                </div>
+                <small class="text-danger error-form" *ngIf=" formLogin?.controls?.password?.errors?.required && formLogin?.controls?.password?.touched">
+                  Vui lòng nhập mật khẩu
+                </small>
+              </div>
+              <div class='box-dont-account mt-3'>
+                <button style="padding-left: 0px" type='button' class="btn btn-clear" [routerLink]="['/forgot-password']" (click)="closeLoginModal()">Quên mật khẩu</button>
+              </div>
+             
+              <div class="justify-content-center d-flex">
+                <button type="submit" class="btn btn-primary btn-login mt-3"  (click)="login()">Đăng nhập</button>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <div class='box-dont-account'>
+              <button type='button' class="btn btn-clear btn-pink" (click)="back = true">Bạn chưa có tài khoản</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="flip-card-back">
+        <div class="modal-signup">
+          <div class="modal-header">
+            <button type="button" class="close pull-right" aria-label="Close" (click)="closeLoginModal()">
+              <span aria-hidden="true" class="white">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            
+            <form method="post" [formGroup]="formSignUp">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label for="inputNickname">Tài khoản *</label>
+                    <input type="text" class="form-control" id="inputNickname" aria-describedby="emailHelp" formControlName="name">
+                    <small class="text-danger error-form" *ngIf=" formSignUp?.controls?.name?.errors?.required && formSignUp?.controls?.name?.touched">
+                      Vui lòng nhập tài khoản
+                    </small>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label for="inputEmail2">Email *</label>
+                    <input type="email" class="form-control" id="inputEmail2" aria-describedby="emailHelp" formControlName="email" [pattern]="emailPattern">
+                    <small class="text-danger error-form" *ngIf=" formSignUp.controls.email.touched &&  formSignUp.controls.email.errors?.required ">
+                      Vui lòng nhập email
+                    </small>
+                    <small class="text-danger error-form" *ngIf="formSignUp?.controls?.email?.errors?.pattern">
+                      Email không hợp lệ
+                    </small>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group pass">
+                    <label for="input-password3">Mật khẩu *</label>
+                    <input type="password" class="form-control" id="input-password3" formControlName="password" minlength="8">
+                    <span class="tick-green" *ngIf="!formSignUp?.controls?.password?.errors?.required && !formSignUp?.controls?.password?.errors?.minlength && !formSignUp.hasError('invalidPassword')"></span>
+                    <small class="text-danger error-form" style="bottom: -35px; height: 36px;" *ngIf=" formSignUp?.controls?.password?.errors?.required && formSignUp?.controls?.password?.touched">
+                      Vui lòng nhập mật khẩu
+                    </small>
+                    <small class="text-danger error-form" style="bottom: -35px;" *ngIf="( formSignUp?.controls?.password?.errors?.minlength || formSignUp.hasError('invalidPassword') )  && !formSignUp?.controls?.password?.errors?.required && formSignUp?.controls?.password?.touched">
+                      Mật khẩu không hợp lệ
+                    </small>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="input-password4">Nhập lại mật khẩu *</label>
+                    <input type="password" class="form-control" id="input-password4" formControlName="c_password">
+                    <span class="tick-green" *ngIf="!formSignUp.hasError('invalidConfirmPassword') && !formSignUp?.controls?.password?.errors?.required && !formSignUp?.controls?.password?.errors?.minlength"></span>
+                    <small class="text-danger error-form" style="bottom: -35px; height: 36px;" *ngIf=" formSignUp?.controls?.c_password?.errors?.required && formSignUp?.controls?.c_password?.touched">
+                        Vui lòng nhập mật khẩu
+                    </small>
+                    <small class="text-danger error-form" style="bottom: -35px;" *ngIf=" formSignUp.hasError('invalidConfirmPassword') && formSignUp?.controls?.c_password?.touched && !formSignUp?.controls?.c_password?.errors?.required">
+                        Mật khẩu không hợp lệ
+                    </small>
+                  </div>
+  
+                </div>
+              </div>
+              
+  
+  
+              
+  
+              
+              
+              <div class="justify-content-center d-flex">
+                <button type="submit" class="btn btn-primary btn-login" name="signup"  (click)="signUp()">Đăng ký</button>
+              </div>
+            </form>
+  
+          </div>
+          <div class="modal-footer justify-content-start">
+            <div class='box-dont-account'>
+              <button type='button' class="btn btn-link white" (click)="back = false">
+                <i class="fa fa-chevron-left mr-2" aria-hidden="true"></i>
+                Đăng ký
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

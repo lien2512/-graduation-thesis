@@ -1,0 +1,310 @@
+.main-content {
+  background-color: #f7e1e4;
+}
+.section-banner {
+  // background-image: url(../../../assets/images/home-banner-bg.jpg);
+  // background-repeat: no-repeat;
+  // background-size: cover;
+  // background-position: center center;
+  // height: 695px;
+  height: 50vh;
+  .carousel {
+    height: 100%;
+    // padding-top: 85px;
+    .carousel-inner {
+      height: 100%;
+      .carousel-item {
+        height: 100%;
+        .item-wrap {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-direction: column;
+          height: 100%;
+        }
+
+        .main-img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+        .sub-img {
+          margin-top: 10px;
+          margin-bottom: 10px;
+        }
+
+        #myVideo {
+          background-size: cover;
+          background-position: 50% 50%;
+          position: absolute;
+          margin: auto;
+          width: 100%;
+          height: 100%;
+          right: -100%;
+          bottom: -100%;
+          top: -100%;
+          left: -100%;
+          object-fit: cover;
+        }
+      }
+    }
+    .carousel-indicators {
+      li {
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+      }
+    }
+  }
+  .box-text-banner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    width: 100%;
+    .text-banner {
+      font-family: "Posterama", sans-serif;
+      font-size: 40px;
+      text-transform: uppercase;
+      color: white;
+    }
+    .btn-carousel {
+      padding: 0;
+      a {
+        color: pink;
+        text-decoration-line: none;
+        font-size: 24px;
+        color: pink;
+        width: 120px;
+        text-transform: uppercase;
+        line-height: 38px;
+        display: block;
+      }
+    }
+  }
+}
+.medium {
+  h3 {
+  }
+  text-align: center;
+  .create {
+    display: flex;
+    justify-content: space-around;
+    margin: 0 auto;
+    width: 55%;
+    div {
+      width: 40%;
+    }
+    .user,
+    .bee {
+      padding: 10px;
+      text-align: center;
+      background-color: white;
+      top: 0;
+      left: 0;
+      height: 75px;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: 50%;
+      text-align: left;
+      button {
+        height: 55px;
+        width: 95%;
+        background: transparent;
+        font-weight: 500;
+        color: white;
+        border: 2px solid white;
+      }
+    }
+  }
+  .description {
+    p {
+      width: 80%;
+      margin: 20px auto;
+      font-family: cursive;
+    }
+  }
+}
+.highlight {
+  padding-bottom: 60px;
+  h4 {
+    color: #ff9e6e;
+    text-align: center;
+    margin: 30px;
+  }
+  .row-avatar {
+    width: 90%;
+    margin: 0 auto;
+  }
+  .each-item {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    .box-avatar {
+      // width: 80%;
+      position: relative;
+      .btn-follow.follow {
+        position: absolute;
+        border: none;
+        top: 5px;
+        right: 10px;
+        font-size: 24px;
+      }
+    }
+    .item-avatar {
+      border: 5px solid #f2b597;
+      border-radius: 10px;
+      overflow: hidden;
+      height: 260px;
+      &:focus {
+        outline: none;
+      }
+      img {
+        transition: transform 0.5s linear;
+      }
+      .main-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        cursor: pointer;
+      }
+    }
+      .item-bottom {
+        cursor: pointer;
+        position: absolute;
+        bottom: 5px;
+        left: 5px;
+        right: 5px;
+        border-radius: 0 0 7px 7px;
+        background-color: rgba(56, 74, 108, 0.75);
+        padding: 0 30px;
+        opacity: 0;
+      visibility: hidden;
+      transition: opacity 1.5s;
+        flex: 1;
+        .wrap-panda-name {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          margin-top: 10px;
+          margin-bottom: 10px;
+        }
+        .panda-name {
+          font-weight: bold;
+          font-size: 18px;
+          color: #f2b597;
+          margin-right: 10px;
+          margin-bottom: 0;
+          flex: 1;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          white-space: nowrap;
+        }
+        .age {
+          width: 70px;
+        }
+        .panda-details {
+          color: white;
+        }
+      }
+      &:hover{
+        .item-bottom {
+          opacity: 1;
+          visibility: visible;
+        }
+        .item-avatar img{
+          transform: scale(1.1);
+        }
+      }
+  }
+}
+@media (max-width: 667px) {
+  .section-banner {
+    height: 40vh;
+    .carousel .carousel-inner .carousel-item .main-img {
+      object-fit: unset;
+    }
+  }
+}
+@media (min-width: 576px) {
+  .section-banner {
+    height: 50vh;
+    .box-text-banner {
+      .text-banner {
+        font-size: 60px;
+      }
+      .btn-carousel a {
+        width: 160px;
+        line-height: 50px;
+        font-size: 22px;
+      }
+    }
+  }
+}
+@media (max-width: 767px) {
+  .section-banner {
+    .carousel {
+      .carousel-inner {
+        .carousel-item {
+          .item-wrap {
+            margin-top: 35px;
+          }
+          .main-img {
+            height: 215px;
+            object-fit: cover;
+          }
+        }
+      }
+    }
+  }
+}
+@media (min-width: 767px) {
+  .section-banner .carousel .carousel-inner .carousel-item .main-img {
+    height: auto !important;
+    margin-top: 150px;
+  }
+}
+@media (min-width: 992px) {
+  .section-banner {
+    height: 50vh;
+    .box-text-banner {
+      .text-banner {
+        font-size: 90px;
+      }
+      .btn-carousel a {
+        width: 170px;
+        line-height: 56px;
+        font-size: 24px;
+      }
+    }
+  }
+}
+
+@media (min-width: 1200px) {
+  .section-banner {
+    height: 70vh;
+    .carousel {
+      .carousel-inner {
+        .carousel-item {
+          .main-img {
+            width: 100%;
+            // height: 300px;
+            height: 100%;
+            object-fit: cover;
+            cursor: pointer;
+          }
+        }
+      }
+    }
+  }
+}
+@media (max-width: 414px) {
+  .section-banner {
+    .box-text-banner {
+      .text-banner {
+        font-size: 35px;
+      }
+    }
+  }
+}

@@ -1,0 +1,17 @@
+.rating-component {
+  position: relative;
+  height: 19px;
+  width: 160px;
+  .star {
+    display: block;
+  }
+  .star-active {
+    position: absolute;
+    left: 0;
+    width: 20%;
+    background-image: url(../../../assets/images/rating-star.png);
+    background-repeat: no-repeat;
+    height: 100%;
+    top: 0;
+  }
+}

@@ -1,0 +1,202 @@
+<div id="bookStep1" class="bookStep1" [hidden]="(bookStep == 1) ? false:true">
+    <div class="modal-header">
+      <p class="modal-title">{{ 'PANDA_SETTINGS.BOOK_PANDA_STEP_1' | translate }}</p>
+      <p class="timezone op-70 fz-16">{{ 'PANDA_SETTINGS.BASED_ON' | translate }} ({{currentTimezone}})</p>
+
+      <button (click)="closeBookModal()" type="button" aria-label="Close" class="close-modal"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+          <g id="Group_919" data-name="Group 919" transform="translate(-1085 -16)">
+            <path id="Path_40" data-name="Path 40" d="M12,0A12,12,0,1,1,0,12,12,12,0,0,1,12,0Z" transform="translate(1085 16)" fill="#fff" opacity="0.1"></path>
+            <path id="Icon_ionic-ios-close" data-name="Icon ionic-ios-close" d="M16.233,15.288,19.09,12.43a.67.67,0,0,0-.947-.947l-2.857,2.857-2.857-2.857a.67.67,0,1,0-.947.947l2.857,2.857-2.857,2.857a.67.67,0,0,0,.947.947l2.857-2.857,2.857,2.857a.67.67,0,0,0,.947-.947Z" transform="translate(1081.735 12.711)" fill="#fff" opacity="0.8"></path>
+          </g>
+        </svg>
+      </button>
+
+    </div>
+    <div class="modal-body">
+      <div class="row-des-calendar">
+        <div class="each-status-calendar">
+          <span class="calendar-status available"></span>
+          <span class="calendar-status-text">{{ 'PANDA_SETTINGS.AVAILABLE' | translate }}</span>
+        </div>
+        <div class="each-status-calendar">
+          <span class="calendar-status booked"></span>
+          <span class="calendar-status-text">{{ 'PANDA_SETTINGS.BOOKED' | translate }}</span>
+        </div>
+        <div class="each-status-calendar">
+          <span class="calendar-status confirming-by-you"></span>
+          <span class="calendar-status-text">{{ 'ORDERS.WAITINGTOCONFIRM' | translate }}</span>
+        </div>
+        <div class="each-status-calendar">
+          <span class="calendar-status booked-by-you"></span>
+          <span class="calendar-status-text">{{ 'PANDA_SETTINGS.BOOKED_BY_YOU' | translate }}</span>
+        </div>
+        <div class="each-status-calendar" tooltip="{{ 'PANDA_SETTINGS.special_price' | translate }}" containerClass="TooltipBadge">
+          <span class="calendar-status special-time"></span>
+          <span class="calendar-status-text">{{ 'PANDA_SETTINGS.SPECIAL_TIME' | translate }}</span>
+        </div>
+
+      </div>
+      <full-calendar #fullcalendar [options]="calendarOptions"></full-calendar>
+    </div>
+    <div id="bookStep2" class="bookStep2 bookStep3" [hidden]="(bookStep == 2) ? false:true">
+      <div class="modal-header">
+        <p class="modal-title">{{ 'PANDA_SETTINGS.BOOK_PANDA_STEP_2' | translate }}</p>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="closeBookModal()">
+          <span aria-hidden="true" class="white">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="row">
+              <div class="col-md-5">
+                <label class="white bold lh-35">{{'PANDA_SETTINGS.START_DATE' | translate}}</label>
+              </div>
+              <div class="form-group form-default col-md-7">
+                <input type="text" placeholder="DATE" class="form-control disable-click" disabled [(ngModel)]="dateSelected" spkpandasDisableInput>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 ">
+            <div class="row">
+              <div class="col-md-5">
+                <label class="white bold lh-35">End date</label>
+              </div>
+              <div class="form-group form-default col-md-7">
+                <input type="text" placeholder="DATE" class="form-control disable-click" disabled [(ngModel)]="dateSelected" spkpandasDisableInput>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="row">
+              <label class="col-md-5 white bold lh-35">Start time</label>
+              <div class="col-md-7">
+                <select class="
+                custom-select form-control " id="startDate"  [(ngModel)]="startTime" (change)="onStartTimeChange(startTime)" style="cursor: pointer;">
+                  <option *ngFor="let item of bookedSlot; let i = index" [value]="item.start_time" [selected]="item.start_time == startTime">{{formatDateSlot(item.start_time)}}</option>
+                </select>
+              </div>
+
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="row">
+              <div class="col-md-5">
+                <label class="white bold lh-35">End time</label>
+              </div>
+              <div class="col-md-7">
+                <select class="custom-select form-control" id="endDate" [ngModelOptions]="{standalone: true}" [(ngModel)]="endTime" (change)="onEndTimeChange(endTime)" style="cursor: pointer;">
+                <option *ngFor="let item of bookedSlot; let i = index" [value]="item.end_time" [selected]="item.end_time == endTime">{{formatDateSlot(item.end_time)}}</option>
+              </select>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row col-md-6 mt-3">
+          <div class="col-5 pl-0">
+            <span class="white bold">Thời lượng</span>
+          </div>
+          <div class="col-7 pl-4">
+            <span class="field-text" *ngIf="rentHour">{{rentHour}}</span>
+          </div>
+        </div>
+        <div class="row mt-3">
+          <div class="col-md-3">
+            <label class="white bold lh-35">Chọn dịch vụ:</label></div>
+          <div class="order-service col-md-9 row">
+            <!-- <div class="chooseService col-md-6 col-6" *ngFor="let s of serviceArray">
+              <div class="input-group form-radio justify-content-start">
+                <input name="service" id="{{s.service}}" [(ngModel)]="service" (ngModelChange)="chooseService()"
+                  [value]="s.service" type="radio" [disabled]="!s.id">
+                <label class="label" for="{{s.service}}">
+                  <span *ngIf="s.service == 'Game' && s.id" >{{ 'ORDERS.SERVICE_GAME' | translate }}</span>
+                  <span *ngIf="s.service == 'Cosplay'  && s.id" >{{ 'ORDERS.SERVICE_COSPLAY' | translate }}</span>
+                  <span *ngIf="s.service == 'Just chat'  && s.id" >{{ 'ORDERS.SERVICE_JUST_CHAT' | translate }}</span>
+                  <span *ngIf="s.service == 'Entertainment'  && s.id" >{{ 'ORDERS.ENTERTAINMENT' | translate }}</span>
+                  <span *ngIf="s.service == 'Game'  && !s.id" tooltip= "{{'PandaProfile.serviceUnavailable'  | translate }}"  placement="top" container="body" >{{ 'ORDERS.SERVICE_GAME' | translate }}</span>
+                  <span *ngIf="s.service == 'Cosplay'  && !s.id" tooltip= "{{'PandaProfile.serviceUnavailable' | translate }}"  placement="top" container="body" >{{ 'ORDERS.SERVICE_COSPLAY' | translate }}</span>
+                  <span *ngIf="s.service == 'Just chat'  && !s.id" tooltip= "{{'PandaProfile.serviceUnavailable'  | translate }}"  placement="top" container="body" >{{ 'ORDERS.SERVICE_JUST_CHAT' | translate }}</span>
+                  <span *ngIf="s.service == 'Entertainment'  && !s.id" tooltip= "{{'PandaProfile.serviceUnavailable'  | translate }}"  placement="top" container="body" >{{ 'ORDERS.ENTERTAINMENT' | translate }}</span>
+                </label>
+              </div>
+            </div> -->
+          </div>
+        </div>
+        <div class="row-action">
+          <button class="btn btn-outline-danger" [disabled]="!isPassTime" [ngClass]="{'active': request?.service_type === 'video'}" (click)="chooseServiceType('video',serviceDataClone?.video_price)"
+            *ngIf="serviceData?.video_price != null">
+            Video 
+          </button>
+          <button class="btn btn-outline-danger" [disabled]="!isPassTime" [ngClass]="{'active': request?.service_type === 'voice'}" (click)="chooseServiceType('voice',serviceDataClone?.voice_price)"
+                  *ngIf="service !== 'Cosplay' && serviceData?.voice_price != null">
+            Audio
+          </button>
+        </div>
+        <div class="mb-3">
+        <div class="addPromoCode row align-items-center ">
+          <label class="white bold lh-35 pl-3">{{'PANDA_SETTINGS.ADD_PROMO' | translate}}</label>
+          <div class="d-flex form-group form-default col-sm-8 pl-5 mb-0">
+            <input type="text" class="form-control" [(ngModel)]="promoCode" (input)="onPromoChange($event.target.value)">
+            <button class="btn btn-primary ml-3" [disabled]="promoCode === '' || request.service_type === ''" (click)="applyPromoCode()" style="cursor: pointer;">{{'PANDA_SETTINGS.APPLY_PROMO' | translate}}</button>
+          </div>
+
+        </div>
+        <div class="text-danger error-form promonotexist pt-1" *ngIf="responseCode === '404'">
+          {{'PROMO.PROMO_NOT_EXIST' | translate}}
+        </div>
+      </div>
+        <div class="booking-info">
+          <div class="row">
+            <div class="col-5">
+              <span class="white bold field-label">{{ 'PANDA_SETTINGS.PRICE' | translate }}: </span>
+            </div>
+            <div class="col-7">
+              <span class="field-text">{{rentPrice | number : '1.2-2'}}
+                {{ rentPrice == 1 ? ('PAYMENT.bamboo' | translate) : ('PAYMENT.CURRENCY_BAMBOO' | translate) }}</span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-5">
+              <span class="white bold field-label">{{ 'PANDA_SETTINGS.MY_BALANCE' | translate }}: </span>
+            </div>
+            <div class="col-7">
+              <span class="field-text">{{userBalance | number : '1.2-2'}}
+                {{ userBalance == 1 ? ('PAYMENT.bamboo' | translate) : ('PAYMENT.CURRENCY_BAMBOO' | translate) }}</span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-5">
+              <span class="white bold field-label">{{ 'PANDA_SETTINGS.NEW_BALANCE' | translate }}: </span>
+            </div>
+            <div class="col-7">
+              <span class="field-text" [ngClass]="{'text-danger': userBalance - rentPrice < 0}">{{ userBalance - rentPrice | number : '1.2-2'}} {{ userBalance - rentPrice
+                        == 1 || userBalance - rentPrice
+                        == 0 ? ('PAYMENT.bamboo' | translate) : ('PAYMENT.CURRENCY_BAMBOO' | translate) }}</span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-5">
+              <span class="white bold field-label">{{ 'PANDA_SETTINGS.SPECIAL_REQUEST' | translate }}: </span>
+            </div>
+            <div class="col-md-7">
+              <div class="form-group">
+                <textarea class="form-control request" rows="4" style="background-color: transparent; color: #999;"
+                  maxlength="200" placeholder="{{ 'Common.NOTE_SUGGEST' | translate }}" [(ngModel)]="request.note"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="footer-content">
+          <button class="btn btn-light" (click)="updateBookStep(1);goPrev()">{{ 'BECOME_PANDA.BACK' | translate }}</button>
+          <div class="modal-footer-right">
+            <button class="btn btn-light" (click)="openPaymentPage()">{{ 'PANDA_SETTINGS.TOPUP' | translate }}</button>
+            <button class="btn btn-primary" [disabled]="(userBalance < rentPrice) || !isPassTime" spkpandasLoadingButton [loading]="loading" (click)="createOrder()">{{ 'PANDA_SETTINGS.BOOK' | translate }}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

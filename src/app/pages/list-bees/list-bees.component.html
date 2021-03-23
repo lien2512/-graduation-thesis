@@ -1,0 +1,17 @@
+<div class="row">
+    <div class="col-sm-3">
+        <app-left-nav></app-left-nav>
+    </div>
+    <div class="col-sm-9">
+        <div>
+            <h4 >Bees Online</h4>
+            <div class="row">
+                <div class="col-sm-6 col-lg-4 col-xl-3" *ngFor="let item of listBeesOnline">
+                    <app-bee-box [info] = "item"></app-bee-box>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
+

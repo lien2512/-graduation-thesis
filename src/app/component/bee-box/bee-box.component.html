@@ -1,0 +1,36 @@
+<div class="box-bee" (click)="navigateDetail()">
+    <div class="avatar">
+        <img src="{{info.avatar}}">
+    </div>
+    <div class="follow"><button type="button" class="btn btn-outline-danger" (click)="follow()">Follow</button>
+    </div>
+    <div class="info">
+        <div class="row">
+            <span class="name">{{info.name}}</span>
+            <div class="state d-flex flex-row align-items-center">
+                <span class="status mr-1"
+                    [ngClass]="{'online': info.online == '1', 'offline': info.online == '0', 'busy': info.online == '2'}">
+                </span>
+                <span>online</span>
+            </div>
+
+            <span class="audio">
+                <i class="fa fa-video-camera" aria-hidden="true" *ngIf="info.audio == 'true'"></i>
+            </span>
+            <span class="video">
+                <i class="fa fa-volume-up" aria-hidden="true" *ngIf="info.video == 'true'"></i>
+            </span>
+            <span class="followers">
+                {{info.followers}}<i class="ml-1 fa fa-user" aria-hidden="true"></i>
+            </span>
+            <span class="iconOnOff">
+            </span>
+            <span class="tag">
+                {{info.tag}}
+            </span>
+        </div>
+        <div>
+
+        </div>
+    </div>
+</div>

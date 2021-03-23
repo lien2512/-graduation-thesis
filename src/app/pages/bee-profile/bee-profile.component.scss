@@ -1,0 +1,113 @@
+
+
+.nameBee {
+    color: darkred;
+    font-weight: bold;
+    font-size: 40px;
+  }
+  .info-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    .box-action {
+      button {
+        margin: 5px;
+      }
+    }
+  }
+  .avatar-bee {
+    width: 250px;
+    object-fit: cover;
+    border-radius: 5px;
+  }
+  .box-total {
+    border-radius: 5px;
+    background-color: #efd9d9;
+    height: 85px;
+    .box-item {
+      padding: 5px;
+      border-right: 2px solid wheat;
+      margin: 10px;
+      padding-right: 20px;
+      line-height: initial;
+      text-align: center;
+      font-weight: 500;
+      .title {
+          color: lightcoral;
+        text-transform: uppercase;
+        font-size: 18px;
+      }
+    }
+  }
+  .title-box {
+      font-size: 18px;
+      font-weight: 500;
+      color: darkred;
+  }
+  .box-img {
+      .title-box {
+  
+      }
+      .image {
+          img {
+              height: 130px;
+              width: 130px;
+              border-radius: 5px;
+              object-fit: cover;
+              margin: 5px;
+  
+          }
+      }
+  }
+  .modal-body.report {
+    textarea {
+        border-radius: 3px;
+        width: 99%;
+        min-height: 100px;
+    }
+  }
+  .row-img {
+    display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      .img-container {
+        width: 135px;
+      height: 135px;
+      cursor: pointer;
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+      margin-right: 15px;
+      margin-bottom: 15px;
+      img {
+        height: 100%;
+      width: 100%;
+      -o-object-fit: cover;
+      object-fit: cover;
+      }
+      .backdrop {
+        background: rgba(0, 0, 0, 0.5);
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        flex-direction: column;
+      }
+      }
+      .delete-img {
+        position: absolute;
+        right: 5px;
+        color: #eb088c;
+        cursor: pointer;
+      }
+  }
+
+  
+  
+  

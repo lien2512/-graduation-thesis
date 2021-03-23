@@ -1,0 +1,52 @@
+.box-bee {
+  position: relative;
+  width: 200px;
+  background-color: #e65656;
+  border-radius: 10px;
+  .follow {
+    width: auto;
+    position: absolute;
+    top: 10px;
+    right: 5px;
+    z-index: 999990;
+    button {
+        padding: 3px 5px;
+    }
+  }
+  .avatar {
+    img {
+      height: 200px;
+      object-fit: cover;
+      width: 200px;
+      border-top-right-radius: 10px;
+      border-top-left-radius: 10px;
+    }
+  }
+  .info {
+    padding: 10px;
+    span {
+      color: white;
+      width: auto;
+    }
+    .tag {
+        width: auto;
+    }
+    .state {
+      width: auto;
+    }
+    .status {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      &.online {
+        background-color: rgb(0, 161, 0);
+      }
+      &.offline {
+        background-color: gray;
+      }
+      &.busy {
+        background-color: darkred;
+      }
+    }
+  }
+}
