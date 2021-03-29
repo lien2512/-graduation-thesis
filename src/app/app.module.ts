@@ -24,6 +24,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { ImageCropperModule } from 'ngx-image-cropper';
 import { TagInputModule } from 'ngx-chips';
+import { AngularAgoraRtcModule, AgoraConfig } from 'angular-agora-rtc';
 const firebaseConfig = {
   apiKey: 'AIzaSyAY0q9PonWzSoujGQh6GGsqQ6LufCglB30',
   authDomain: 'beauty-garden-5d096.firebaseapp.com',
@@ -34,6 +35,9 @@ const firebaseConfig = {
   measurementId: 'G-TR5ED9LLW9',
 };
 firebase.initializeApp(firebaseConfig);
+const agoraConfig: AgoraConfig = {
+  AppID: '68839fbf8dcc423f87c2f89fa52e975b',
+};
 
 @NgModule({
   declarations: [
@@ -61,7 +65,8 @@ firebase.initializeApp(firebaseConfig);
     NgxPaginationModule,
     BsDatepickerModule.forRoot(),
     ImageCropperModule,
-    TagInputModule
+    TagInputModule,
+    AngularAgoraRtcModule.forRoot(agoraConfig)
   ],
   providers: [],
   bootstrap: [AppComponent],

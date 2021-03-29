@@ -8,10 +8,11 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { ImageCropperModule } from 'ngx-image-cropper';
 import { BecomeBeeComponent } from './become-bee/become-bee.component';
 import { TagInputModule } from 'ngx-chips';
+import { AgoraCallComponent } from './agora-call/agora-call.component';
 
 
 @NgModule({
-  declarations: [AccSettingComponent, BecomeBeeComponent],
+  declarations: [AccSettingComponent, BecomeBeeComponent, AgoraCallComponent],
   imports: [
     CommonModule,
     RouterModule,

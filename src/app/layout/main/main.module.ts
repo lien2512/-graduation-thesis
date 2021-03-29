@@ -10,6 +10,7 @@ import { LoginComponent } from 'src/app/component/login/login.component';
 import { AccSettingComponent } from 'src/app/pages/acc-setting/acc-setting.component';
 import { PagesModule } from 'src/app/pages/pages.module';
 import { BecomeBeeComponent } from 'src/app/pages/become-bee/become-bee.component';
+import { AgoraCallComponent } from 'src/app/pages/agora-call/agora-call.component';
 
 
 
@@ -26,7 +27,8 @@ import { BecomeBeeComponent } from 'src/app/pages/become-bee/become-bee.componen
         {path: 'bee', component: BeeProfileComponent},
         {path: 'bees', component: ListBeesComponent},
         {path: 'account-setting', component: AccSettingComponent},
-        {path: 'become-bee', component: BecomeBeeComponent}
+        {path: 'become-bee', component: BecomeBeeComponent},
+        {path: 'call', component: AgoraCallComponent}
       ]
     }])
   ]
