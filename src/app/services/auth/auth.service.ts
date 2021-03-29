@@ -33,4 +33,25 @@ export class AuthService {
         }
       })
   }
+  logOut(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      firebase.auth().signOut().then(res => {
+        resolve(res);
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  }
+  getCurrentUser() {
+    return new Promise<any>((resolve, reject) => {
+      firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+          resolve(user);
+        } else {
+          reject('No user logged in');
+        }
+      });
+    });
+    // firebase.auth().onAuthStateChanged().;
+  }
 }

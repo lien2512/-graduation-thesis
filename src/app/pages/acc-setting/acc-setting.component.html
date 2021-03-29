@@ -1,386 +1,404 @@
 <div class="main-content main-bg profile profile-settings">
     <div class="container">
       <p class="title">Trang cá nhân của bạn</p>
-      <tabset class="tab-default">
-        <tab heading="Thông tin cá nhân" id="tab1" (selectTab)="initTabAccount()" [active]="mainTab == 'account'">
-          <section>
-
-            <div class="row-account-info">
-              <div class="col-12 col-lg-8 d-flex flex-row flex-wrap">
-                <div class="avatar-wrap mb-5">
-                  <span *ngIf="previewAvatar.length == 0">
-                    <img src="assets/images/default-image.png" alt="">
-                    <label for="add-avatar" (click)="popupChooseAvatarDefault()" class="backdrop" style="margin-bottom: 0px">
-                      <i class="fa fa-camera icon-upload" aria-hidden="true"></i>
-                    </label>
-                  </span>
-                  <span *ngIf="previewAvatar.length > 0">
-                    <img *ngFor="let image of previewAvatar" [src]="image.url" alt="">
-                    <label for="add-avatar" (click)="popupChooseAvatarDefault()">
-                      <i class="fa fa-camera icon-upload" aria-hidden="true"></i>
-                    </label>
-                  </span>
-                  <p class="avatar-note">Ảnh đại diện</p>
-                </div>
-                <div class="main-infor">
-                  
-                  
-                  
-                  <!-- <div class="">
-                  <span>
-                    <span class="label">{{'SETTING_USER.LAST_ACTIVITY_AT' | translate}}</span>
-                    <span class="field">{{userProfile.last_activity_at}}</span>
-                  </span>
+      <div class="pd-horizontal-tabs">
+      <div class="tab">
+        <button class="tablinks flex-1" [ngClass]="{'active': mainTab == 'account'}" (click)="selectTab('account')">Thông tin cá nhân</button>
+        <button class="tablinks flex-1" [ngClass]="{'active': mainTab == 'myOrder'}" (click)="selectTab('favourite')">Lịch cá nhân</button>
+        <button class="tablinks flex-1" [ngClass]="{'active': mainTab == 'favourite'}" (click)="selectTab('favourite')">Danh sách yêu thích</button>
+        <button class="tablinks flex-1" [ngClass]="{'active': mainTab == 'block'}" (click)="selectTab('block')">Danh sách hạn chế</button>
+        <button class="tablinks flex-1" [ngClass]="{'active': mainTab == 'changePass'}" (click)="selectTab('changePass')">Đổi mật khẩu</button>
+        <!-- <button class="tablinks flex-1">Danh sách hạn chế</button> -->
+      </div>
+      <div class="tabcontent">
+        <div class="" *ngIf="mainTab == 'account'">
+            <section>
+  
+              <div class="row-account-info">
+                <div class="col-12 col-lg-8 d-flex flex-row flex-wrap">
+                  <!-- <div class="avatar-wrap mb-5">
+                    <span *ngIf="previewAvatar.length == 0">
+                      <img src="assets/images/default-image.png" alt="">
+                      <label for="add-avatar" (click)="popupChooseAvatarDefault()" class="backdrop" style="margin-bottom: 0px">
+                        <i class="fa fa-camera icon-upload" aria-hidden="true"></i>
+                      </label>
+                    </span>
+                    <span *ngIf="previewAvatar.length > 0">
+                      <img *ngFor="let image of previewAvatar" [src]="image.url" alt="">
+                      <label for="add-avatar" (click)="popupChooseAvatarDefault()">
+                        <i class="fa fa-camera icon-upload" aria-hidden="true"></i>
+                      </label>
+                    </span>
+                    <p class="avatar-note">Ảnh đại diện</p>
                   </div> -->
-                </div>
-              </div>
-              <div class="main-infor col-lg-4">
-                <p class="main-infor-title">Chỉnh sửa thông tin cá nhân</p>
-                <div class="flex-row-between flex-wrap">
-                  <p>
-                    <span class="label">Email</span>
-                    <span class="field">{{email}}</span>
-                  </p>
-                  <div class="pb-2">
-                  <i [ngClass]="!isShowEmail? 'fa fa-eye-slash icon-eye':'fa fa-eye icon-eye'" (click)="showEmail(userProfile.email)"></i>
-                </div>
-                </div>
-                <div>
-              </div>
-                
-                
-              </div>
-            </div>
-        
-            <div>
-              <div class="box">
-                <p class="box-subtitle isRequire">Tài khoản</p>
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="form-group form-default">
-                      <input type="text" [(ngModel)]="userProfile.username" class="form-control" maxlength="20">
+                  <div class="form-custom__row flex-align-center mb-40">
+                    <div class="img-profile">
+                      <img class="pre-upload" src="{{imageUrl ? imageUrl : '../../../assets/img/blank-profile.png'}}">
                     </div>
+                    <label class="upload-btn sub-heading">
+                      Upload Image
+                      <input type="file" #image (change)="handleFileInput($event)" accept="image/*" />
+                    </label>
+                    <button class="btn-transparent black-text sub-heading" (click)="removeImage()">
+                      REMOVE CURRENT
+                    </button>
+                  </div>
+                  <div class="main-infor">
+                    
+                    
+                    
+                    <!-- <div class="">
+                    <span>
+                      <span class="label">{{'SETTING_USER.LAST_ACTIVITY_AT' | translate}}</span>
+                      <span class="field">{{userProfile.last_activity_at}}</span>
+                    </span>
+                    </div> -->
                   </div>
                 </div>
+                <div class="main-infor col-lg-4">
+                  <p class="main-infor-title">Chỉnh sửa thông tin cá nhân</p>
+                  <div class="flex-row-between flex-wrap">
+                    <p>
+                      <span class="label">Email</span>
+                      <span class="field">{{userProfile.email}}</span>
+                    </p>
+                    <div class="pb-2">
+                    <i [ngClass]="!isShowEmail? 'fa fa-eye-slash icon-eye':'fa fa-eye icon-eye'" (click)="showEmail(userProfile.email)"></i>
+                  </div>
+                  </div>
+                  <div>
+                </div>
+                  
+                  
+                </div>
               </div>
-              <div class="box">
-                <p class="box-subtitle">Giới tính</p>
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="select-default">
-                      <div class="input-group mb-3">
-                        <select class="custom-select" [(ngModel)]="userProfile.gender">
-                          <option value="male">Nam</option>
-                          <option value="female">Nữ</option>
-                          <option value="other">Khác}</option>
-                        </select>
+          
+              <div>
+                <div class="box">
+                  <p class="box-subtitle isRequire">Tài khoản</p>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group form-default">
+                        <input type="text" [(ngModel)]="userProfile.displayName" class="form-control" maxlength="20">
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div class="box">
-                <p class="box-subtitle">Ngày sinh</p>
-                <div class="row">
-                  <div class="form-group form-default col-md-6">
-                    <input type="text" [(ngModel)]="userProfile.birthday" placeholder="Ngày sinh" class="form-control" 
-                      bsDatepicker [maxDate]="today" [bsConfig]="{ dateInputFormat: 'DD-MM-YYYY', showWeekNumbers: false }" >
-                  </div>
-                </div>
-              </div>
-              <div class="box">
-                <p class="box-subtitle">Tỉnh/Thành phố</p>
-                <div class="row">
-                  <div class="col-md-6 form-group form-default">
-                    <input type="text" [(ngModel)]="userProfile.city" class="form-control">
-                  </div>
-                </div>
-              </div>
-              <div class="box box-intro">
-                <p class="box-subtitle">Giới thiệu</p>
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <textarea [placeholder]="Giới thiệu bản thân ..." [(ngModel)]="userProfile.bio" class="form-control" id="exampleFormControlTextarea1"
-                        rows="8"></textarea>
-                    </div>
-                  </div>
-                </div>
-  
-              </div>
-              <!-- <div class="box box-game">
-                <p class="box-subtitle">Lĩnh vực quan tâm</p>
-                <div class="row mb-3">
-                  <div class="col-md-6" *ngFor="let game of userProfile.games;let i = index">
-                    <fieldset>
-                      <legend *ngIf="i % 10 == 0 && i != 10">{{i+1}}{{'BECOME_PANDA.ST_GAME' | translate}}</legend>
-                      <legend *ngIf="i % 10 == 1 && i != 11">{{i+1}}{{'BECOME_PANDA.ND_GAME' | translate}}</legend>
-                      <legend *ngIf="i % 10 == 2 && i != 12">{{i+1}}{{'BECOME_PANDA.RD_GAME' | translate}}</legend>
-                      <legend *ngIf="i % 10 >= 3 || (i < 13 && i > 9)">{{i+1}}{{'BECOME_PANDA.TH_GAME' | translate}}</legend>
-                      <div (click)="removeEachGames(i)" *ngIf="userProfile.games.length !== 1" class="remove-game">
-                        <i class="fa fa-times fa-2x" aria-hidden="true"></i>
-                      </div>
-                      <div class="form-group">
-                        <label for="game_{{i+1}}">{{'BECOME_PANDA.GAME_PLAY' | translate}}</label>
-                        <select class="custom-select form-control" id="game_{{i+1}}" [(ngModel)]="game.id" (change)="gamePlayChange(game.id, i)" *ngIf="langProfile == 'en'">
-                          <option value="" disabled>{{'BECOME_PANDA.SELECT_GAME' | translate}}</option>
-                          <option *ngFor="let g of divGames.games" [value]="g.id">{{g.name}}</option>
-                        </select>
-                        <select class="custom-select form-control" id="game_{{i+1}}" [(ngModel)]="game.id" (change)="gamePlayChange(game.id, i)"  *ngIf="langProfile == 'zh'">
-                          <option value="" disabled>{{'BECOME_PANDA.SELECT_GAME' | translate}}</option>
-                          <option *ngFor="let g of divGames.games" [value]="g.id">{{g.cn_name}}</option>
-                        </select>
-                      </div>
-                      <div class="for-group" *ngIf="game.isOther">
-                        <div class="box">
-                          <label class="isRequire">{{'BECOME_PANDA.MY_GAME' | translate}}</label>
-                          <div class="row">
-                            <div class="col-md-6 form-group form-default">
-                              <input type="text" [(ngModel)]="game.other" class="form-control">
-                            </div>
-                          </div>
-                        </div>
-                        <div class="box-img">
-                          <label class="isRequire">{{'BECOME_PANDA.MY_GAME_IMAGE' | translate}}</label>
-                          <div class="row-img">
-                            <div class="img-container" id="upload-non-member" *ngIf="game.previewOtherGameImage?.url">
-                              <span class="delete-img" (click)="removeGameImage(i)">
-                                <i class="fa fa-times-circle" aria-hidden="true"></i>
-                              </span>
-                              <img [src]="game.previewOtherGameImage?.type === 'image' ? environment.apiUrl + '/' + game.previewOtherGameImage?.url :  game.previewOtherGameImage?.url" alt="">
-                            </div>
-                            <label id="upload-non-member" class="img-container" *ngIf="!game.previewOtherGameImage?.url">
-                              <div class="backdrop">
-                                <i class="fa fa-plus fa-2x" aria-hidden="true"></i>
-                              </div>
-                              <img src="assets/images/default-image.png" alt="">
-                              <input id="upload-non-member" class="d-none" type="file" (change)="chooseImage($event, i)"
-                                accept="image/*" />
-                            </label>
-                          </div>
+                <div class="box">
+                  <p class="box-subtitle">Giới tính</p>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="select-default">
+                        <div class="input-group mb-3">
+                          <select class="custom-select" [(ngModel)]="userProfile.gender">
+                            <option value="male">Nam</option>
+                            <option value="female">Nữ</option>
+                            <option value="other">Khác</option>
+                          </select>
                         </div>
                       </div>
-                      <div class="form-group">
-                        <label for="rank_{{i+1}}">{{'BECOME_PANDA.GAME_CAPACITY' | translate}}</label>
-                        <select class="custom-select form-control" id="rank_{{i+1}}" [(ngModel)]="game.capacity">
-                          <option *ngFor="let c of divGames.capacity" [value]="c.id">{{c.name}}</option>
-                        </select>
-                      </div>
-                      <div class="form-group" *ngIf="langProfile == 'en'">
-                        <label for="server_{{i+1}}">{{'BECOME_PANDA.SERVER' | translate}}</label>
-                        <select class="custom-select form-control" id="server_{{i+1}}" [(ngModel)]="game.server_id">
-                          <option *ngFor="let s of filterServer(game.id)" [value]="s.id">
-                            {{s.name}}
-                          </option>
-                        </select>
-                      </div>
-                      <div class="form-group" *ngIf="langProfile == 'zh'">
-                        <label for="server_{{i+1}}">{{'BECOME_PANDA.SERVER' | translate}}</label>
-                        <select class="custom-select form-control" id="server_{{i+1}}" [(ngModel)]="game.server_id">
-                          <option *ngFor="let s of filterServer(game.id)" [value]="s.id">
-                            {{s.cn_name}}
-                          </option>
-                        </select>
-                      </div>
-                      <div class="form-group">
-                        <label for="platform_{{i+1}}">{{'BECOME_PANDA.FLATFORM' | translate}}</label>
-                        <select class="custom-select form-control" id="platform_{{i+1}}" [(ngModel)]="game.platform">
-                          <option *ngFor="let p of divGames.platform" [value]="p.id">{{p.name}}</option>
-                        </select>
-                      </div>
-                    </fieldset>
+                    </div>
                   </div>
                 </div>
-                <button class="btn btn-link" (click)="addMoreBoxGames()">{{'BECOME_PANDA.ADD_GAME' | translate}}</button>
-              </div> -->
-            </div>
-            <div class="row">
-              <div class="col-md-6">
-                <div class="d-flex justify-content-end mt-3">
-                  <button class="btn btn-primary" (click)="saveUserProfile();">Lưu</button>
+                <div class="box">
+                  <p class="box-subtitle">Ngày sinh</p>
+                  <div class="row">
+                    <div class="form-group form-default col-md-6">
+                      <input type="text" [(ngModel)]="userProfile.birthday" placeholder="Ngày sinh" class="form-control" 
+                        bsDatepicker [maxDate]="today" [bsConfig]="{ dateInputFormat: 'DD-MM-YYYY', showWeekNumbers: false }" >
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-  
-          </section>
-        </tab>
-        <tab heading="Danh sách yêu thích" (selectTab)="initTabFavorite()" [active]="mainTab == 'favour'">
-          <section class="section-favorite">
-            <div class="row">
-              <div class="form-group col-md-3 form-default">
-                <div class="input-search">
-                  <input autocomplete="off" [(ngModel)]="favoriteSettings.search" (keyup.enter)="searchPandas()" type="text" class="form-control"
-                    placeholder="{{'Common.SEARCH_PANDAS' | translate}}">
-                  <i class="icon icon-search" (click)="searchPandas()"></i>
-                </div>
-              </div>
-              <div class="col-md-9 d-flex flex-row">
-                <div class="form-check-inline form-group form-check-filter" [ngClass]="{'active': favoriteSettings.favoriteType == 'subscribed'}">
-                  <input class="form-check-input" type="radio" name="filter-pandas" id="subscribed" value="subscribed" [(ngModel)]="favoriteSettings.favoriteType"
-                    (change)="favoriteTypeChange('subscribed')">
-                  <label class="form-check-label" for="subscribed">
-                    Bee đang theo dõi
-                  </label>
-                </div>
-                <!-- <div class="form-check-inline form-check-filter form-group" [ngClass]="{'active': favoriteSettings.favoriteType == 'following'}">
-                  <input class="form-check-input" type="radio" name="filter-pandas" id="following" value="following" [(ngModel)]="favoriteSettings.favoriteType"
-                    (change)="favoriteTypeChange('following')">
-                  <label class="form-check-label" for="following">
-                    {{'SETTING_USER.FOLLOW_PANDA' | translate}}
-                  </label>
+                <!-- <div class="box">
+                  <p class="box-subtitle">Tỉnh/Thành phố</p>
+                  <div class="row">
+                    <div class="col-md-6 form-group form-default">
+                      <input type="text" [(ngModel)]="userProfile.city" class="form-control">
+                    </div>
+                  </div>
                 </div> -->
-                <div class="form-check-inline form-check-filter form-group" [ngClass]="{'active': favoriteSettings.favoriteType == 'booked'}">
-                  <input class="form-check-input" type="radio" name="filter-pandas" id="booked" value="booked" [(ngModel)]="favoriteSettings.favoriteType"
-                    (change)="favoriteTypeChange('booked')">
-                  <label class="form-check-label" for="booked">
-                    Bee đã từng đặt lịch
-                  </label>
+                <div class="box box-intro">
+                  <p class="box-subtitle">Giới thiệu</p>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <textarea  [(ngModel)]="userProfile.bio" class="form-control" id="exampleFormControlTextarea1"
+                          rows="8"></textarea>
+                      </div>
+                    </div>
+                  </div>
+    
                 </div>
-                <div class="form-check-inline form-check-filter form-group" [ngClass]="{'active': favoriteSettings.favoriteType == 'visited'}">
-                  <input class="form-check-input" type="radio" name="filter-pandas" id="visited" value="visited" [(ngModel)]="favoriteSettings.favoriteType"
-                    (change)="favoriteTypeChange('visited')">
-                  <label class="form-check-label" for="visited">
-                    Bee bạn quan tâm
-                  </label>
-                </div>
+                <!-- <div class="box box-game">
+                  <p class="box-subtitle">Lĩnh vực quan tâm</p>
+                  <div class="row mb-3">
+                    <div class="col-md-6" *ngFor="let game of userProfile.games;let i = index">
+                      <fieldset>
+                        <legend *ngIf="i % 10 == 0 && i != 10">{{i+1}}{{'BECOME_PANDA.ST_GAME' | translate}}</legend>
+                        <legend *ngIf="i % 10 == 1 && i != 11">{{i+1}}{{'BECOME_PANDA.ND_GAME' | translate}}</legend>
+                        <legend *ngIf="i % 10 == 2 && i != 12">{{i+1}}{{'BECOME_PANDA.RD_GAME' | translate}}</legend>
+                        <legend *ngIf="i % 10 >= 3 || (i < 13 && i > 9)">{{i+1}}{{'BECOME_PANDA.TH_GAME' | translate}}</legend>
+                        <div (click)="removeEachGames(i)" *ngIf="userProfile.games.length !== 1" class="remove-game">
+                          <i class="fa fa-times fa-2x" aria-hidden="true"></i>
+                        </div>
+                        <div class="form-group">
+                          <label for="game_{{i+1}}">{{'BECOME_PANDA.GAME_PLAY' | translate}}</label>
+                          <select class="custom-select form-control" id="game_{{i+1}}" [(ngModel)]="game.id" (change)="gamePlayChange(game.id, i)" *ngIf="langProfile == 'en'">
+                            <option value="" disabled>{{'BECOME_PANDA.SELECT_GAME' | translate}}</option>
+                            <option *ngFor="let g of divGames.games" [value]="g.id">{{g.name}}</option>
+                          </select>
+                          <select class="custom-select form-control" id="game_{{i+1}}" [(ngModel)]="game.id" (change)="gamePlayChange(game.id, i)"  *ngIf="langProfile == 'zh'">
+                            <option value="" disabled>{{'BECOME_PANDA.SELECT_GAME' | translate}}</option>
+                            <option *ngFor="let g of divGames.games" [value]="g.id">{{g.cn_name}}</option>
+                          </select>
+                        </div>
+                        <div class="for-group" *ngIf="game.isOther">
+                          <div class="box">
+                            <label class="isRequire">{{'BECOME_PANDA.MY_GAME' | translate}}</label>
+                            <div class="row">
+                              <div class="col-md-6 form-group form-default">
+                                <input type="text" [(ngModel)]="game.other" class="form-control">
+                              </div>
+                            </div>
+                          </div>
+                          <div class="box-img">
+                            <label class="isRequire">{{'BECOME_PANDA.MY_GAME_IMAGE' | translate}}</label>
+                            <div class="row-img">
+                              <div class="img-container" id="upload-non-member" *ngIf="game.previewOtherGameImage?.url">
+                                <span class="delete-img" (click)="removeGameImage(i)">
+                                  <i class="fa fa-times-circle" aria-hidden="true"></i>
+                                </span>
+                                <img [src]="game.previewOtherGameImage?.type === 'image' ? environment.apiUrl + '/' + game.previewOtherGameImage?.url :  game.previewOtherGameImage?.url" alt="">
+                              </div>
+                              <label id="upload-non-member" class="img-container" *ngIf="!game.previewOtherGameImage?.url">
+                                <div class="backdrop">
+                                  <i class="fa fa-plus fa-2x" aria-hidden="true"></i>
+                                </div>
+                                <img src="assets/images/default-image.png" alt="">
+                                <input id="upload-non-member" class="d-none" type="file" (change)="chooseImage($event, i)"
+                                  accept="image/*" />
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label for="rank_{{i+1}}">{{'BECOME_PANDA.GAME_CAPACITY' | translate}}</label>
+                          <select class="custom-select form-control" id="rank_{{i+1}}" [(ngModel)]="game.capacity">
+                            <option *ngFor="let c of divGames.capacity" [value]="c.id">{{c.name}}</option>
+                          </select>
+                        </div>
+                        <div class="form-group" *ngIf="langProfile == 'en'">
+                          <label for="server_{{i+1}}">{{'BECOME_PANDA.SERVER' | translate}}</label>
+                          <select class="custom-select form-control" id="server_{{i+1}}" [(ngModel)]="game.server_id">
+                            <option *ngFor="let s of filterServer(game.id)" [value]="s.id">
+                              {{s.name}}
+                            </option>
+                          </select>
+                        </div>
+                        <div class="form-group" *ngIf="langProfile == 'zh'">
+                          <label for="server_{{i+1}}">{{'BECOME_PANDA.SERVER' | translate}}</label>
+                          <select class="custom-select form-control" id="server_{{i+1}}" [(ngModel)]="game.server_id">
+                            <option *ngFor="let s of filterServer(game.id)" [value]="s.id">
+                              {{s.cn_name}}
+                            </option>
+                          </select>
+                        </div>
+                        <div class="form-group">
+                          <label for="platform_{{i+1}}">{{'BECOME_PANDA.FLATFORM' | translate}}</label>
+                          <select class="custom-select form-control" id="platform_{{i+1}}" [(ngModel)]="game.platform">
+                            <option *ngFor="let p of divGames.platform" [value]="p.id">{{p.name}}</option>
+                          </select>
+                        </div>
+                      </fieldset>
+                    </div>
+                  </div>
+                  <button class="btn btn-link" (click)="addMoreBoxGames()">{{'BECOME_PANDA.ADD_GAME' | translate}}</button>
+                </div> -->
               </div>
-            </div>
-            <div>
               <div class="row">
-                <div class="col-md-6 col-lg-4" *ngFor="let item of listFavorite | paginate: favoriteSettings.paginate">
-                  <div class="item-panda">
-                    <div class="avatar-wrap">
-                      <span class="contact-status" [ngClass]="{'offline': item.online_status == '0','online' : item.online_status == '1','busy':item.online_status == '2'}"></span>
-                      <img [src]="item.avatar" alt="">
-                    </div>
-                    <p class="panda-name" [routerLink]="['/pandas-profile',item.name,item.id]">{{ item.name }}</p>
-                    <div class="form-group m-0">
-                      <button class="btn btn-primary" (click)="unInteractivePanda(item.id)" *ngIf="favoriteSettings.favoriteType == 'subscribed'">{{'Common.unsubscribe' | translate}}</button>
-                      <button class="btn btn-primary" (click)="unInteractivePanda(item.id)" *ngIf="favoriteSettings.favoriteType == 'following'">{{'Common.unfollow' | translate}}</button>
-                      <span class="chat">
-                        <i (click)="openChatBox(item.id)" class="fa fa-comment" aria-hidden="true" *ngIf="favoriteSettings.favoriteType == 'visited'"
-                        ></i>
-                      </span>
-                      <button class="btn btn-primary" (click)="navigateToPandaProfile(item.name, item.id)" *ngIf="favoriteSettings.favoriteType == 'booked'">{{'Common.book_again' | translate}}</button>
-                    </div>
+                <div class="col-md-6">
+                  <div class="d-flex justify-content-end mt-3">
+                    <button class="btn btn-primary" (click)="saveUserProfile();">Lưu</button>
                   </div>
                 </div>
               </div>
-              <div class="row" *ngIf="listFavorite.length < 1">
-                <div class="col-md-12">
-                  <p style="color: aliceblue;">{{resultFavorite}}</p>
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-12">
-                <div class="d-flex justify-content-end">
-                  <pagination-controls autoHide="true" (pageChange)="favoritePageChange($event)"  maxSize="5" ></pagination-controls>
-                </div>
-              </div>
-            </div>
-          </section>
-        </tab>
-        <tab heading="Danh sách chặn" (selectTab)="getListBlock()" [active]="mainTab == 'blacklist'">
-          <section class="section-blacklist">
-            <div class="row">
-              <div class="form-group col-md-3 form-default">
-                <div class="input-search">
-                  <input autocomplete="off" [(ngModel)]="blockListSetting.search" (keyup.enter)="searchAccBlocked()" type="text" class="form-control" placeholder="{{'Common.SEARCH_USERS' | translate}}">
-                  <i class="icon icon-search" (click)="searchAccBlocked()"></i>
-                </div>
-              </div>
-            </div>
-            <div class="mt-4">
-              <div class="row">
-              <div class="col-md-6 col-lg-4" *ngFor="let item of listBlock | paginate: blockListSetting.paginate">
-                  <div class="item-panda">
-                    <div class="avatar-wrap">
-                      <img [src]="item.avatar" alt="">
-                    </div>
-                    <p class="panda-name">{{item.name}}</p>
-                    <button class="btn btn-primary" (click)="unBlockPanda(item.id)">Bỏ chặn</button>
-                  </div>
-              </div>
-            </div>
-            <div class="row" *ngIf="resultBlock">
-              <div class="col-md-12">
-                <p style="color: aliceblue;">{{resultBlock}}</p>
-              </div>
-            </div>
-            </div>
-            <div class="row">
-              <div class="col-md-12">
-                <div class="d-flex justify-content-end">
-                  <pagination-controls autoHide="true" (pageChange)="listBlockChange($event)" id ="blacklist" maxSize="5" ></pagination-controls>
-                </div>
-              </div>
-            </div>
-          </section>
-        </tab>
-        <tab heading="Thay đổi mật khẩu" (selectTab)="initTabChangePassword()" [active]="mainTab == 'changePass'">
-          <div class="row" class="changePass">
-            <div class="col-md-6">
-              <form method="post" [formGroup]="formChangePassword">
-                <div class="form-group form-default">
-                  <label for="" class="isRequire">Mật khẩu hiệnt tại</label>
-                  <div class="relative">
-                    <input formControlName="oldPassword" placeholder="" type="password" class="form-control" id="oldPassword" (input)="changeInputCurrentPass()">
-                    <i [ngClass]="!isShowPassOld? 'fa fa-eye-slash icon-eye':'fa fa-eye icon-eye'" (click)="showPassword('oldPassword')" ></i>
-                  </div>
-                
-                  <div class="text-danger error-form require" *ngIf="formChangePassword?.controls?.oldPassword?.errors?.required && formChangePassword?.controls?.oldPassword?.touched">
-                    Bạn chưa điền mật khẩu hiện tại
-                  </div>
-                  <div class="text-danger error-form require" *ngIf="!formChangePassword?.controls?.oldPassword?.errors?.required && sameCurrentPass">
-                    Mật khẩu hiện tại không chính xác                  
-                </div>
-                </div>
-                <div class="form-group form-default">
-                  <label for="" class="isRequire" >Mật khẩu mới</label>
-                  <div class="relative">
-                    <input formControlName="newPassword" placeholder="" type="password" class="form-control" id="newPassword" minlength="8">
-                    <i [ngClass]="!isShowPassNew? 'fa fa-eye-slash icon-eye':'fa fa-eye icon-eye'" (click)="showPassword('newPassword')"></i>
-                  </div>
-  
-                  <div class="text-danger error-form require" *ngIf=" formChangePassword?.controls?.newPassword?.errors?.required && formChangePassword?.controls?.newPassword?.touched">
-                    Bạn chưa điền mật khẩu mới
-                  </div>
-
-                  <small class="text-danger error-form regex" *ngIf="( formChangePassword?.controls?.newPassword?.errors?.minlength || formChangePassword.hasError('invalidPassword') )  && !formChangePassword?.controls?.newPassword?.errors?.required && formChangePassword?.controls?.newPassword?.touched && !formChangePassword.hasError('invalidSamePassword')">
-                    Mật khẩu mới chưa đúng định dạng
-                  </small>
-                  <small class="text-danger error-form notMatch" *ngIf="!formChangePassword?.controls?.newPassword?.errors?.minlength && formChangePassword.hasError('invalidSamePassword') && formChangePassword?.controls?.newPassword?.touched && !formChangePassword?.controls?.newPassword?.errors?.required">
-                    Mật khẩu mới không trùng mật khẩu cũ
-                  </small>
-                </div>
-                <div class="form-group form-default">
-                  <label for="" class="isRequire">Xác nhận mật khẩu</label>
-                  <div class="relative">
-                    <input formControlName="newRePassword" placeholder="" type="password" class="form-control" id="newRePassword" minlength="6">
-                    <i [ngClass]="!isShowPassNewRe? 'fa fa-eye-slash icon-eye':'fa fa-eye icon-eye'" (click)="showPassword('newRePassword')"></i>
-                  </div>
-                  <div class="text-danger error-form require" *ngIf=" formChangePassword?.controls?.newRePassword?.errors?.required && formChangePassword?.controls?.newRePassword?.touched">
-                    Vui lòng nhập lại mật khẩu để xác nhận
-                  </div>
-                  <small class="text-danger error-form regex" *ngIf="formChangePassword?.controls?.newRePassword?.errors?.minlength && !formChangePassword?.controls?.newRePassword?.errors?.required && formChangePassword?.controls?.newRePassword?.touched">
-                    Mật khẩu chưa đúng định dạng
-                  </small>
-                  <small class="text-danger error-form require" *ngIf="!formChangePassword?.controls?.newRePassword?.errors?.minlength && formChangePassword.hasError('invalidConfirmPassword') && formChangePassword?.controls?.newRePassword?.touched && !formChangePassword?.controls?.newRePassword?.errors?.required">
-                    Mật khẩu không trùng mật khẩu mới
-                  </small>
-                </div>
-                <button type="submit" class="btn btn-gradient submit" name="changePassword" value="Change Password" spkpandasLoadingButton [loading]="loading"
-                  (click)="changePassword()">Lưu</button>
-              </form>
-            </div>
-          </div>
-  
-        </tab>
-        <tab heading="Lịch hẹn của tôi" (selectTab)="initTabChangeOrder()" [active]="showMeeting != null || mainTab == 'order'">
-          <!-- <spkpandas-user-orders [showMeeting]="showMeeting" [userInfo]="userInfo" #UserOrder></spkpandas-user-orders>
+    
+            </section>
+        </div>
+        <div class="" *ngIf="mainTab == 'myOrder'">
+          <!-- <tab heading="Lịch hẹn của tôi" (selectTab)="initTabChangeOrder()" [active]="showMeeting != null || mainTab == 'order'">
+          <spkpandas-user-orders [showMeeting]="showMeeting" [userInfo]="userInfo" #UserOrder></spkpandas-user-orders>
         </tab> -->
-      </tabset>
+        </div>
+        <div class="" *ngIf="mainTab == 'favourite'">
+            <section class="section-favorite">
+              <div class="row">
+                <div class="form-group col-md-3 form-default">
+                  <div class="input-search">
+                    <input autocomplete="off" [(ngModel)]="favoriteSettings.search" (keyup.enter)="searchPandas()" type="text" class="form-control"
+                      >
+                    <i class="icon icon-search" (click)="searchPandas()"></i>
+                  </div>
+                </div>
+                <div class="col-md-9 d-flex flex-row">
+                  <div class="form-check-inline form-group form-check-filter" [ngClass]="{'active': favoriteSettings.favoriteType == 'subscribed'}">
+                    <input class="form-check-input" type="radio" name="filter-pandas" id="subscribed" value="subscribed" [(ngModel)]="favoriteSettings.favoriteType"
+                      (change)="favoriteTypeChange('subscribed')">
+                    <label class="form-check-label" for="subscribed">
+                      Bee đang theo dõi
+                    </label>
+                  </div>
+                  <div class="form-check-inline form-check-filter form-group" [ngClass]="{'active': favoriteSettings.favoriteType == 'booked'}">
+                    <input class="form-check-input" type="radio" name="filter-pandas" id="booked" value="booked" [(ngModel)]="favoriteSettings.favoriteType"
+                      (change)="favoriteTypeChange('booked')">
+                    <label class="form-check-label" for="booked">
+                      Bee đã từng đặt lịch
+                    </label>
+                  </div>
+                  <div class="form-check-inline form-check-filter form-group" [ngClass]="{'active': favoriteSettings.favoriteType == 'visited'}">
+                    <input class="form-check-input" type="radio" name="filter-pandas" id="visited" value="visited" [(ngModel)]="favoriteSettings.favoriteType"
+                      (change)="favoriteTypeChange('visited')">
+                    <label class="form-check-label" for="visited">
+                      Bee bạn quan tâm
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div class="row">
+                  <div class="col-md-6 col-lg-4" *ngFor="let item of listFavorite | paginate: favoriteSettings.paginate">
+                    <div class="item-panda">
+                      <div class="avatar-wrap">
+                        <span class="contact-status" [ngClass]="{'offline': item.online_status == '0','online' : item.online_status == '1','busy':item.online_status == '2'}"></span>
+                        <img [src]="item.avatar" alt="">
+                      </div>
+                      <p class="panda-name" [routerLink]="['/pandas-profile',item.name,item.id]">{{ item.name }}</p>
+                      <div class="form-group m-0">
+                        <button class="btn btn-primary" (click)="unInteractivePanda(item.id)" *ngIf="favoriteSettings.favoriteType == 'subscribed'">Bỏ theo</button>
+                        <button class="btn btn-primary" (click)="unInteractivePanda(item.id)" *ngIf="favoriteSettings.favoriteType == 'following'">Bỏ theo dõi</button>
+                        <span class="chat">
+                          <i (click)="openChatBox(item.id)" class="fa fa-comment" aria-hidden="true" *ngIf="favoriteSettings.favoriteType == 'visited'"
+                          ></i>
+                        </span>
+                        <button class="btn btn-primary" (click)="navigateToPandaProfile(item.name, item.id)" *ngIf="favoriteSettings.favoriteType == 'booked'">Đặt lại</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row" *ngIf="listFavorite.length < 1">
+                  <div class="col-md-12">
+                    <p style="color: aliceblue;">{{resultFavorite}}</p>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="d-flex justify-content-end">
+                    <pagination-controls autoHide="true" (pageChange)="favoritePageChange($event)"  maxSize="5" ></pagination-controls>
+                  </div>
+                </div>
+              </div>
+            </section>
+        </div>
+        <div class="" *ngIf="mainTab == 'block'">
+            <section class="section-blacklist">
+              <div class="row">
+                <div class="form-group col-md-3 form-default">
+                  <div class="input-search">
+                    <input autocomplete="off" [(ngModel)]="blockListSetting.search" (keyup.enter)="searchAccBlocked()" type="text" class="form-control" >
+                    <i class="icon icon-search" (click)="searchAccBlocked()"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="mt-4">
+                <div class="row">
+                <div class="col-md-6 col-lg-4" *ngFor="let item of listBlock | paginate: blockListSetting.paginate">
+                    <div class="item-panda">
+                      <div class="avatar-wrap">
+                        <img [src]="item.avatar" alt="">
+                      </div>
+                      <p class="panda-name">{{item.name}}</p>
+                      <button class="btn btn-primary" (click)="unBlockPanda(item.id)">Bỏ chặn</button>
+                    </div>
+                </div>
+              </div>
+              <div class="row" *ngIf="resultBlock">
+                <div class="col-md-12">
+                  <p style="color: aliceblue;">{{resultBlock}}</p>
+                </div>
+              </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="d-flex justify-content-end">
+                    <pagination-controls autoHide="true" (pageChange)="listBlockChange($event)" id ="blacklist" maxSize="5" ></pagination-controls>
+                  </div>
+                </div>
+              </div>
+            </section>
+        </div>
+        <div class="" *ngIf="mainTab == 'changePass'">
+            <div class="row" class="changePass">
+              <div class="col-md-6">
+                <form method="post" [formGroup]="formChangePassword">
+                  <div class="form-group form-default">
+                    <label for="" class="isRequire">Mật khẩu hiệnt tại</label>
+                    <div class="relative">
+                      <input formControlName="oldPassword" placeholder="" type="password" class="form-control" id="oldPassword" (input)="changeInputCurrentPass()">
+                      <i [ngClass]="!isShowPassOld? 'fa fa-eye-slash icon-eye':'fa fa-eye icon-eye'" (click)="showPassword('oldPassword')" ></i>
+                    </div>
+                  
+                    <div class="text-danger error-form require" *ngIf="formChangePassword?.controls?.oldPassword?.errors?.required && formChangePassword?.controls?.oldPassword?.touched">
+                      Bạn chưa điền mật khẩu hiện tại
+                    </div>
+                    <div class="text-danger error-form require" *ngIf="!formChangePassword?.controls?.oldPassword?.errors?.required && sameCurrentPass">
+                      Mật khẩu hiện tại không chính xác                  
+                  </div>
+                  </div>
+                  <div class="form-group form-default">
+                    <label for="" class="isRequire" >Mật khẩu mới</label>
+                    <div class="relative">
+                      <input formControlName="newPassword" placeholder="" type="password" class="form-control" id="newPassword" minlength="8">
+                      <i [ngClass]="!isShowPassNew? 'fa fa-eye-slash icon-eye':'fa fa-eye icon-eye'" (click)="showPassword('newPassword')"></i>
+                    </div>
+    
+                    <div class="text-danger error-form require" *ngIf=" formChangePassword?.controls?.newPassword?.errors?.required && formChangePassword?.controls?.newPassword?.touched">
+                      Bạn chưa điền mật khẩu mới
+                    </div>
+  
+                    <small class="text-danger error-form regex" *ngIf="( formChangePassword?.controls?.newPassword?.errors?.minlength || formChangePassword.hasError('invalidPassword') )  && !formChangePassword?.controls?.newPassword?.errors?.required && formChangePassword?.controls?.newPassword?.touched && !formChangePassword.hasError('invalidSamePassword')">
+                      Mật khẩu mới chưa đúng định dạng
+                    </small>
+                    <small class="text-danger error-form notMatch" *ngIf="!formChangePassword?.controls?.newPassword?.errors?.minlength && formChangePassword.hasError('invalidSamePassword') && formChangePassword?.controls?.newPassword?.touched && !formChangePassword?.controls?.newPassword?.errors?.required">
+                      Mật khẩu mới không trùng mật khẩu cũ
+                    </small>
+                  </div>
+                  <div class="form-group form-default">
+                    <label for="" class="isRequire">Xác nhận mật khẩu</label>
+                    <div class="relative">
+                      <input formControlName="newRePassword" placeholder="" type="password" class="form-control" id="newRePassword" minlength="6">
+                      <i [ngClass]="!isShowPassNewRe? 'fa fa-eye-slash icon-eye':'fa fa-eye icon-eye'" (click)="showPassword('newRePassword')"></i>
+                    </div>
+                    <div class="text-danger error-form require" *ngIf=" formChangePassword?.controls?.newRePassword?.errors?.required && formChangePassword?.controls?.newRePassword?.touched">
+                      Vui lòng nhập lại mật khẩu để xác nhận
+                    </div>
+                    <small class="text-danger error-form regex" *ngIf="formChangePassword?.controls?.newRePassword?.errors?.minlength && !formChangePassword?.controls?.newRePassword?.errors?.required && formChangePassword?.controls?.newRePassword?.touched">
+                      Mật khẩu chưa đúng định dạng
+                    </small>
+                    <small class="text-danger error-form require" *ngIf="!formChangePassword?.controls?.newRePassword?.errors?.minlength && formChangePassword.hasError('invalidConfirmPassword') && formChangePassword?.controls?.newRePassword?.touched && !formChangePassword?.controls?.newRePassword?.errors?.required">
+                      Mật khẩu không trùng mật khẩu mới
+                    </small>
+                  </div>
+                  <button type="submit" class="btn btn-gradient submit" name="changePassword" value="Change Password" 
+                    (click)="changePassword()">Lưu</button>
+                </form>
+              </div>
+            </div>
+    
+        </div>
+        
+      </div>
+    </div>
   
       
     </div>
@@ -396,7 +414,7 @@
       <image-cropper [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true" [aspectRatio]="4 / 4" format="jpeg" (imageCropped)="imageCropped($event)"></image-cropper>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-gradient pl-4 pr-4" spkpandasLoadingButton [loading]="cropLoading" (click)="saveCropImage()">Crop</button>
+      <button class="btn btn-gradient pl-4 pr-4"  (click)="saveCropImage()">Crop</button>
       <span class="btn btn-light" (click)="cancelCropImage()">Huỷ</span>
     </div>
   </ng-template>

@@ -17,8 +17,8 @@
             Anna
           </button>
           <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" (click)="redirectToUserSetting()" [ngClass]="{'seperate-line': this.userInfo.role != 'pandas'}">Tài khoản của tôi</a>
-            <a class="dropdown-item pandas-account" *ngIf="userInfo.role == 'pandas'" (click)="redirectToBeeSetting()">Tài khoản dịch vụ của tôi</a>
+            <a class="dropdown-item" (click)="redirectToUserSetting()" [ngClass]="{'seperate-line': this.userInfo?.role != 'bee'}">Tài khoản của tôi</a>
+            <a class="dropdown-item" *ngIf="!this.userInfo || showBecomePandaBtn" (click)="redirectBecomeBee()" routerLinkActive="router-link-active">TRở thành Bee</a>
             <a class="dropdown-item" (click)="redirectToTestDevice()">Kiểm tra thiết bị</a>
             <a class="dropdown-item" (click)="signOut()">Đăng xuất</a>
           </div>
@@ -34,6 +34,7 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <div class="collapse-wrap">
       <div class="header-right" [ngClass]="{'responeBecome': userInfo?.role != 'bee'}">
+              <!-- <div class="header-right" > -->
         <ul class="navbar-nav">
           <li class="nav-item active position-relative meetpandas">
             <a id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link" [routerLink]="['/pandas']" routerLinkActive="router-link-active">Gặp gỡ chuyên gia <i class="fa fa-caret-down pl-2" aria-hidden="true"></i></a>
@@ -80,7 +81,6 @@
         <button class="btn btn-clear btn-search" (click)="toogleSearch()"><i class="icon icon-search"></i></button>
         </div>
         <div class="d-flex flex-row align-items-center">
-          <button *ngIf="!this.userInfo || showBecomePandaBtn" (click)="redirectBecomeBee()" routerLinkActive="router-link-active" class="btn btn-around white mx-2">TRở thành Bee</button>
           <div class="d-flex flex-row align-items-center" *ngIf="this.userInfo">
             <button class="btn btn-clear relative">
               <i class="icon icon-noti"></i>
@@ -93,18 +93,18 @@
           </button>
           </div>
           <!-- <button class="btn btn-primary" (click)="openLoginModal()" *ngIf="!this.userInfo" >{{ 'Common.sign_in' | translate }}</button> -->
-          <button class="btn btn-primary" (click)="openLoginModal('signin')">Đăng nhập</button>
+          <button class="btn btn-primary" (click)="openLoginModal('signin')" *ngIf="!userInfo">Đăng nhập</button>
         </div>
         <div class="wrap-avatar-header avatar-desktop">
   
           <div class="dropdown dropdown-user-profile" *ngIf="this.userInfo">
             <button class="btn dropdown-toggle pl-1" type="button" id="dropdownMenuButton" data-toggle="dropdown"
-                    aria-haspopup="true" aria-expanded="false" *ngIf="this.userInfo?.name">
-              {{ this.userInfo.name }}
+                    aria-haspopup="true" aria-expanded="false" *ngIf="this.userInfo?.displayName">
+              {{ this.userInfo.displayName }}
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-              <a class="dropdown-item" (click)="redirectToUserSetting()" [ngClass]="{'seperate-line': this.userInfo.role != 'pandas'}">Tài khoản của tôi</a>
-              <a class="dropdown-item pandas-account" *ngIf="userInfo.role == 'pandas'" (click)="redirectToBeeSetting()">Tài khoản dịch vụ của tôi</a>
+              <a class="dropdown-item" (click)="redirectToUserSetting()" [ngClass]="{'seperate-line': userInfo?.role != 'bee'}">Tài khoản của tôi</a>
+              <a class="dropdown-item" *ngIf="!this.userInfo || showBecomePandaBtn" (click)="redirectBecomeBee()" routerLinkActive="router-link-active">TRở thành Bee</a>
               <a class="dropdown-item" (click)="redirectToTestDevice()">Kiểm tra thiết bị</a>
               <a class="dropdown-item" (click)="signOut()">Đăng xuất</a>
             </div>

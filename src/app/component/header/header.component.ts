@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { CookieService } from 'ngx-cookie-service';
+import { AuthService } from 'src/app/services/auth/auth.service';
+import { SubjectService } from 'src/app/services/subject.service';
 import { LoginComponent } from '../login/login.component';
 
 @Component({
@@ -12,7 +16,7 @@ export class HeaderComponent implements OnInit {
   listBee: any;
   unreadNotification: any;
   unreadMessage: any = 1;
-  showBecomePandaBtn: false;
+  showBecomePandaBtn= true;
   activeRow: any = 1;
   noResultFound: boolean = false;
   showSearchLoading: boolean = false;
@@ -21,17 +25,30 @@ export class HeaderComponent implements OnInit {
   searchKey: any;
   modalSignIn: BsModalRef
   constructor(
-    public modalService: BsModalService
+    public modalService: BsModalService,
+    private subjectService: SubjectService,
+    private cookie: CookieService,
+    private authService: AuthService,
+    private router : Router
+
   ) { }
 
   ngOnInit(): void {
-    this.userInfo = {
-      role: 'bee',
-      name: "ANna"
-    }
+    this.subjectService.userInfo.subscribe((res) => {
+      this.userInfo = res;
+      if (!this.userInfo && this.cookie.get('user_info') && this.cookie.get('user_info') != '') {
+        this.userInfo = JSON.parse(this.cookie.get('user_info'));
+        
+      }
+      if (this.userInfo.role == 'bee') {
+        this.showBecomePandaBtn = false;
+      }
+      console.log(this.userInfo)
+    })
+    console.log(this.userInfo);
   }
   redirectToUserSetting() {
-
+    this.router.navigate(['/account-setting']);
   }
   redirectToBeeSetting() {
 
@@ -46,13 +63,20 @@ export class HeaderComponent implements OnInit {
 
   }
   signOut() {
-
+    this.authService.logOut().then(res => {
+      document.cookie = `jwt_access_token=;expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+    document.cookie = `user_info=;expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+    localStorage.removeItem('user_data');
+    this.cookie.delete('jwt_access_token', '/');
+    this.cookie.delete('user_info', '/');
+    this.subjectService.userInfo.next(null);
+    })
   }
   toogleSearch() {
 
   }
   redirectBecomeBee() {
-
+    this.router.navigate(['/become-bee'])
   }
   notificationShowed() {
 

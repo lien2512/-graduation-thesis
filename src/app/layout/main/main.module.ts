@@ -7,6 +7,9 @@ import { ListBeesComponent } from 'src/app/pages/list-bees/list-bees.component';
 import { ComponentModule } from 'src/app/component/component.module';
 import { DashboardComponent } from 'src/app/pages/dashboard/dashboard.component';
 import { LoginComponent } from 'src/app/component/login/login.component';
+import { AccSettingComponent } from 'src/app/pages/acc-setting/acc-setting.component';
+import { PagesModule } from 'src/app/pages/pages.module';
+import { BecomeBeeComponent } from 'src/app/pages/become-bee/become-bee.component';
 
 
 
@@ -15,12 +18,15 @@ import { LoginComponent } from 'src/app/component/login/login.component';
   imports: [
     CommonModule,
     ComponentModule,
+    PagesModule,
     RouterModule.forChild([{
       path: '', component: MainComponent, children: [
         {path: 'login', component: LoginComponent},
         {path: '', component: DashboardComponent},
         {path: 'bee', component: BeeProfileComponent},
-        {path: 'bees', component: ListBeesComponent}
+        {path: 'bees', component: ListBeesComponent},
+        {path: 'account-setting', component: AccSettingComponent},
+        {path: 'become-bee', component: BecomeBeeComponent}
       ]
     }])
   ]

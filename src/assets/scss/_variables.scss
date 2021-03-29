@@ -1,0 +1,54 @@
+$pink: #EB088C;
+$blue: #26ABE2;
+$black:#00000B;
+$gray: #33333C;
+$darkGray: #999999;
+$green : #10D300;
+$pupple: #382F6C;
+$yellow: #FFEB00;
+$orange:  #fd7e14;
+$gradient-left-right: linear-gradient(90deg, rgba(38,171,226,1) 0%, rgba(235,8,140,1) 100%);
+$header-bg: #01003A;
+$border-gray: rgba(255, 255, 255, 0.3);
+$white: #fff;
+
+$calendar-row: rgb(254, 235, 239);
+$pink2: #ba0760;
+$bg-purple: #15114c;
+$bg-purple2: #343164;
+
+$font-size-base: 16px;
+$font-size-base-mobile: 14px;
+$font-family-base: 'Archer', sans-serif;
+
+//color new design
+
+$stratos: #01003A;
+$portGore: #262950;
+$portGoreSecondary: #262853;
+$curiousBlue: #26ABE2;
+$hollywoodCerise: #EB088C;
+$gulfBlue: #04034A;
+$purpleHeart: #612BD3;
+$martinique: #34365E;
+$success: #51DE71;
+$error: #f75010;
+
+// breakpoints
+// Desktop to Tablet is at 1128px and again at 480px from Tablet to Mobile 
+
+$breakpoints: (
+  sm: 480px,
+  md: 768px,
+  xs: 1128px,
+  lg: 1200px,
+);
+
+
+$shadown1: 0 0 6px rgba(38, 171, 226, 0.25);
+$shadown2: 0 0 12px rgba(38, 171, 226, 0.5);
+$shadown3: 0 0 24px  rgba(38, 171, 226, 0.75);
+$shadown4: 0 0 24px  rgba(38, 171, 226, 1);
+$line-gradient1: linear-gradient(113deg, #EB088C 0%, #AB06D8 100%);
+
+

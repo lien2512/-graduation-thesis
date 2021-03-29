@@ -1,0 +1,265 @@
+<div class="profile-page">
+    <div class="profile-header">
+      <div class="pd-container">
+        <div class="pf-header-content">
+          <div class="pf-right">
+            <div class="pf-right__review">
+              <p class="rv-name">
+                Trở thành Bee
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <div class="pf-breadcrumb">
+      <div class="pd-container">
+        <div class="breadcrumb-content">
+          <div class="breadcrumbs-item">
+            <i class="fa fa-calendar" aria-hidden="true"></i>
+            <!-- Tuổi {{beeProfile.age}} -->
+          </div>
+          <button type="button" class="btn btn-save-change" (click)="updateBeeProfile()">
+            Lưu 
+          </button>
+        </div>
+      </div>
+    </div>
+  
+    <div class="pf-content">
+      <div class="pd-container">
+        <div class="profile-page-grid">
+          <div class="pf-col-left">
+            <div class="pf-acc-info">
+              <div class="box-gradian-top"></div>
+              <div class="acc-info">
+                <div class="acc-info-img">
+                  <div class="border-inner bgc-stratos">
+                    <div *ngFor="let image of previewAvatar">
+                      <img [style]="{ width : '100%' }" [src]="image.url" alt="">
+                    </div>
+                  </div>
+                </div>
+                <p class="acc-info-name">
+                  {{userInfo?.displayName}}
+                </p>
+              </div>
+  
+            </div>
+            <div class="bdrs-10 bgc-portGoreSecondary p-16 mrb-24">
+              <div class="header-in-box mrb-16">
+                <p class="fz-20 fw-600 lh-1 isRequire">
+                  Ảnh đại diện
+                </p>
+                <a class="fz-20 fw-600 color-curiousBlue lh-1" [hidden]="previewAvatar.length == 0">
+                  <label style="color: #26ABE2" (click)="popupChooseAvatarDefault()">Tải lên từ máy</label>
+                </a>
+              </div>
+  
+              <div class="item--added mih-250" (click)="popupChooseAvatarDefault()" [hidden]="previewAvatar.length > 0">
+                <div class="box-plus">
+                  <i class="fas fa-plus"></i>
+                </div>
+                <img [src]="croppedImage" alt="">
+              </div>
+  
+              <div class="item--added mih-250 mrb-16" *ngFor="let image of previewAvatar">
+                <img [style]="{ width : '100%' }" [src]="image.url" alt="">
+              </div>
+            </div>
+  
+            <div class="bdrs-10 bgc-portGoreSecondary p-16 mrb-24">
+              <div class="header-in-box mrb-16">
+                <p class="fz-20 fw-600 lh-1 isRequire">
+                  Giới tính
+                </p>
+              </div>
+  
+              <div class="pd-dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <span>{{ beeProfile.gender }}</span>
+                  <i class="fas fa-angle-down"></i>
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  <a class="dropdown-item" (click)="setGender('male')">Nam</a>
+                  <a class="dropdown-item" (click)="setGender('female')">Nữ</a>
+                  <a class="dropdown-item" (click)="setGender('other')">Khác</a>
+                </div>
+              </div>
+            </div>
+            <div class="bdrs-10 bgc-portGoreSecondary p-16 mrb-24 box--tags">
+                <div class="header-in-box mrb-16">
+                  <p class="fz-20 fw-600 lh-1 isRequire">
+                    Ngày sinh
+                  </p>
+                </div>
+                <input type="text" [(ngModel)]="beeProfile.birthday" placeholder="Ngày sinh" class="form-control" 
+                bsDatepicker [maxDate]="today" [bsConfig]="{ dateInputFormat: 'DD-MM-YYYY', showWeekNumbers: false }" >
+                <div class="pd-dropdown">
+                  
+                </div>
+              </div>
+            <div class="bdrs-10 bgc-portGoreSecondary p-16 mrb-24 box--tags">
+              <div class="header-in-box mrb-16">
+                <p class="fz-20 fw-600 lh-1 isRequire">
+                  Hastag
+                </p>
+              </div>
+  
+              <div class="pd-dropdown">
+                <tag-input [ngModel]='tags' (onAdd)="onTagAdded($event)" (onRemove)="onTagRemoved($event)" maxItems="10" >
+                  <tag-input-dropdown [showDropdownIfEmpty]="true" [autocompleteItems]="autocompleteTags" [appendToBody]="true" [zIndex]="9999999"></tag-input-dropdown>
+                </tag-input>
+              </div>
+            </div>
+  
+  
+  
+  
+          </div>
+          <div class="pf-col-center">
+            <div class="content-register-as-panda">
+              <div class="bdrs-10 bgc-portGoreSecondary p-16 mrb-24">
+                <div class="header-in-box mrb-16">
+                  <p class="fz-20 fw-600 lh-1 isRequire">
+                    Giới thiệu bản thân
+                  </p>
+                </div>
+  
+                <div class="w-100">
+                  <textarea class="pd-textarea h170" [(ngModel)]="beeProfile.bio"></textarea>
+                </div>
+              </div>
+  
+              <div class="pf-timeline-item item--edit">
+                <div class="pf-timeline-item__header">
+                  <p class="fz-20 fw-600 lh-1 isRequire">
+                    Ảnh
+                  </p>
+                </div>
+                <div class="pf-timeline-item__photos photo--edit row-img">
+  
+                  <label for="upload-mumber" class="img-container" *ngIf="previewMember.length < 10">
+                    <div class="backdrop">
+                      <i aria-hidden="true" class="fa fa-plus fa-2x"></i>
+                    </div>
+                    <input type="file" class="upload-f" id="upload-mumber" (change)="chooseImage($event, imageType.imageMember)" multiple accept="image/*" />
+                  </label>
+  
+                  <div class="img-container photo-item col-lg-6" *ngFor="let image of previewMember; let i = index">
+                    <span class="delete-img" (click)="removeEachImage(i, imageType.imageMember, image.id)">
+                      <i class="fa fa-times-circle" aria-hidden="true"></i>
+                    </span>
+                    <img [src]="image.url" alt="" width="100%">
+                  </div>
+                </div>
+                <p class="mrb-8 op-70">Upload tối đa 10 ảnh.</p>
+              </div>
+  
+              <div class="bdrs-10 bgc-portGoreSecondary p-16 mrb-24">
+                <div class="header-in-box mrb-16">
+                  <p class="fz-20 fw-600 lh-1">
+                    Video 
+                  </p>
+                  <a class="fz-20 fw-600 color-curiousBlue lh-1" *ngIf="previewVideo.length > 0">
+                    <label for="video" class="text-link upload cursor-pointer op-50 color-white">
+                      <i class="fa fa-upload mr-2" aria-hidden="true" style="font-size: 24px;"></i>
+                      <span [ngClass]="{'upload-video': previewVideo.length > 0}">Re-upload</span>
+                    </label>
+                    <input type="file" id="video" name="video" class="upload-f" (change)="chooseVideo($event)" accept="video/*" style="display: none;">
+                  </a>
+                </div>
+  
+                <div style="position: relative" class="item--added mih-300 mrb-16" *ngIf="previewVideo.length == 0">
+                  <div class="box-plus">
+                    <i class="fas fa-plus"></i>
+                    <input type="file" name="video" class="upload-f" (change)="chooseVideo($event)" accept="video/*">
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-12">
+                    <div class="embed-responsive embed-responsive-16by9" *ngIf="previewVideo.length > 0">
+                      <video [src]="previewVideo" controls></video>
+                    </div>
+  
+                  </div>
+                </div>
+  
+                <p class="op-70">Chia sẻ những video để mọi người hiểu hơn về bạn</p>
+              </div>
+  
+              <div class="only-btn-right mrt-32">
+                <button type="button" class="btn btn-save-change" (click)="updateBeeProfile()"> Lưu</button>
+              </div>
+  
+  
+            </div>
+          </div>
+          <div class="pf-col-right">
+            <div class="bdrs-10 bgc-portGoreSecondary p-16">
+              <h3 class="fz-22 mrb-24 lh-1 color-white fw-600">
+               Tại sao phải hoàn thiện hồ sơ cá nhân
+              </h3>
+              <p class="mrb-16 fw-600 op-80">
+                CHúng tôi tin rằng, bạn giới thiệu về bản thân sẽ giúp những người yêu mến bạn hiểu và yêu mến bạn hơn :)))
+              </p>
+              <p class="mrb-24 text-with-dot fw-600 op-80">
+                <b class="fw-600">Profile Photo:</b> This is what incentivize people to click on your profile and see your offers
+              </p>
+              <p class="mrb-24 text-with-dot fw-600 op-80">
+                <b class="fw-600">Photos & Video:</b> Visual impact is powerful, use these to tell your potential customers what to expect.
+              </p>
+              <p class="mrb-24 text-with-dot fw-600 op-80">
+                <b class="fw-600">Bio:</b> it gives people who want to purchase your offer an idea of where to begin.
+              </p>
+              <p class="mrb-24 text-with-dot fw-600 op-80">
+                <b class="fw-600">Tags:</b> it helps people to find your niche through search more easily
+              </p>
+              <p class="mrb-16 fw-600 op-80">
+                And most importantly, Pandas who filled in more than 1 type of offer receive an average of 75% more orders.
+              </p>
+              <div>
+                <!-- <img src="/src/assets/images/images.png" width="100%" /> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+    </div>
+  </div>
+  <!-- MODAL FOR CROP IMAGE -->
+  <ng-template #templateCropImage>
+    <div class="modal-header">
+      <h4 class="modal-title">Cắt ảnh</h4>
+    </div>
+    <div class="modal-body text-center" style="padding: 15px;">
+      <image-cropper [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true" [aspectRatio]="4/4" format="jpeg" (imageCropped)="imageCropped($event, previewAvatar, avatarDefault)"></image-cropper>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-gradient pl-4 pr-4" (click)="saveCropImage()">Lưu</button>
+      <span class="btn btn-light" (click)="cancelCropImage(previewAvatar)">Huỷ</span>
+    </div>
+  </ng-template>
+  
+  <ng-template #templateChooseAvatar>
+    <div class="modal-header">
+      <h4 class="modal-title">Chọn ảnh</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="closeChooseAvatar()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body text-center" style="padding: 15px;">
+      <div class="uploadFromComputer">
+        <label class="white bold pull-left mb-0 " style="cursor: pointer;" for="uploadYourAvatar">
+          <i class="icon icon-upload" aria-hidden="true"></i>&nbsp; &nbsp;Tải ảnh: <small class="text-secondary">Tối đa 2MB</small>
+          &nbsp;</label>
+      </div>
+      <input id="uploadYourAvatar" type="file" accept="image/*" (change)="chooseImageAvatar($event, imageType.avatar)" style="display: none;">
+  
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-gradient pl-4 pr-4" (click)="setImagetoAvatar()" [disabled]="">Tải lên & Lưu</button>
+    </div>
+  </ng-template>

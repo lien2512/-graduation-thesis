@@ -16,10 +16,14 @@ import { FullCalendarModule } from '@fullcalendar/angular';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
+import {NgxPaginationModule} from 'ngx-pagination';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 // firebase
 import firebase from 'firebase';
 import { ToastrModule } from 'ngx-toastr';
+import { TabsModule } from 'ngx-bootstrap/tabs';
+import { ImageCropperModule } from 'ngx-image-cropper';
+import { TagInputModule } from 'ngx-chips';
 const firebaseConfig = {
   apiKey: 'AIzaSyAY0q9PonWzSoujGQh6GGsqQ6LufCglB30',
   authDomain: 'beauty-garden-5d096.firebaseapp.com',
@@ -54,6 +58,10 @@ firebase.initializeApp(firebaseConfig);
       preventDuplicates : true,
       countDuplicates : false
     }),
+    NgxPaginationModule,
+    BsDatepickerModule.forRoot(),
+    ImageCropperModule,
+    TagInputModule
   ],
   providers: [],
   bootstrap: [AppComponent],

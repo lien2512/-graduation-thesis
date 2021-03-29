@@ -7,6 +7,10 @@ import { FirebaseService } from 'src/app/services/firebase.service';
 import firebase from 'firebase';
 import { Router } from '@angular/router';
 import { HelperService } from 'src/app/services/helper.service';
+import { SubjectService } from 'src/app/services/subject.service';
+import { CookieService } from 'ngx-cookie-service';
+import { Account } from 'src/app/class/account';
+import { stringify } from '@angular/compiler/src/util';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -20,13 +24,17 @@ export class LoginComponent implements OnInit {
   back= false;
   isShowPass = false
   @Output() onClose = new EventEmitter();
+  @Output() onLoginSuccess = new EventEmitter();
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
     private firebaseService: FirebaseService,
     private modalService: BsModalService,
     private router: Router,
-    private helperService : HelperService
+    private helperService : HelperService,
+    private subjectService: SubjectService,
+    private cookie: CookieService,
+
   ) { }
 
   ngOnInit(): void {
@@ -70,22 +78,44 @@ export class LoginComponent implements OnInit {
   }
   login() {
     this.authService.login(this.formLogin.value).then((res: any) => {
-        console.log(res);
         const user: firebase.User = res.user;
-        this.helperService.showSuccess('', 'Đăng nhập thành công');
+        // if (user.emailVerified) {
+          const newUser: Account = {} as Account;
+          newUser.displayName = user.displayName
+          newUser.id = user.uid;
+          newUser.email = this.formLogin.value.email;
+          newUser.emailVerified = false;
+          newUser.role = 'user';
+          this.firebaseService.updateRef('users', user.uid, { account: newUser });
+          localStorage.setItem('user_data', JSON.stringify({
+            token: user.refreshToken,
+            data: newUser
+          }))
+          this.cookie.set('jwt_access_token', user.refreshToken, 365, '/');
+          this.cookie.set('user_info', JSON.stringify(newUser), 365, '/')
+          this.subjectService.userInfo.next(newUser);
+          setTimeout(()=> {
+            this.subjectService.userInfo.subscribe((res) => {
+                console.log(res);
+            })
+          }, 200)
+          
+          // this.router.navigate(['/account-settings']);
+  
+        // } else {
+        //   this.helperService.showError('error', "Đăng nhập thất bại");
+        // }
         this.closeLoginModal();
-        if (user.emailVerified) {
-        this.firebaseService.updateRef('users', user.uid, {emailVeried: true});
-        this.router.navigate(['/account-setting']);
-        }
       
     }).catch(err => {
+      debugger
       switch (err.code) {
         case 'auth/user-not-found':
           this.helperService.showError('error', 'Tài khoản chưa được đăng ký');
           break;
         default:
-          this.helperService.showError('error', err.message);
+          this.helperService.showError('error', "Đăng nhập thất bại");
+          alert('Đăng nhập thất bại')
           break;
       }
     })
@@ -93,13 +123,14 @@ export class LoginComponent implements OnInit {
   }
   signUp() {
     this.authService.signup(this.formSignUp.value).then((res: any) => {
-      console.log(res);
-        this.firebaseService.createUserInfo(res.user.uid, this.formSignUp.value);
-        this.sendEmailVerify();
-        this.closeLoginModal();
-      
-       
-        
+      const newUser: firebase.User = res.user;
+      newUser.updateProfile({
+        displayName: this.formSignUp.value.name
+      });
+      this.createUserInfo(newUser);
+      newUser.sendEmailVerification();
+      this.closeLoginModal();
+      this.helperService.showSuccess('success', 'Đăng ký thành công');        
     }).catch(err => {
       this.helperService.showError('error', err.message);
     })
@@ -111,6 +142,31 @@ export class LoginComponent implements OnInit {
   }
   showPassword() {
 
+  }
+  loginSuccess(res) {
+    debugger;
+    const accessToken = res.data.access_token;
+    const userInfo = res.data.user_infos;
+    localStorage.setItem('user_data', JSON.stringify({
+      token: accessToken,
+      data: userInfo
+    }));
+    this.cookie.set('jwt_access_token', accessToken, 365, '/');
+    this.cookie.set('user_info', JSON.stringify(userInfo), 365, '/');
+    this.onLoginSuccess.emit();
+    this.closeLoginModal();
+    this.helperService.showSuccess('', 'Đăng nhập thành công');
+    setTimeout(() => {
+      this.subjectService.userInfo.next(userInfo);
+    }, 200);
+  }
+  createUserInfo(userInfo) {
+    console.log(this.formSignUp);
+    const user: Account = {} as Account;
+    user.displayName = this.formSignUp.value.name;
+    user.email = userInfo.email;
+    user.emailVerified = false;
+    this.firebaseService.createUserInfo(userInfo.uid, {accoutn: user});
   }
 
 

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FirebaseService } from 'src/app/services/firebase.service';
 
 @Component({
   selector: 'app-list-bees',
@@ -7,8 +8,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ListBeesComponent implements OnInit {
   listBeesOnline: any;
-  
-  constructor() { }
+  listBee: any = [];
+  constructor(
+    private firebaseService: FirebaseService
+  ) { }
 
   ngOnInit(): void {
     this.listBeesOnline = [{
@@ -62,6 +65,13 @@ export class ListBeesComponent implements OnInit {
       tag: 'happy',
     }
   ]
+  }
+  getListPanda() {
+    this.firebaseService.getAllRef('users').then((res) => {
+
+    }).catch(err => {
+      
+    })
   }
 
 }
