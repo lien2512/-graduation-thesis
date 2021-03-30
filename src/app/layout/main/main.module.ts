@@ -11,6 +11,7 @@ import { AccSettingComponent } from 'src/app/pages/acc-setting/acc-setting.compo
 import { PagesModule } from 'src/app/pages/pages.module';
 import { BecomeBeeComponent } from 'src/app/pages/become-bee/become-bee.component';
 import { AgoraCallComponent } from 'src/app/pages/agora-call/agora-call.component';
+import { MeetingComponent } from 'src/app/pages/meeting/meeting.component';
 
 
 
@@ -28,7 +29,8 @@ import { AgoraCallComponent } from 'src/app/pages/agora-call/agora-call.componen
         {path: 'bees', component: ListBeesComponent},
         {path: 'account-setting', component: AccSettingComponent},
         {path: 'become-bee', component: BecomeBeeComponent},
-        {path: 'call', component: AgoraCallComponent}
+        {path: 'call', component: AgoraCallComponent},
+        {path: 'meet', component: MeetingComponent}
       ]
     }])
   ]

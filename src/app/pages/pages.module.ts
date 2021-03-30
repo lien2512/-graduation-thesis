@@ -9,10 +9,11 @@ import { ImageCropperModule } from 'ngx-image-cropper';
 import { BecomeBeeComponent } from './become-bee/become-bee.component';
 import { TagInputModule } from 'ngx-chips';
 import { AgoraCallComponent } from './agora-call/agora-call.component';
+import { MeetingComponent } from './meeting/meeting.component';
 
 
 @NgModule({
-  declarations: [AccSettingComponent, BecomeBeeComponent, AgoraCallComponent],
+  declarations: [AccSettingComponent, BecomeBeeComponent, AgoraCallComponent, MeetingComponent],
   imports: [
     CommonModule,
     RouterModule,
