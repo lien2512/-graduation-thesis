@@ -6,13 +6,15 @@ import { HeaderComponent } from './header/header.component';
 import { FormsModule } from '@angular/forms';
 import { LoginComponent } from './login/login.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { PopUpConfirmComponent } from './pop-up-confirm/pop-up-confirm.component';
 
 
 @NgModule({
   declarations: [
     HeaderComponent,
     FooterComponent,
-    LoginComponent
+    LoginComponent,
+    PopUpConfirmComponent
   ],
   imports: [
     CommonModule,
@@ -23,6 +25,7 @@ import { ReactiveFormsModule } from '@angular/forms';
   exports: [
     HeaderComponent,
     FooterComponent,
+    PopUpConfirmComponent
   ]
 })
 export class ComponentModule { }

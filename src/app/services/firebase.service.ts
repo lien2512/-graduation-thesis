@@ -58,7 +58,9 @@ export class FirebaseService {
     });
   }
   updateLogo(collection, doc, logoUrl) {
-    return this.updateRef(collection, doc, { account : {logo: logoUrl} });
+    // return this.updateRef(collection, doc, { account : {logo: logoUrl} });
+    return this.updateRef(collection, doc, {logo: logoUrl} );
+
   }
   updateUserInfo(user: any) {
     const userUpdateData = {

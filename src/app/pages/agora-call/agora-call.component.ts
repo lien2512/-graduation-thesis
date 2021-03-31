@@ -2,17 +2,17 @@ import { Component, OnInit } from '@angular/core';
 // import { AngularAgoraRtcService } from 'angular-agora-rtc/lib/angular-agora-rtc.service';
 import { Stream } from 'src/app/class/Stream';
 import { AngularAgoraRtcService } from 'src/app/services/angular-agora-rtc.service';
-
+import * as AgoraRTC from 'agora-rtc-sdk'
 @Component({
   selector: 'app-agora-call',
   templateUrl: './agora-call.component.html',
-  styleUrls: ['./agora-call.component.css']
+  styleUrls: ['./agora-call.component.scss']
 })
 export class AgoraCallComponent implements OnInit {
   activeCall: boolean = false;
   audioEnabled: boolean = true;
   videoEnabled: boolean = true;
-  localStream: Stream
+  client: any;
   remoteCalls: any = [];
   constructor(
     private agoraService: AngularAgoraRtcService
@@ -21,99 +21,85 @@ export class AgoraCallComponent implements OnInit {
    }
 
   ngOnInit(): void {
-  }
-  startCall() {
-    this.activeCall = true;
-    this.agoraService.client.join('03ba16b0e67f4334a597b7a5d10a5adc', '1000', null, (uid) => {
-      this.localStream = this.agoraService.createStream(uid, true, null, null, true, false);
-      this.localStream.setVideoProfile('720p_3');
-      this.subscribeToStreams();
+    this.initAgora();
+    this.client.on("stream-added", (evt: any) => {
+      this.client.subscribe(evt.stream, this.handleError);
+    });
+    // Play the remote stream when it is subsribed
+    this.client.on("stream-subscribed", (evt: any) => {
+      let stream = evt.stream;
+      let streamId = String(stream.getId());
+      this.addVideoStream(streamId);
+      stream.play(streamId);
     });
   }
-
-  private subscribeToStreams() {
-    this.localStream.on("accessAllowed", () => {
-      console.log("accessAllowed");
+  initAgora() {
+    this.client = AgoraRTC.createClient({
+      mode: "rtc",
+      codec: "vp8",
     });
-    // The user has denied access to the camera and mic.
-    this.localStream.on("accessDenied", () => {
-      console.log("accessDenied");
+    this.client.init("68839fbf8dcc423f87c2f89fa52e975b", () => {
+      console.log("client initialized");
+    }, (err: any) => {
+      console.log("client init failed ", err);
     });
-
-    this.localStream.init(() => {
-      console.log("getUserMedia successfully");
-      this.localStream.play('agora_local');
-      this.agoraService.client.publish(this.localStream, function (err) {
-        console.log("Publish local stream error: " + err);
+  }
+  join() {
+    const token = '00668839fbf8dcc423f87c2f89fa52e975bIADCZrkZtVYMQsEmpQ73S5eYMkz4EDkrWFX2/0tRvAvBM2KDJSsAAAAAEAAeXT+cGc1lYAEAAQAZzWVg'
+    const chanel = 'test-1'
+    this.client.join(token, chanel, null, (uid: string) => {
+      console.log('uid:', uid);
+      this.localStream()
+      // Create a local stream
+    }, (err: any) => {
+      console.log('error join:', err);
+    });
+  }
+  localStream() {
+    let localStream = AgoraRTC.createStream({
+      audio: true,
+      video: true,
+    });
+    // Initialize the local stream
+    localStream.init(() => {
+      console.log('localStream:',localStream);
+      
+      // Play the local stream
+      localStream.play("me");
+      // Publish the local stream
+      this.client.publish(localStream, (err: any) => {
+        console.log('error localStream:', err);
       });
-      this.agoraService.client.on('stream-published', function (evt) {
-        console.log("Publish local stream successfully");
-      });
-    }, function (err) {
-      console.log("getUserMedia failed", err);
-    });
-
-    this.agoraService.client.on('error', (err) => {
-      console.log("Got error msg:", err.reason);
-      if (err.reason === 'DYNAMIC_KEY_TIMEOUT') {
-        this.agoraService.client.renewChannelKey("", () => {
-          console.log("Renew channel key successfully");
-        }, (err) => {
-          console.log("Renew channel key failed: ", err);
-        });
-      }
-    });
-
-    this.agoraService.client.on('stream-added', (evt) => {
-      const stream = evt.stream;
-      this.agoraService.client.subscribe(stream, (err) => {
-        console.log("Subscribe stream failed", err);
-      });
-    });
-
-    this.agoraService.client.on('stream-subscribed', (evt) => {
-      const stream = evt.stream;
-      if (!this.remoteCalls.includes(`agora_remote${stream.getId()}`)) this.remoteCalls.push(`agora_remote${stream.getId()}`);
-      setTimeout(() => stream.play(`agora_remote${stream.getId()}`), 2000);
-    });
-
-    this.agoraService.client.on('stream-removed', (evt) => {
-      const stream = evt.stream;
-      stream.stop();
-      this.remoteCalls = this.remoteCalls.filter(call => call !== `#agora_remote${stream.getId()}`);
-      console.log(`Remote stream is removed ${stream.getId()}`);
-    });
-
-    this.agoraService.client.on('peer-leave', (evt) => {
-      const stream = evt.stream;
-      if (stream) {
-        stream.stop();
-        this.remoteCalls = this.remoteCalls.filter(call => call === `#agora_remote${stream.getId()}`);
-        console.log(`${evt.uid} left from this channel`);
-      }
+    }, (err: any) => {
+      console.log('error localStream:', err);
     });
   }
-  leave() {
-    this.agoraService.client.leave(() => {
-      this.activeCall = false;
-      document.getElementById('agora_local').innerHTML = "";
-      console.log("Leavel channel successfully");
-    }, (err) => {
-      console.log("Leave channel failed");
-    });
-  }
+  // Handle errors.
+  handleError(err: any) {
+    console.log("Error: ", err);
+  };
 
-  toggleAudio() {
-    this.audioEnabled = !this.audioEnabled;
-    if (this.audioEnabled) this.localStream.enableAudio();
-    else this.localStream.disableAudio();
-  }
+  // Add video streams to the container.
+  addVideoStream(elementId: string) {
+    // Query the container to which the remote stream belong.
+    let remoteContainer: any = document.getElementById("remote-container");
+    // Creates a new div for every stream
+    let streamDiv = document.createElement("div");
+    // Assigns the elementId to the div.
+    streamDiv.id = elementId;
+    // Takes care of the lateral inversion
+    streamDiv.style.transform = "rotateY(180deg)";
+    // Adds the div to the container.
+    remoteContainer.appendChild(streamDiv);
+  };
 
-  toggleVideo() {
-    this.videoEnabled = !this.videoEnabled;
-    if (this.videoEnabled) this.localStream.enableVideo();
-    else this.localStream.disableVideo();
+  // Remove the video stream from the container.
+  removeVideoStream(elementId: string) {
+    let remoteDiv: any = document.getElementById(elementId);
+    if (remoteDiv) remoteDiv.parentNode.removeChild(remoteDiv);
+  };
+  async endCall() {
+    await this.client.leave();
   }
-
 
 }

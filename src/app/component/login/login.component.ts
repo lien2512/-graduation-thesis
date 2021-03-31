@@ -92,13 +92,9 @@ export class LoginComponent implements OnInit {
             data: newUser
           }))
           this.cookie.set('jwt_access_token', user.refreshToken, 365, '/');
-          this.cookie.set('user_info', JSON.stringify(newUser), 365, '/')
+          this.cookie.set('account_info', JSON.stringify(newUser), 365, '/')
+          debugger;
           this.subjectService.userInfo.next(newUser);
-          setTimeout(()=> {
-            this.subjectService.userInfo.subscribe((res) => {
-                console.log(res);
-            })
-          }, 200)
           
           // this.router.navigate(['/account-settings']);
   
@@ -152,7 +148,7 @@ export class LoginComponent implements OnInit {
       data: userInfo
     }));
     this.cookie.set('jwt_access_token', accessToken, 365, '/');
-    this.cookie.set('user_info', JSON.stringify(userInfo), 365, '/');
+    this.cookie.set('account_info', JSON.stringify(userInfo), 365, '/');
     this.onLoginSuccess.emit();
     this.closeLoginModal();
     this.helperService.showSuccess('', 'Đăng nhập thành công');

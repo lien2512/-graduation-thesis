@@ -94,8 +94,8 @@ export class BecomeBeeComponent implements OnInit {
   ngOnInit(): void {
     this.subjectService.userInfo.subscribe((res: any) => {
       this.userInfo = res;
-      if (!this.userInfo && this.cookie.get('user_info') && this.cookie.get('user_info') != '') {
-        this.userInfo = JSON.parse(this.cookie.get('user_info'));
+      if (!this.userInfo && this.cookie.get('account_info') && this.cookie.get('account_info') != '') {
+        this.userInfo = JSON.parse(this.cookie.get('account_info'));
       };
       if (!this.userInfo)
         this.router.navigate(['']);
@@ -339,10 +339,10 @@ export class BecomeBeeComponent implements OnInit {
       if ((this.beeProfile.video.length == 0 || this.statusUpVideo) && this.statusUpdate) {
         clearInterval(id);
         this.helperService.hideFullLoading();
-        let userInfo = JSON.parse(this.cookie.get('user_info'));
-        this.cookie.set('user_info', JSON.stringify(null));
+        let userInfo = JSON.parse(this.cookie.get('account_info'));
+        this.cookie.set('account_info', JSON.stringify(null));
         userInfo.role = 'pandas';
-        this.cookie.set('user_info', JSON.stringify(userInfo));
+        this.cookie.set('account_info', JSON.stringify(userInfo));
         this.subjectService.userInfo.next(userInfo);
         this.router.navigate(['panda/account/setting']);
       }

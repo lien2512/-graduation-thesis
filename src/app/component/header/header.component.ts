@@ -35,9 +35,10 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit(): void {
     this.subjectService.userInfo.subscribe((res) => {
+      debugger;
       this.userInfo = res;
-      if (!this.userInfo && this.cookie.get('user_info') && this.cookie.get('user_info') != '') {
-        this.userInfo = JSON.parse(this.cookie.get('user_info'));
+      if (!this.userInfo && this.cookie.get('account_info') && this.cookie.get('account_info') != '') {
+        this.userInfo = JSON.parse(this.cookie.get('account_info'));
         
       }
       if (this.userInfo.role == 'bee') {
@@ -65,10 +66,10 @@ export class HeaderComponent implements OnInit {
   signOut() {
     this.authService.logOut().then(res => {
       document.cookie = `jwt_access_token=;expires=Thu, 01 Jan 1970 00:00:00 GMT`;
-    document.cookie = `user_info=;expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+    document.cookie = `account_info=;expires=Thu, 01 Jan 1970 00:00:00 GMT`;
     localStorage.removeItem('user_data');
     this.cookie.delete('jwt_access_token', '/');
-    this.cookie.delete('user_info', '/');
+    this.cookie.delete('account_info', '/');
     this.subjectService.userInfo.next(null);
     })
   }

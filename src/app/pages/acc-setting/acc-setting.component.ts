@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
 import { Account } from 'src/app/class/account';
+import { PopUpConfirmComponent } from 'src/app/component/pop-up-confirm/pop-up-confirm.component';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { HelperService } from 'src/app/services/helper.service';
@@ -154,7 +155,7 @@ export class AccSettingComponent implements OnInit {
 
     this.currentUser = await this.authService.getCurrentUser();
     const res : any = await this.firebaseService.getRefById('users', this.currentUser.uid);
-    // console.log(res);
+    console.log(res);
     this.userProfile = res.account;
     this.imageUrl = res.logo;
 
@@ -195,10 +196,11 @@ export class AccSettingComponent implements OnInit {
       alert('Nhập đầy đủ thông tin');
     } else {
       if (this.fileData) {
+        debugger;
         const avtUrl = await this.firebaseService.uploadLogo(this.imageUrl, 'userAvt/');
-        this.firebaseService.updateLogo('users', this.currentUser.uid, avtUrl);
+        this.firebaseService.updateLogo('users', this.userProfile.id, avtUrl );
       } else if (this.isRemoveLogo) {
-        this.firebaseService.updateLogo('users', this.currentUser.uid, '');
+        this.firebaseService.updateLogo('users', this.userProfile.id, '');
         this.isRemoveLogo = false;
       }
       // if (this.userProfile.avatar !== undefined && this.userProfile.avatar.length > 0  && this.avatarDefault == '') {
