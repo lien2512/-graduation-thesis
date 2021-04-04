@@ -1,11 +1,13 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { AgoraLocalComponent } from 'angular-agora-rtc';
 import firebase from 'firebase';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { CookieService } from 'ngx-cookie-service';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { SubjectService } from 'src/app/services/subject.service';
+import { AgoraCallComponent } from '../agora-call/agora-call.component';
 
 @Component({
   selector: 'app-bee-profile',
@@ -88,17 +90,31 @@ export class BeeProfileComponent implements OnInit {
           logs.push(tempObject);
         });
         console.log(logs);
-        this.infoTheCall = logs.find((item) => { return item.status == 'cancel'})
-        if (this.infoTheCall) {
-          if (this.infoTheCall.action == 'turn_off') {
-            if (this.infoTheCall.closeUser == 'receiver')
+        if (logs.find((item) => { return item.status == 'cancel'})) {
+          let info = logs.find((item) => { return item.status == 'cancel'});
+          if (info.action == 'turn_off') {
+            if (info.closeUser == 'receiver')
             {
               this.modalCall.hide();
-            } else if (this.infoTheCall.closeUser == 'caller') {
+            } else if (info.closeUser == 'caller') {
               alert("bạn đã huỷ cuộc gọi");
               // this.deleteCollection(firebase.firestore(),"call", this.userInfo.id + '-' + this.id)
             }
           }
+        }
+        if (logs.find((item) => { return item.status == 'calling'})) {
+          let info = logs.find((item) => { return item.status == 'calling'});
+         this.modalCall =  this.modalService.show(AgoraCallComponent, {
+            class: 'modal-default',
+            initialState: {
+              token: info.token,
+              chanel: info.chanel,
+            },
+          });
+          this.modalCall.content.onEndcall.subscribe(() => {
+            this.modalCall.hide();
+            firebase.firestore().collection("call").doc(info.idCall).update("status", 'end_call');
+        });
         }
       });
   }

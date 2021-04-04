@@ -27,6 +27,7 @@ export class HeaderComponent implements OnInit {
   searchKey: any;
   modalSignIn: BsModalRef;
   notiModalRef: BsModalRef;
+  modalCall: BsModalRef;
   ringingAudio: any;
   notiModalShowing: boolean;
   timeOutNotiModal: any;
@@ -193,14 +194,18 @@ export class HeaderComponent implements OnInit {
     this.connectingCall = true;
     this.hideNotiModal();
 
-    debugger;
-    this.modalService.show(AgoraCallComponent, {
+    this.modalCall = this.modalService.show(AgoraCallComponent, {
       class: 'modal-default',
       initialState: {
         token: this.infoTheCall.token,
         chanel: this.infoTheCall.chanel,
       },
     });
+    firebase.firestore().collection("call").doc(this.infoTheCall.idCall).update('status', 'calling');
+    this.modalCall.content.onEndcall.subscribe(() => {
+      this.modalCall.hide();
+      firebase.firestore().collection("call").doc(this.infoTheCall.idCall).update("status", 'end_call');
+  });
   }
   declineMeeting() {
     this.statusCall = 'cancel';

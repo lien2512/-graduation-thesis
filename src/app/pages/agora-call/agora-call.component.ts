@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 // import { AngularAgoraRtcService } from 'angular-agora-rtc/lib/angular-agora-rtc.service';
 import { Stream } from 'src/app/class/Stream';
 import { AngularAgoraRtcService } from 'src/app/services/angular-agora-rtc.service';
@@ -33,6 +33,7 @@ export class AgoraCallComponent implements OnInit {
   token: any;
   chanel: any;
   role: number;
+  @Output() onEndcall = new EventEmitter();
    expirationTimeInSeconds = 3600
  
  currentTimestamp = Math.floor(Date.now() / 1000)
@@ -66,30 +67,15 @@ export class AgoraCallComponent implements OnInit {
     });
     // Play the remote stream when it is subsribed
     this.client.on('stream-subscribed', (evt: any) => {
-      // this.modalAcceptCall = this.modalService.show(PopUpConfirmComponent)
-        this.modalAcceptCall = this.modalService.show(PopUpConfirmComponent, {
-          class: 'modal-default calling',
-          initialState: {
-            confirmText: 'Chấp nhận cuộc gọi',
-            confirmButton: 'Đồng ý',
-            cancelButton: "Huỷ",
-            confirmTitle: "Cuộc gọi đến"
-          }
-        });
-        this.modalAcceptCall.content.onCancel.subscribe(() => {
-          this.modalAcceptCall.hide();
-        });
-        this.modalAcceptCall.content.onConfirm.subscribe(() => {
-          this.modalAcceptCall.hide();
-          let stream = evt.stream;
-          let streamId = String(stream.getId());
-          this.addVideoStream(streamId);
-          stream.play(streamId);
-        })
+      let stream = evt.stream;
+      let streamId = String(stream.getId());
+      this.addVideoStream(streamId);
+      stream.play(streamId);        
       
     });
     // Remove the corresponding view when a remote user unpublishes.
     this.client.on('stream-removed', function (evt) {
+      console.log('1333');
       let stream = evt.stream;
       let streamId = String(stream.getId());
       stream.close();
@@ -97,6 +83,7 @@ export class AgoraCallComponent implements OnInit {
     });
     // Remove the corresponding view when a remote user leaves the channel.
     this.client.on('peer-leave', function (evt) {
+      console.log('13773');
       let stream = evt.stream;
       let streamId = String(stream.getId());
       stream.close();
@@ -198,7 +185,9 @@ export class AgoraCallComponent implements OnInit {
     if (remoteDiv) remoteDiv.parentNode.removeChild(remoteDiv);
   }
   async endCall() {
+    console.log(11222);
     await this.client.leave();
+    this.onEndcall.emit();
   }
   generateToken(chanel) {
     const tokenA = agoraToken.RtcTokenBuilder.buildTokenWithUid(this.appID, this.appCertificate, chanel, 2882341273,this.role, this.privilegeExpiredTs)
