@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import firebase from 'firebase';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
 import { Account } from 'src/app/class/account';
@@ -62,6 +63,7 @@ export class AccSettingComponent implements OnInit {
     email: '',
     emailVerified: false,
     avatar: '',
+    logo: ''
   } ;
   listFavorite: any;
   listAvatarDefault = [
@@ -154,15 +156,16 @@ export class AccSettingComponent implements OnInit {
   async getData() {
 
     this.currentUser = await this.authService.getCurrentUser();
-    const res : any = await this.firebaseService.getRefById('users', this.currentUser.uid);
+    const doc = await firebase.firestore().collection('users').doc(this.currentUser.uid).get()
+    const res = doc.data();
     console.log(res);
-    this.userProfile = res.account;
-    this.imageUrl = res.logo;
-
-    // this.imageUrl = this.userProfile.logo;
-    // this.email = this.userProfile.email;
-    console.log(this.userProfile);
-    
+    this.userProfile.id = res.id;
+    this.userProfile.logo = res.logo;
+    this.userProfile.email = res.email;
+    this.userProfile.displayName = res.displayName;
+    this.userProfile.bio = res.bio ? res.bio : '';
+    this.userProfile.gender = res.gender ;
+    this.userProfile.birthday = res.birthday;
   }
   async updateBeeProfile() {
     this.firebaseService.updateRef('users', this.userProfile.uid, this.userProfile).then((res) => {
@@ -197,27 +200,15 @@ export class AccSettingComponent implements OnInit {
     } else {
       if (this.fileData) {
         debugger;
-        const avtUrl = await this.firebaseService.uploadLogo(this.imageUrl, 'userAvt/');
-        this.firebaseService.updateLogo('users', this.userProfile.id, avtUrl );
+        const avtUrl = await this.firebaseService.uploadLogo(this.userProfile.logo, 'userAvt/');
+        firebase.firestore().collection('users').doc(this.userProfile.id).update('logo', avtUrl);
+        // this.firebaseService.updateLogo('users', this.userProfile.id, avtUrl );
+        this.userProfile.logo = String(avtUrl)
       } else if (this.isRemoveLogo) {
         this.firebaseService.updateLogo('users', this.userProfile.id, '');
         this.isRemoveLogo = false;
       }
-      // if (this.userProfile.avatar !== undefined && this.userProfile.avatar.length > 0  && this.avatarDefault == '') {
-      //   if (this.uploadGif) {
-      //     this.onSubmitImage(this.userProfile.avatar, 'avatar');
-      //   } else {
-      //     const _imageName = uuid.v4();
-      //     const _blobImg = this.dataURItoBlob(this.croppedImage);
-      //     const _imageFile = new File([_blobImg], _imageName + ".jpeg", {
-      //       type: "'image/jpeg'"
-      //     });
-      //     this.onSubmitImage([_imageFile], 'avatar');
-      //   }
-      // } else if (this.avatarDefault){
-      //   this.userProfile.avatarUrl = this.avatarDefault;
-      // }
-      this.firebaseService.updateRef('users', this.userProfile.id, {account: this.userProfile});
+      this.firebaseService.updateRef('users', this.userProfile.id,  this.userProfile);
       alert("thành công rồi");
     }
   }

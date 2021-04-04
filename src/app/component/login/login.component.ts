@@ -86,7 +86,8 @@ export class LoginComponent implements OnInit {
           newUser.email = this.formLogin.value.email;
           newUser.emailVerified = false;
           newUser.role = 'user';
-          this.firebaseService.updateRef('users', user.uid, { account: newUser });
+          newUser.status = 'online';
+          this.firebaseService.updateRef('users', user.uid,  newUser );
           localStorage.setItem('user_data', JSON.stringify({
             token: user.refreshToken,
             data: newUser
@@ -162,7 +163,7 @@ export class LoginComponent implements OnInit {
     user.displayName = this.formSignUp.value.name;
     user.email = userInfo.email;
     user.emailVerified = false;
-    this.firebaseService.createUserInfo(userInfo.uid, {accoutn: user});
+    this.firebaseService.createUserInfo(userInfo.uid,  user);
   }
 
 

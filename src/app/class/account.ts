@@ -13,4 +13,5 @@ export interface Account {
     imageMember: any,
     tags: any,
     bio: any,
+    status: string
 }

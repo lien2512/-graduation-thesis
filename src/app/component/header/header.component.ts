@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import firebase from 'firebase';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { CookieService } from 'ngx-cookie-service';
 import { AuthService } from 'src/app/services/auth/auth.service';
@@ -23,7 +24,8 @@ export class HeaderComponent implements OnInit {
   showResult: boolean = true;
   isSearch: boolean = false;
   searchKey: any;
-  modalSignIn: BsModalRef
+  modalSignIn: BsModalRef;
+  ringingAudio: any;
   constructor(
     public modalService: BsModalService,
     private subjectService: SubjectService,
@@ -46,7 +48,11 @@ export class HeaderComponent implements OnInit {
       }
       console.log(this.userInfo)
     })
-    console.log(this.userInfo);
+    this.ringingAudio = new Audio();
+        this.ringingAudio.src = "/assets/audio/rings_call.wav";
+        this.ringingAudio.load();
+        this.ringingAudio.loop = true;
+    this.handleCall();
   }
   redirectToUserSetting() {
     this.router.navigate(['/account-setting']);
@@ -114,5 +120,21 @@ export class HeaderComponent implements OnInit {
   }
   hideModalFilter() {
     
+  }
+  handleCall() {
+    // let query = firebase.firestore().collection('call');
+
+    firebase
+      .firestore()
+      .collection('call')
+      .where("participant", "array-contains", this.userInfo.id).where('status','==','pending')
+      .onSnapshot((querySnapshot) => {
+        let changes = querySnapshot.docChanges();
+        console.log(changes)
+        if (changes.length > 0) {
+          console.log(changes);
+          this.ringingAudio.play();
+        }
+      });
   }
 }
