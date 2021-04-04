@@ -15,7 +15,7 @@ export class BeeBoxComponent implements OnInit {
   ngOnInit(): void {
   }
   navigateDetail() {
-    this.router.navigate(['bee']);
+    this.router.navigate(['bee', this.info.displayName,this.info.id]);
   }
   follow() {
     alert('heheheh');

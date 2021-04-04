@@ -103,13 +103,16 @@ export class BecomeBeeComponent implements OnInit {
     this.getRegisterInfo();
   }
 
-  getRegisterInfo() {
-    // this.apiService.userRegisterInfo().subscribe((response: any) => {
-    //   if (response.code == STATUS_CODE.SUCCESS) {
-    //     this.beeProfile.age = response.data.age;
-    //   }
-    // }, err => { });
-    this.firebaseService.getRefById('users',this.userInfo.id);
+  async getRegisterInfo() {
+    this.previewAvatar = [];
+    let res: any = await this.firebaseService.getRefById('users',this.userInfo.id);
+    this.beeProfile.displayName = res.displayName;
+    this.beeProfile.gender = res.gender;
+    this.beeProfile.birthday = res.gender;
+    this.beeProfile.id = res.id;
+    this.beeProfile.bio = res.bio;
+    this.previewAvatar.push({url: res.logo });
+    // console.log(await this.firebaseService.getRefById('users',this.userInfo.id));
   }
 
   popupChooseAvatarDefault() {
@@ -303,33 +306,34 @@ export class BecomeBeeComponent implements OnInit {
   }
 
   updateBeeProfile() {
+    debugger;
     this.beeProfile.tags = this.tags;
     this.beeProfile.imageMember = this.previewMember;
 
     let status = true;
     if (!this.beeProfile.bio ){
-      this.helperService.showError('', "Vui lòng giới thiệu bản thân");
+      this.helperService.showError('Fail!', "Vui lòng giới thiệu bản thân");
       status = false;
     }
     if (this.beeProfile.tags.length == 0){
-      this.helperService.showError('', "Vui lòng chọn hastag");
+      this.helperService.showError('Fail!', "Vui lòng chọn hastag");
       status = false;
     }
     if (!this.beeProfile.birthday){
-      this.helperService.showError('', "Vui lòng nhập ngày sinh");
+      this.helperService.showError('Fail!', "Vui lòng nhập ngày sinh");
       status = false;
     }
     
     if (this.beeProfile.gender == 'Select Gender'){
-      this.helperService.showError('', "Vui lòng chọn giới tính");
+      this.helperService.showError('Fail!', "Vui lòng chọn giới tính");
       status = false;
     }
     if (this.beeProfile.avatar.length == 0 && this.avatarDefault == '') {
-      this.helperService.showError('', "Hãy chọn ảnh đại diện");
+      this.helperService.showError('Fail!', "Hãy chọn ảnh đại diện");
       status = false;
     }
     if (this.beeProfile.imageMember.length == 0) {
-      this.helperService.showError('', "Hãy tải một ảnh nào đó");
+      this.helperService.showError('Fail!', "Hãy tải một ảnh nào đó");
       status = false;
     }
     if (status == false) return false;
@@ -341,10 +345,9 @@ export class BecomeBeeComponent implements OnInit {
         this.helperService.hideFullLoading();
         let userInfo = JSON.parse(this.cookie.get('account_info'));
         this.cookie.set('account_info', JSON.stringify(null));
-        userInfo.role = 'pandas';
+        userInfo.role = 'bee';
         this.cookie.set('account_info', JSON.stringify(userInfo));
         this.subjectService.userInfo.next(userInfo);
-        this.router.navigate(['panda/account/setting']);
       }
     }, 200);
     //upload video to AWS S3
@@ -367,30 +370,13 @@ export class BecomeBeeComponent implements OnInit {
       this.beeProfile.avatarUrl = this.avatarDefault;
     }
     this.beeProfile.role = 'bee';
-    this.beeProfile.displayName = this.userInfo.displayName
-
-    // this.apiService.updatePanda(this.user_info).subscribe((response) => {
-    //     if (response['code'] == STATUS_CODE.SUCCESS && response['data'] == true) {
-    //       this.statusUpdate = true;
-    //       this.router.navigate(['/panda/account/setting']);
-    //     } else {
-    //       // console.log(response)
-    //       this.statusUpdate = false;
-    //     }
-    //   },
-    //   (err) => {
-    //     // console.log(err)
-    //     this.statusUpdate = false;
-    //   }
-    // );
-    this.firebaseService.updateRef('users',this.userInfo.id, {account: this.beeProfile}).then((res) => {
-      console.log(res);
+    this.beeProfile.displayName = this.userInfo.displayName;
+    console.log(1111);
+    let a = this.firebaseService.updateRef('users',this.userInfo.id,  this.beeProfile);
+    console.log(a) ;
       alert("thành công");
       this.subjectService.userInfo.next(this.beeProfile);
       this.router.navigate(['/account-setting'])
-    }).catch(err => {
-
-    })
 
   }
 

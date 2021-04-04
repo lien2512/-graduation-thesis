@@ -25,7 +25,7 @@ import { MeetingComponent } from 'src/app/pages/meeting/meeting.component';
       path: '', component: MainComponent, children: [
         {path: 'login', component: LoginComponent},
         {path: '', component: DashboardComponent},
-        {path: 'bee', component: BeeProfileComponent},
+        {path: 'bee/:name/:id', component: BeeProfileComponent},
         {path: 'bees', component: ListBeesComponent},
         {path: 'account-setting', component: AccSettingComponent},
         {path: 'become-bee', component: BecomeBeeComponent},

@@ -1,4 +1,6 @@
+import { isNgTemplate } from '@angular/compiler';
 import { Injectable } from '@angular/core';
+import { async } from '@angular/core/testing';
 import firebase from 'firebase';
 import * as valuesLd from 'lodash/values';
 import { Account } from '../class/account';
@@ -10,6 +12,10 @@ export class FirebaseService {
   createUserInfo(uid, data) {
     return firebase.firestore().collection('users').doc(uid).set(data);
   }
+  createCall(uid, data) {
+    return firebase.firestore().collection('call').doc(uid).set(data);
+    // return firebase.database().ref('call/' + uid).set(data);
+  }
   getUser() {
     return firebase.firestore().collection('users').get();
   }
@@ -17,30 +23,42 @@ export class FirebaseService {
 
   }
   updateRef(req, id, body) {
-    return firebase.database().ref(`/${req}/${id}`).update(body)
+    return firebase.firestore().collection(req).doc(id).update(body);
+    // return firebase.database().ref(`/${req}/${id}`).update(body)
   }
   getRefById(ref, id) {
     return new Promise((resolve, reject) => {
-      firebase.database().ref('/' + ref + '/' + id).once('value').then((snapshot) => {
-        const detail = snapshot.val();
+
+      firebase.firestore().collection(ref).doc(id).get().then((snapshot) => {
+        const detail = snapshot.data();
         resolve(detail);
       });
     });
+    // return firebase.firestore().collection(ref).doc(id).get();
   }
-
-  async getRefById2(ref, id) {
-
-    let snapshot = await firebase.database().ref('/' + ref + '/' + id).once('value');
-    return snapshot.val()
-  }
-  getAllRef(ref) {
+   getBeeByStatus(attribute, status) {
+    let listBee = [];
     return new Promise((resolve, reject) => {
-      firebase.database().ref('/' + ref).on('value', (snapshot) => {
-        const detail = valuesLd(snapshot.val());
-        resolve(detail);
-      });
-    });
-  }
+      firebase.firestore().collection("users").where(attribute, "==", status).get().then((snapshot) => {
+        snapshot.forEach((doc) => {
+          listBee.push(doc.data())
+        })
+        resolve(listBee);
+      })
+    })
+ }
+ getListAcc(document) {
+   let listBee = []
+  return new Promise((resolve, reject) => {
+    firebase.firestore().collection(document).get().then((snapshot) => {
+      snapshot.forEach((doc) => {
+        listBee.push(doc.data())
+      })
+      resolve(listBee);
+    })
+  })
+ }
+
   uploadLogo(logo, path) {
     const name = new Date().getTime();
     const ref = firebase.storage().ref(path + name);
@@ -59,7 +77,8 @@ export class FirebaseService {
   }
   updateLogo(collection, doc, logoUrl) {
     // return this.updateRef(collection, doc, { account : {logo: logoUrl} });
-    return this.updateRef(collection, doc, {logo: logoUrl} );
+    // return this.updateRef(collection, doc, 'logo': logoUrl );
+    firebase.firestore().collection('users').doc(doc).update('logo', logoUrl)
 
   }
   updateUserInfo(user: any) {
@@ -91,6 +110,11 @@ export class FirebaseService {
         resolve(clients);
       });
     });
+  }
+  updateStatus(status, userId) {
+    const updates = {};
+    updates[`users/${userId}/account/status`] = status;
+    return firebase.database().ref().update(updates);
   }
 
 }

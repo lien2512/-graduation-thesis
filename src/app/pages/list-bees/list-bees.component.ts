@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import firebase from 'firebase';
 import { FirebaseService } from 'src/app/services/firebase.service';
 
 @Component({
@@ -14,64 +15,18 @@ export class ListBeesComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.listBeesOnline = [{
-      avatar: 'assets/images/images.png',
-      name: 'Anna',
-      audio: 'true',
-      video: 'true',
-      followers: '15',
-      online: '1',
-      type: 'skin',
-      tag: 'happy',
-    },
-    {
-      avatar: 'assets/images/images.png',
-      name: 'Anna',
-      audio: 'true',
-      video: 'true',
-      followers: '15',
-      online: '0',
-      type: 'skin',
-      tag: 'happy',
-    },
-    {
-      avatar: 'assets/images/avatar-default.jpg',
-      name: 'Anna',
-      audio: 'true',
-      video: 'true',
-      followers: '15',
-      online: '2',
-      type: 'skin',
-      tag: 'happy',
-    },
-    {
-      avatar: 'assets/images/avatar-default.jpg',
-      name: 'Anna',
-      audio: 'true',
-      video: 'true',
-      followers: '15',
-      online: '1',
-      type: 'skin',
-      tag: 'happy',
-    },
-    {
-      avatar: 'assets/images/avatar-default.jpg',
-      name: 'Anna',
-      audio: 'true',
-      video: 'true',
-      followers: '15',
-      online: '1',
-      type: 'skin',
-      tag: 'happy',
-    }
-  ]
+ 
+  this.getListPanda();
+  this.getListBeeOnline();
   }
-  getListPanda() {
-    this.firebaseService.getAllRef('users').then((res) => {
-
-    }).catch(err => {
-      
-    })
+  async getListPanda() {
+    this.listBee = await this.firebaseService.getListAcc('users');
+    console.log(this.listBee);
+  }
+   async getListBeeOnline() {
+    this.listBeesOnline = await this.firebaseService.getBeeByStatus('status', 'online');
+    
+    console.log(this.listBeesOnline);
   }
 
 }

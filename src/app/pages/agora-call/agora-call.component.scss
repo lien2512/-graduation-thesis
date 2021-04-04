@@ -1,0 +1,38 @@
+*{
+    font-family: sans-serif;
+  }
+  h1,h4{
+    text-align: center;
+  }
+  #me{
+    position: relative;
+    width: 200px;
+    height: 200px;
+    margin: 0 auto;
+    display: block;
+  }
+  #me video{
+    position: relative !important;
+  }
+  #remote-container{
+    position: relative;
+    width: 200px;
+    height: 200px;
+    margin: 0 auto;
+    display: block;
+    div:first-child {
+      div:first-child {
+        video {
+          position: relative !important;
+        }
+      }
+    }
+  }
+  
+  #remote-container video{
+    height: auto;
+    position: relative !important;
+  }
+  video{
+    position: initial !important;
+  }
