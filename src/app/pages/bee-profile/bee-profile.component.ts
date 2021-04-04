@@ -113,7 +113,7 @@ export class BeeProfileComponent implements OnInit {
           });
           this.modalCall.content.onEndcall.subscribe(() => {
             this.modalCall.hide();
-            firebase.firestore().collection("call").doc(info.idCall).update("status", 'end_call');
+            firebase.firestore().collection("call").doc(info.idCall).update("status", 'end_call')
         });
         }
       });

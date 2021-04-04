@@ -188,6 +188,7 @@ export class AgoraCallComponent implements OnInit {
     console.log(11222);
     await this.client.leave();
     this.onEndcall.emit();
+
   }
   generateToken(chanel) {
     const tokenA = agoraToken.RtcTokenBuilder.buildTokenWithUid(this.appID, this.appCertificate, chanel, 2882341273,this.role, this.privilegeExpiredTs)

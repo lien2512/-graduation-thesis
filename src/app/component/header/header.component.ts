@@ -53,6 +53,8 @@ export class HeaderComponent implements OnInit {
         this.cookie.get('account_info') != ''
       ) {
         this.userInfo = JSON.parse(this.cookie.get('account_info'));
+        this.userInfo.status = "online";
+      firebase.firestore().collection("users").doc(this.userInfo.id).update('status', "online")
       }
       if (this.userInfo.role == 'bee') {
         this.showBecomePandaBtn = false;
@@ -171,12 +173,7 @@ export class HeaderComponent implements OnInit {
     this.timeOutNotiModal = setTimeout(() => {
       if (this.notiModalShowing) {
         this.hideNotiModal();
-        let data = {
-          caller: this.infoTheCall.participant[0],
-          callee: this.infoTheCall.participant[1],
-          // userId: this.callingUser.info['userId'],
-          status: this.infoTheCall.status,
-        };
+
       }
     }, 120000);
   }
@@ -193,7 +190,7 @@ export class HeaderComponent implements OnInit {
   pandaAcceptMeeting() {
     this.connectingCall = true;
     this.hideNotiModal();
-
+    firebase.firestore().collection("call").doc(this.infoTheCall.idCall).update('status', 'calling');
     this.modalCall = this.modalService.show(AgoraCallComponent, {
       class: 'modal-default',
       initialState: {
@@ -201,7 +198,6 @@ export class HeaderComponent implements OnInit {
         chanel: this.infoTheCall.chanel,
       },
     });
-    firebase.firestore().collection("call").doc(this.infoTheCall.idCall).update('status', 'calling');
     this.modalCall.content.onEndcall.subscribe(() => {
       this.modalCall.hide();
       firebase.firestore().collection("call").doc(this.infoTheCall.idCall).update("status", 'end_call');
@@ -242,6 +238,11 @@ export class HeaderComponent implements OnInit {
     // process.nextTick(() => {
     //   this.deleteQueryBatch(db, query, resolve);
     // });
+  }
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    firebase.firestore().collection("users").doc(this.userInfo.id).update("status", "offline");
   }
 
 }
