@@ -164,3 +164,53 @@
     <div class="modal-footer"></div>
 
 </ng-template>
+<ng-template #templateInputHours>
+    <form method="post" [formGroup]="formMeetNow">
+      <div class="modal-body">
+        <div>
+          <label class="white bold lh-35 col-sm-12">Trò chuyện ngay bây giờ</label>
+        </div>
+        <div class="action">
+          <div class="row mb-2"  *ngIf="beeProfile.services.includes('video')" >
+            <div class="col-6">
+              <div class="input-group form-radio">
+                <input type="radio" aria-label="Video Call" id="video-service" value="video"  formControlName="bookType">
+                <label class="label white" for="video-service">
+                  Video
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="row" *ngIf="beeProfile.services.includes('audio')">
+            <div class="col-6">
+              <div class="input-group form-radio">
+                <input type="radio" aria-label="Audio Call" id="audio-service" value="audio" formControlName="bookType">
+                <label class="label white" for="audio-service">
+                  Audio
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        
+       
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary"  (click)="startBooking()">Xác nhân</button>
+        <button type="button" class="btn btn-light" (click)="closeModalInputHours()">Huỷ</button>
+      </div>
+    </form>
+  </ng-template>
+  <ng-template #templateCall>
+    <div class="modal-body text-center">
+      <p>
+        <i class="fa fa-phone mr-2"></i>
+        <span *ngIf="!connectingCall;else connectingCal">Cuộc gọi </span>
+        <ng-template #connectingCal>Đang kết nối</ng-template>
+        <i class="fa fa-bell bell" aria-hidden="true"></i>
+
+      </p>
+      <button type="button" class="btn btn-warning" [disabled]="this.connectingCall" (click)="cancelCall()">Huỷ</button>
+    </div>
+  </ng-template>

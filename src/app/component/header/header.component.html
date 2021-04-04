@@ -119,3 +119,21 @@
     </div>
   </nav>
   </header>
+  <ng-template #notificationCall>
+    <div class="modal-header">
+    </div>
+    <div class="modal-body">
+      <p ><span>Bạn đang có cuộc gọi </span></p>
+      <!-- <p *ngIf="callingUser.info.bookType == 'video'"><span>{{ this.callingUser.info.userName }} </span>
+        {{'Common.popup_calling_video' | translate }}</p>
+      <p *ngIf="callingUser.info.bookType == 'audio'"><span>{{ this.callingUser.info.userName }} </span>
+        {{'Common.popup_calling_audio' | translate }}</p> -->
+      <p *ngIf="connectingCall"> Đang kết nối... </p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-warning mr-3" [disabled]="this.connectingCall" (click)="declineMeeting()">{{
+        Từ chối</button>
+      <button class="btn btn-primary" [disabled]="this.connectingCall" (click)="pandaAcceptMeeting()">{{
+        Chấp nhận</button>
+    </div>
+  </ng-template>

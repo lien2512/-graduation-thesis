@@ -30,6 +30,8 @@ export class AgoraCallComponent implements OnInit {
   userInfo: any;
   appID = '68839fbf8dcc423f87c2f89fa52e975b';
   appCertificate = '03ba16b0e67f4334a597b7a5d10a5adc';
+  token: any;
+  chanel: any;
   role: number;
    expirationTimeInSeconds = 3600
  
@@ -53,6 +55,11 @@ export class AgoraCallComponent implements OnInit {
         
       }
     })
+    
+  }
+  ngAfterViewInit(): void {
+    //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
+    //Add 'implements AfterViewInit' to the class.
     this.initAgora();
     this.client.on('stream-added', (evt: any) => {
       this.client.subscribe(evt.stream, this.handleError);
@@ -96,14 +103,16 @@ export class AgoraCallComponent implements OnInit {
       this.removeVideoStream(streamId);
 
     });
+    
   }
   initAgora() {
+    console.log(this.token);
     this.client = AgoraRTC.createClient({
       mode: 'rtc',
       codec: 'vp8',
     });
     this.client.init(
-      '68839fbf8dcc423f87c2f89fa52e975b',
+      this.token,
       () => {
         console.log('client initialized');
       },
@@ -111,16 +120,26 @@ export class AgoraCallComponent implements OnInit {
         console.log('client init failed ', err);
       }
     );
+    // this.client.init(
+    //   '68839fbf8dcc423f87c2f89fa52e975b',
+    //   () => {
+    //     console.log('client initialized');
+    //   },
+    //   (err: any) => {
+    //     console.log('client init failed ', err);
+    //   }
+    // );
   }
   join() {
-    const chanel = this.generateChannelName();
-    const token = this.generateToken(chanel);
+    // const chanel = this.generateChannelName();
+    // const token = this.generateToken(chanel);
     // const token =
     //   '00668839fbf8dcc423f87c2f89fa52e975bIADCZrkZtVYMQsEmpQ73S5eYMkz4EDkrWFX2/0tRvAvBM2KDJSsAAAAAEAAeXT+cGc1lYAEAAQAZzWVg';
     //   const chanel = 'viet-1'
+    console.log('token',this.token, '   chanhel', this.chanel)
       this.client.join(
-      token,
-      chanel,
+        this.token,
+      this.chanel,
       null,
       (uid: string) => {
         console.log('uid:', uid);
