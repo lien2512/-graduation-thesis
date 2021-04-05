@@ -305,11 +305,20 @@ export class BecomeBeeComponent implements OnInit {
     this.beeProfile.video = [];
   }
 
-  updateBeeProfile() {
+  async updateBeeProfile() {
     debugger;
     this.beeProfile.tags = this.tags;
     this.beeProfile.imageMember = this.previewMember;
-
+    if (this.beeProfile.imageMember.length > 0) {
+      let avtUrls = [];
+      this.beeProfile.imageMember.forEach(async (item) => {
+        console.log(item);
+        let avtUrl = await this.firebaseService.uploadLogo(item.url, 'userAvt/');
+        avtUrls.push(avtUrl);
+      })
+      this.beeProfile.imageMember = avtUrls;
+    }
+    this.beeProfile.avatar = this.previewAvatar;
     let status = true;
     if (!this.beeProfile.bio ){
       this.helperService.showError('Fail!', "Vui lòng giới thiệu bản thân");
@@ -337,43 +346,43 @@ export class BecomeBeeComponent implements OnInit {
       status = false;
     }
     if (status == false) return false;
-
+    this.beeProfile.birthday = moment(this.beeProfile.birthday , 'DD/MM/YYYY').format('YYYY-MM-DD');
     this.helperService.showFullLoading();
-    var id = setInterval(() => {
-      if ((this.beeProfile.video.length == 0 || this.statusUpVideo) && this.statusUpdate) {
-        clearInterval(id);
-        this.helperService.hideFullLoading();
-        let userInfo = JSON.parse(this.cookie.get('account_info'));
-        this.cookie.set('account_info', JSON.stringify(null));
-        userInfo.role = 'bee';
-        this.cookie.set('account_info', JSON.stringify(userInfo));
-        this.subjectService.userInfo.next(userInfo);
-      }
-    }, 200);
-    //upload video to AWS S3
-    if (this.beeProfile.video.length > 0) {
-      this.onSubmitVideo(this.beeProfile.video);
-    }
+    
+    // var id = setInterval(() => {
+    //   if ((this.beeProfile.video.length == 0 || this.statusUpVideo) && this.statusUpdate) {
+    //     clearInterval(id);
+    //     this.helperService.hideFullLoading();
+    //     let userInfo = JSON.parse(this.cookie.get('account_info'));
+    //     this.cookie.set('account_info', JSON.stringify(null));
+    //     userInfo.role = 'bee';
+    //     this.cookie.set('account_info', JSON.stringify(userInfo));
+    //     this.subjectService.userInfo.next(userInfo);
+    //   }
+    // }, 200);
+    // if (this.beeProfile.video.length > 0) {
+    //   this.onSubmitVideo(this.beeProfile.video);
+    // }
     //upload avatar
     if (this.beeProfile.avatar.length > 0 && this.avatarDefault == '') {
       if (this.uploadGif) {
         this.onSubmitImage(this.beeProfile.avatar, 'avatar');
       } else {
-        const _imageName = uuid.v4();
-        const _blobImg = this.dataURItoBlob(this.croppedImage);
-        const _imageFile = new File([_blobImg], _imageName + ".jpeg", {
-          type: "'image/jpeg'"
-        });
-        this.onSubmitImage([_imageFile], 'avatar');
+        // const _imageName = uuid.v4();
+        // const _blobImg = this.dataURItoBlob(this.croppedImage);
+        // const _imageFile = new File([_blobImg], _imageName + ".jpeg", {
+        //   type: "'image/jpeg'"
+        // });
+        // this.onSubmitImage([_imageFile], 'avatar');
       }
     } else if (this.avatarDefault){
       this.beeProfile.avatarUrl = this.avatarDefault;
     }
     this.beeProfile.role = 'bee';
     this.beeProfile.displayName = this.userInfo.displayName;
-    console.log(1111);
-    let a = this.firebaseService.updateRef('users',this.userInfo.id,  this.beeProfile);
-    console.log(a) ;
+    this.beeProfile.video = []
+    console.log(1111, this.beeProfile);
+    this.firebaseService.updateRef('users',this.userInfo.id,  this.beeProfile);
       alert("thành công");
       this.subjectService.userInfo.next(this.beeProfile);
       this.router.navigate(['/account-setting'])

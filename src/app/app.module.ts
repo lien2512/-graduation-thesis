@@ -25,6 +25,7 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
 import { ImageCropperModule } from 'ngx-image-cropper';
 import { TagInputModule } from 'ngx-chips';
 import { AngularAgoraRtcModule, AgoraConfig } from 'angular-agora-rtc';
+import { AngularFireModule } from '@angular/fire';
 const firebaseConfig = {
   apiKey: 'AIzaSyAY0q9PonWzSoujGQh6GGsqQ6LufCglB30',
   authDomain: 'beauty-garden-5d096.firebaseapp.com',
@@ -66,7 +67,8 @@ const agoraConfig: AgoraConfig = {
     BsDatepickerModule.forRoot(),
     ImageCropperModule,
     TagInputModule,
-    AngularAgoraRtcModule.forRoot(agoraConfig)
+    AngularAgoraRtcModule.forRoot(agoraConfig),
+    AngularFireModule.initializeApp(firebaseConfig)
   ],
   providers: [],
   bootstrap: [AppComponent],

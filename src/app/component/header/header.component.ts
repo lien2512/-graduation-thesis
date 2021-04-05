@@ -60,6 +60,7 @@ export class HeaderComponent implements OnInit {
         this.showBecomePandaBtn = false;
       }
       console.log(this.userInfo);
+      console.log(firebase.auth().currentUser);
     });
     this.ringingAudio = new Audio();
     this.ringingAudio.src = '/assets/audio/rings_call.wav';
