@@ -41,7 +41,7 @@ export class HeaderComponent implements OnInit {
     private cookie: CookieService,
     private authService: AuthService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.subjectService.userInfo.subscribe((res) => {
@@ -54,7 +54,7 @@ export class HeaderComponent implements OnInit {
       ) {
         this.userInfo = JSON.parse(this.cookie.get('account_info'));
         this.userInfo.status = "online";
-      firebase.firestore().collection("users").doc(this.userInfo.id).update('status', "online")
+        firebase.firestore().collection("users").doc(this.userInfo.id).update('status', "online")
       }
       if (this.userInfo.role == 'bee') {
         this.showBecomePandaBtn = false;
@@ -70,10 +70,10 @@ export class HeaderComponent implements OnInit {
   redirectToUserSetting() {
     this.router.navigate(['/account-setting']);
   }
-  redirectToBeeSetting() {}
-  redirectToWallet() {}
-  redirectToPayMent() {}
-  redirectToTestDevice() {}
+  redirectToBeeSetting() { }
+  redirectToWallet() { }
+  redirectToPayMent() { }
+  redirectToTestDevice() { }
   signOut() {
     this.authService.logOut().then((res) => {
       document.cookie = `jwt_access_token=;expires=Thu, 01 Jan 1970 00:00:00 GMT`;
@@ -84,12 +84,12 @@ export class HeaderComponent implements OnInit {
       this.subjectService.userInfo.next(null);
     });
   }
-  toogleSearch() {}
+  toogleSearch() { }
   redirectBecomeBee() {
     this.router.navigate(['/become-bee']);
   }
-  notificationShowed() {}
-  openBoxChat() {}
+  notificationShowed() { }
+  openBoxChat() { }
   openLoginModal(event) {
     this.modalSignIn = this.modalService.show(LoginComponent, {
       class: 'modal-sign-in',
@@ -99,16 +99,16 @@ export class HeaderComponent implements OnInit {
       this.modalSignIn.hide();
     });
   }
-  onClickResultDetail(result) {}
-  shouldShowResults() {}
-  onSearchBoxChange() {}
-  onEnter() {}
-  move(event) {}
-  clickOutside() {}
-  hideModalFilter() {}
+  onClickResultDetail(result) { }
+  shouldShowResults() { }
+  onSearchBoxChange() { }
+  onEnter() { }
+  move(event) { }
+  clickOutside() { }
+  hideModalFilter() { }
   handleCall() {
     // let query = firebase.firestore().collection('call');
-    
+
     firebase.firestore().collection('call').where('recipientCall', '==', this.userInfo.id)
       .onSnapshot((querySnapshot) => {
         let logs = [];
@@ -119,24 +119,24 @@ export class HeaderComponent implements OnInit {
           logs.push(tempObject);
         });
         console.log(logs);
-        this.infoTheCall = logs.find((item) => { return item.status == 'pending'});
-        
-        if (logs.find((item) => { return item.status == 'pending'})) {
+        this.infoTheCall = logs.find((item) => { return item.status == 'pending' });
+
+        if (logs.find((item) => { return item.status == 'pending' })) {
           firebase.firestore().collection("users").doc(this.userInfo.id).update('status', 'pending');
           this.openCallingNotification(this.notificationCall);
-         
+
         }
-        if (logs.find((item) => { return item.status == 'cancel'})) {
-          let info = logs.find((item) => { return item.status == 'cancel'})
+        if (logs.find((item) => { return item.status == 'cancel' })) {
+          let info = logs.find((item) => { return item.status == 'cancel' })
           if (info.action == 'turn_off') {
             if (info.closeUser == 'caller') {
-             this.hideNotiModal();
-             this.deleteCollection(firebase.firestore(), 'call', info.idCall)
-           }
-         }
+              this.hideNotiModal();
+              this.deleteCollection(firebase.firestore(), 'call', info.idCall)
+            }
+          }
         }
       });
-      firebase
+    firebase
       .firestore()
       .collection('call')
       .where('callee', '==', this.userInfo.id)
@@ -149,12 +149,11 @@ export class HeaderComponent implements OnInit {
           logs.push(tempObject);
         });
         console.log(logs);
-        this.infoTheCall = logs.find((item) => { return item.status == 'cancel'})
-        if (logs.find((item) => { return item.status == 'cancel'})) {
-          let info = logs.find((item) => { return item.status == 'cancel'})
+        this.infoTheCall = logs.find((item) => { return item.status == 'cancel' })
+        if (logs.find((item) => { return item.status == 'cancel' })) {
+          let info = logs.find((item) => { return item.status == 'cancel' })
           if (info.action == 'turn_off') {
-            if (info.closeUser == 'receiver')
-            {
+            if (info.closeUser == 'receiver') {
               alert("Người nghe từ chối");
               this.deleteCollection(firebase.firestore(), 'call', info.idCall)
             }
@@ -201,7 +200,7 @@ export class HeaderComponent implements OnInit {
     this.modalCall.content.onEndcall.subscribe(() => {
       this.modalCall.hide();
       firebase.firestore().collection("call").doc(this.infoTheCall.idCall).update("status", 'end_call');
-  });
+    });
   }
   declineMeeting() {
     this.statusCall = 'cancel';
@@ -213,12 +212,12 @@ export class HeaderComponent implements OnInit {
   async deleteCollection(db, collectionPath, batchSize) {
     const collectionRef = db.collection(collectionPath);
     const query = collectionRef.orderBy('__name__').limit(batchSize);
-  
+
     return new Promise((resolve, reject) => {
       this.deleteQueryBatch(db, query, resolve).catch(reject);
     });
   }
-  
+
   async deleteQueryBatch(db, query, resolve) {
     const snapshot = await query.get();
     const batchSize = snapshot.size;
@@ -244,5 +243,12 @@ export class HeaderComponent implements OnInit {
     //Add 'implements OnDestroy' to the class.
     firebase.firestore().collection("users").doc(this.userInfo.id).update("status", "offline");
   }
+  async createToken() {
+    // firebase.functions().useEmulator("localhost", 5001); 
 
+
+    const doCreateAgoraToken = firebase.app().functions().httpsCallable('doCreateAgoraToken');
+    const tokenResult = await doCreateAgoraToken({channelName:'abcd'}); // chanel name chỗ này đặt random nhé, new Date().getTime() cũng đc
+    console.log(tokenResult);
+  }
 }

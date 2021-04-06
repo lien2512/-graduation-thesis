@@ -35,6 +35,7 @@
       <div class="collapse-wrap">
       <div class="header-right" [ngClass]="{'responeBecome': userInfo?.role != 'bee'}">
               <!-- <div class="header-right" > -->
+                <button (click)="createToken()">Create Token</button>
         <ul class="navbar-nav">
           <li class="nav-item active position-relative meetpandas">
             <a id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link" [routerLink]="['/pandas']" routerLinkActive="router-link-active">Gặp gỡ chuyên gia <i class="fa fa-caret-down pl-2" aria-hidden="true"></i></a>
