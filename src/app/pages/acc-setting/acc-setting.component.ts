@@ -67,7 +67,9 @@ export class AccSettingComponent implements OnInit {
     avatar: '',
     logo: '',
     advise: [],
-    review: []
+    review: [],
+    follow: [],
+    follower: [],
   } ;
   listFavorite: any;
   listAvatarDefault = [
@@ -109,6 +111,11 @@ export class AccSettingComponent implements OnInit {
   }
   selectTab(type) {
     this.mainTab = type;
+    switch (type) {
+      case 'block':
+        this.getListBlock();
+        break;
+    }
   }
   initForm() {
     this.formChangePassword = this.fb.group({
@@ -174,6 +181,8 @@ export class AccSettingComponent implements OnInit {
     this.userProfile.bio = res.bio ? res.bio : '';
     this.userProfile.gender = res.gender ;
     this.userProfile.birthday  = moment(res.birthday).format('DD-MM-YYYY');
+    this.userProfile.follow = res.follow;
+    this.userProfile.follower = res.follower;
 
     // this.userProfile.birthday = res.birthday;
   }
@@ -256,13 +265,40 @@ export class AccSettingComponent implements OnInit {
   navigateToPandaProfile(name, id) {
 
   }
-  getListBlock() {
-
+  async getListBlock() {
+    let res: any = await this.firebaseService.getRefById('users',this.userProfile.id);
+    this.listBlock = res.listBock;
   }
   searchAccBlocked() {
 
   }
-  unBlockPanda(item) {}
+  async unBlockPanda(item) {
+    firebase.firestore().collection('users').doc(this.userProfile.id).update({
+      listBock: firebase.firestore.FieldValue.arrayRemove(item)
+    });
+    let beeInfo: any = await this.firebaseService.getRefById('users', item.id) ;
+    debugger;
+    let userInfo = beeInfo.blockedBy.find((item) => {return item.id == this.userProfile.id})
+    console.log(1, userInfo)
+      firebase.firestore().collection('users').doc(item.id).update({
+        blockedBy: firebase.firestore.FieldValue.arrayRemove(userInfo)
+      });
+    console.log(2);
+    // let index = this.listBlock.findIndex((item: any) => {
+    //   item.id == id
+    // })
+    // this.listBlock.splice(index, 1);
+    // firebase.firestore().collection('users').doc(this.userProfile.id).update('listBock', this.listBlock);
+    // let res: any = await this.firebaseService.getRefById('users', id);
+    // let listBlocked = res.blockedBy;
+    // let userBlock = listBlocked.findIndex((item: any) => {
+    //   item.id == this.userProfile.id
+    // })
+    // listBlocked.splice(userBlock, 1);
+    // firebase.firestore().collection('users').doc(id).update('blockedBy', listBlocked);
+    
+    this.getListBlock();
+  }
   listBlockChange(type) {}
   initTabChangePassword() {
 
@@ -387,6 +423,20 @@ export class AccSettingComponent implements OnInit {
     this.avatarDefault = '';
     this.croppedImage = event.base64;
     this.previewAvatar[0].url = this.croppedImage;
+  }
+  selectTabFavourite(type) {
+    debugger;
+    switch (type) {
+      case 'follow':
+        this.listFavorite = this.userProfile.follower;
+        break
+      case 'booked':
+        this.listFavorite = [];
+        break;
+      case 'follower': 
+        this.listFavorite = this.userProfile.follow
+    }
+    console.log(this.listFavorite);
   }
 
 }

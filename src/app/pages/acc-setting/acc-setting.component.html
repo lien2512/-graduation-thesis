@@ -1,22 +1,27 @@
 <div class="main-content main-bg profile profile-settings">
-    <div class="container">
-      <p class="title">Trang cá nhân của bạn</p>
-      <div class="pd-horizontal-tabs">
+  <div class="container">
+    <p class="title">Trang cá nhân của bạn</p>
+    <div class="pd-horizontal-tabs">
       <div class="tab">
-        <button class="tablinks flex-1" [ngClass]="{'active': mainTab == 'account'}" (click)="selectTab('account')">Thông tin cá nhân</button>
-        <button class="tablinks flex-1" [ngClass]="{'active': mainTab == 'myOrder'}" (click)="selectTab('myOrder')">Lịch cá nhân</button>
-        <button class="tablinks flex-1" [ngClass]="{'active': mainTab == 'favourite'}" (click)="selectTab('favourite')">Danh sách yêu thích</button>
-        <button class="tablinks flex-1" [ngClass]="{'active': mainTab == 'block'}" (click)="selectTab('block')">Danh sách hạn chế</button>
-        <button class="tablinks flex-1" [ngClass]="{'active': mainTab == 'changePass'}" (click)="selectTab('changePass')">Đổi mật khẩu</button>
+        <button class="tablinks flex-1" [ngClass]="{'active': mainTab == 'account'}"
+          (click)="selectTab('account')">Thông tin cá nhân</button>
+        <button class="tablinks flex-1" [ngClass]="{'active': mainTab == 'myOrder'}" (click)="selectTab('myOrder')">Lịch
+          cá nhân</button>
+        <button class="tablinks flex-1" [ngClass]="{'active': mainTab == 'favourite'}"
+          (click)="selectTab('favourite')">Danh sách yêu thích</button>
+        <button class="tablinks flex-1" [ngClass]="{'active': mainTab == 'block'}" (click)="selectTab('block')">Danh
+          sách hạn chế</button>
+        <button class="tablinks flex-1" [ngClass]="{'active': mainTab == 'changePass'}"
+          (click)="selectTab('changePass')">Đổi mật khẩu</button>
         <!-- <button class="tablinks flex-1">Danh sách hạn chế</button> -->
       </div>
       <div class="tabcontent">
         <div class="" *ngIf="mainTab == 'account'">
-            <section>
-  
-              <div class="row-account-info">
-                <div class="col-12 col-lg-8 d-flex flex-row flex-wrap">
-                  <!-- <div class="avatar-wrap mb-5">
+          <section>
+
+            <div class="row-account-info">
+              <div class="col-12 col-lg-8 d-flex flex-row flex-wrap">
+                <!-- <div class="avatar-wrap mb-5">
                     <span *ngIf="previewAvatar.length == 0">
                       <img src="assets/images/default-image.png" alt="">
                       <label for="add-avatar" (click)="popupChooseAvatarDefault()" class="backdrop" style="margin-bottom: 0px">
@@ -31,86 +36,89 @@
                     </span>
                     <p class="avatar-note">Ảnh đại diện</p>
                   </div> -->
-                  <div class="form-custom__row flex-align-center mb-40">
-                    <div class="img-profile">
-                      <img class="pre-upload" src="{{userProfile?.logo ? userProfile?.logo : '../../../assets/img/blank-profile.png'}}">
-                      <!-- <img class="pre-upload" src="{{imageUrl ? imageUrl : '../../../assets/img/blank-profile.png'}}"> -->
-                    </div>
-                    <label class="upload-btn sub-heading">
-                      Upload Image
-                      <input type="file" #image (change)="handleFileInput($event)" accept="image/*" />
-                    </label>
-                    <button class="btn-transparent black-text sub-heading" (click)="removeImage()">
-                      REMOVE CURRENT
-                    </button>
+                <div class="form-custom__row flex-align-center mb-40">
+                  <div class="img-profile">
+                    <img class="pre-upload"
+                      src="{{userProfile?.logo ? userProfile?.logo : '../../../assets/img/blank-profile.png'}}">
+                    <!-- <img class="pre-upload" src="{{imageUrl ? imageUrl : '../../../assets/img/blank-profile.png'}}"> -->
                   </div>
-                  <div class="main-infor">
-                    
-                    
-                    
-                    <!-- <div class="">
+                  <label class="upload-btn sub-heading">
+                    Upload Image
+                    <input type="file" #image (change)="handleFileInput($event)" accept="image/*" />
+                  </label>
+                  <button class="btn-transparent black-text sub-heading" (click)="removeImage()">
+                    REMOVE CURRENT
+                  </button>
+                </div>
+                <div class="main-infor">
+
+
+
+                  <!-- <div class="">
                     <span>
                       <span class="label">{{'SETTING_USER.LAST_ACTIVITY_AT' | translate}}</span>
                       <span class="field">{{userProfile.last_activity_at}}</span>
                     </span>
                     </div> -->
-                  </div>
-                </div>
-                <div class="main-infor col-lg-4">
-                  <p class="main-infor-title">Chỉnh sửa thông tin cá nhân</p>
-                  <div class="flex-row-between flex-wrap">
-                    <p>
-                      <span class="label">Email</span>
-                      <span class="field">{{userProfile.email}}</span>
-                    </p>
-                    <div class="pb-2">
-                    <i [ngClass]="!isShowEmail? 'fa fa-eye-slash icon-eye':'fa fa-eye icon-eye'" (click)="showEmail(userProfile.email)"></i>
-                  </div>
-                  </div>
-                  <div>
-                </div>
-                  
-                  
                 </div>
               </div>
-          
-              <div>
-                <div class="box">
-                  <p class="box-subtitle isRequire">Tài khoản</p>
-                  <div class="row">
-                    <div class="col-md-6">
-                      <div class="form-group form-default">
-                        <input type="text" [(ngModel)]="userProfile.displayName" class="form-control" maxlength="20">
+              <div class="main-infor col-lg-4">
+                <p class="main-infor-title">Chỉnh sửa thông tin cá nhân</p>
+                <div class="flex-row-between flex-wrap">
+                  <p>
+                    <span class="label">Email</span>
+                    <span class="field">{{userProfile.email}}</span>
+                  </p>
+                  <div class="pb-2">
+                    <i [ngClass]="!isShowEmail? 'fa fa-eye-slash icon-eye':'fa fa-eye icon-eye'"
+                      (click)="showEmail(userProfile.email)"></i>
+                  </div>
+                </div>
+                <div>
+                </div>
+
+
+              </div>
+            </div>
+
+            <div>
+              <div class="box">
+                <p class="box-subtitle isRequire">Tài khoản</p>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group form-default">
+                      <input type="text" [(ngModel)]="userProfile.displayName" class="form-control" maxlength="20">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="box">
+                <p class="box-subtitle">Giới tính</p>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="select-default">
+                      <div class="input-group mb-3">
+                        <select class="custom-select" [(ngModel)]="userProfile.gender">
+                          <option value="male">Nam</option>
+                          <option value="female">Nữ</option>
+                          <option value="other">Khác</option>
+                        </select>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div class="box">
-                  <p class="box-subtitle">Giới tính</p>
-                  <div class="row">
-                    <div class="col-md-6">
-                      <div class="select-default">
-                        <div class="input-group mb-3">
-                          <select class="custom-select" [(ngModel)]="userProfile.gender">
-                            <option value="male">Nam</option>
-                            <option value="female">Nữ</option>
-                            <option value="other">Khác</option>
-                          </select>
-                        </div>
-                      </div>
-                    </div>
+              </div>
+              <div class="box">
+                <p class="box-subtitle">Ngày sinh</p>
+                <div class="row">
+                  <div class="form-group form-default col-md-6">
+                    <input type="text" [(ngModel)]="userProfile.birthday" placeholder="Ngày sinh" class="form-control"
+                      bsDatepicker [maxDate]="today"
+                      [bsConfig]="{ dateInputFormat: 'DD-MM-YYYY', showWeekNumbers: false }">
                   </div>
                 </div>
-                <div class="box">
-                  <p class="box-subtitle">Ngày sinh</p>
-                  <div class="row">
-                    <div class="form-group form-default col-md-6">
-                      <input type="text" [(ngModel)]="userProfile.birthday" placeholder="Ngày sinh" class="form-control" 
-                        bsDatepicker [maxDate]="today" [bsConfig]="{ dateInputFormat: 'DD-MM-YYYY', showWeekNumbers: false }" >
-                    </div>
-                  </div>
-                </div>
-                <!-- <div class="box">
+              </div>
+              <!-- <div class="box">
                   <p class="box-subtitle">Tỉnh/Thành phố</p>
                   <div class="row">
                     <div class="col-md-6 form-group form-default">
@@ -118,19 +126,19 @@
                     </div>
                   </div>
                 </div> -->
-                <div class="box box-intro">
-                  <p class="box-subtitle">Giới thiệu</p>
-                  <div class="row">
-                    <div class="col-md-6">
-                      <div class="form-group">
-                        <textarea  [(ngModel)]="userProfile.bio" class="form-control" id="exampleFormControlTextarea1"
-                          rows="8"></textarea>
-                      </div>
+              <div class="box box-intro">
+                <p class="box-subtitle">Giới thiệu</p>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <textarea [(ngModel)]="userProfile.bio" class="form-control" id="exampleFormControlTextarea1"
+                        rows="8"></textarea>
                     </div>
                   </div>
-    
                 </div>
-                <!-- <div class="box box-game">
+
+              </div>
+              <!-- <div class="box box-game">
                   <p class="box-subtitle">Lĩnh vực quan tâm</p>
                   <div class="row mb-3">
                     <div class="col-md-6" *ngFor="let game of userProfile.games;let i = index">
@@ -215,16 +223,16 @@
                   </div>
                   <button class="btn btn-link" (click)="addMoreBoxGames()">{{'BECOME_PANDA.ADD_GAME' | translate}}</button>
                 </div> -->
-              </div>
-              <div class="row">
-                <div class="col-md-6">
-                  <div class="d-flex justify-content-end mt-3">
-                    <button class="btn btn-primary" (click)="saveUserProfile();">Lưu</button>
-                  </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="d-flex justify-content-end mt-3">
+                  <button class="btn btn-primary" (click)="saveUserProfile();">Lưu</button>
                 </div>
               </div>
-    
-            </section>
+            </div>
+
+          </section>
         </div>
         <div class="" *ngIf="mainTab == 'myOrder'">
           <!-- <tab heading="Lịch hẹn của tôi" (selectTab)="initTabChangeOrder()" [active]="showMeeting != null || mainTab == 'order'">
@@ -232,223 +240,228 @@
         </tab> -->
         </div>
         <div class="" *ngIf="mainTab == 'favourite'">
-            <section class="section-favorite">
-              <div class="row">
-                <div class="form-group col-md-3 form-default">
-                  <div class="input-search">
-                    <input autocomplete="off" [(ngModel)]="favoriteSettings.search" (keyup.enter)="searchPandas()" type="text" class="form-control"
-                      >
-                    <i class="icon icon-search" (click)="searchPandas()"></i>
-                  </div>
-                </div>
-                <div class="col-md-9 d-flex flex-row">
-                  <div class="form-check-inline form-group form-check-filter" [ngClass]="{'active': favoriteSettings.favoriteType == 'subscribed'}">
-                    <input class="form-check-input" type="radio" name="filter-pandas" id="subscribed" value="subscribed" [(ngModel)]="favoriteSettings.favoriteType"
-                      (change)="favoriteTypeChange('subscribed')">
-                    <label class="form-check-label" for="subscribed">
-                      Bee đang theo dõi
-                    </label>
-                  </div>
-                  <div class="form-check-inline form-check-filter form-group" [ngClass]="{'active': favoriteSettings.favoriteType == 'booked'}">
-                    <input class="form-check-input" type="radio" name="filter-pandas" id="booked" value="booked" [(ngModel)]="favoriteSettings.favoriteType"
-                      (change)="favoriteTypeChange('booked')">
-                    <label class="form-check-label" for="booked">
-                      Bee đã từng đặt lịch
-                    </label>
-                  </div>
-                  <div class="form-check-inline form-check-filter form-group" [ngClass]="{'active': favoriteSettings.favoriteType == 'visited'}">
-                    <input class="form-check-input" type="radio" name="filter-pandas" id="visited" value="visited" [(ngModel)]="favoriteSettings.favoriteType"
-                      (change)="favoriteTypeChange('visited')">
-                    <label class="form-check-label" for="visited">
-                      Bee bạn quan tâm
-                    </label>
-                  </div>
+          <section class="section-favorite">
+            <div class="row">
+              <div class="form-group col-md-3 form-default">
+                <div class="input-search">
+                  <input autocomplete="off" [(ngModel)]="favoriteSettings.search" (keyup.enter)="searchPandas()"
+                    type="text" class="form-control">
+                  <i class="icon icon-search" (click)="searchPandas()"></i>
                 </div>
               </div>
-              <div>
-                <div class="row">
-                  <div class="col-md-6 col-lg-4" *ngFor="let item of listFavorite | paginate: favoriteSettings.paginate">
-                    <div class="item-panda">
-                      <div class="avatar-wrap">
-                        <span class="contact-status" [ngClass]="{'offline': item.online_status == '0','online' : item.online_status == '1','busy':item.online_status == '2'}"></span>
-                        <img [src]="item.avatar" alt="">
-                      </div>
-                      <p class="panda-name" [routerLink]="['/pandas-profile',item.name,item.id]">{{ item.name }}</p>
-                      <div class="form-group m-0">
-                        <button class="btn btn-primary" (click)="unInteractivePanda(item.id)" *ngIf="favoriteSettings.favoriteType == 'subscribed'">Bỏ theo</button>
-                        <button class="btn btn-primary" (click)="unInteractivePanda(item.id)" *ngIf="favoriteSettings.favoriteType == 'following'">Bỏ theo dõi</button>
-                        <span class="chat">
-                          <i (click)="openChatBox(item.id)" class="fa fa-comment" aria-hidden="true" *ngIf="favoriteSettings.favoriteType == 'visited'"
-                          ></i>
-                        </span>
-                        <button class="btn btn-primary" (click)="navigateToPandaProfile(item.name, item.id)" *ngIf="favoriteSettings.favoriteType == 'booked'">Đặt lại</button>
-                      </div>
+              <div class="col-md-9 d-flex flex-row">
+                <button class="btn btn-outline-primary mr-5" (click)="selectTabFavourite('follower')">Bee bạn đang theo dõi</button>
+                <button class="btn btn-outline-primary mr-5" (click)="selectTabFavourite('booked')">Bee đã từng đặt lịch</button>
+                <button class="btn btn-outline-primary" (click)="selectTabFavourite('follow')" *ngIf="userProfile.role == 'bee'">Những người đang theo dõi bạn</button>
+              </div>
+            </div>
+            <div>
+              <div class="row">
+                <div class="col-md-6 col-lg-4" *ngFor="let item of listFavorite | paginate: favoriteSettings.paginate">
+                  <div class="item-panda">
+                    <div class="avatar-wrap">
+                      <span class="contact-status {{item.status}}"></span>
+                      <img [src]="item.logo" alt="">
+                    </div>
+                    <p class="panda-name" [routerLink]="['/bee',item.displayName,item.id]">{{ item.displayName }}</p>
+                    <div class="form-group m-0">
+                      <button class="btn btn-primary" (click)="unInteractivePanda(item.id)"
+                        *ngIf="favoriteSettings.favoriteType == 'subscribed'">Bỏ theo</button>
+                      <button class="btn btn-primary" (click)="unInteractivePanda(item.id)"
+                        *ngIf="favoriteSettings.favoriteType == 'following'">Bỏ theo dõi</button>
+                      <span class="chat">
+                        <i (click)="openChatBox(item.id)" class="fa fa-comment" aria-hidden="true"
+                          *ngIf="favoriteSettings.favoriteType == 'visited'"></i>
+                      </span>
+                      <button class="btn btn-primary" (click)="navigateToPandaProfile(item.displayName, item.id)"
+                        *ngIf="favoriteSettings.favoriteType == 'booked'">Đặt lại</button>
                     </div>
                   </div>
                 </div>
-                <div class="row" *ngIf="listFavorite.length < 1">
-                  <div class="col-md-12">
-                    <p style="color: aliceblue;">{{resultFavorite}}</p>
-                  </div>
-                </div>
               </div>
-              <div class="row">
+              <div class="row" *ngIf="listFavorite?.length < 1">
                 <div class="col-md-12">
-                  <div class="d-flex justify-content-end">
-                    <pagination-controls autoHide="true" (pageChange)="favoritePageChange($event)"  maxSize="5" ></pagination-controls>
-                  </div>
+                  <p style="color: aliceblue;">{{resultFavorite}}</p>
                 </div>
               </div>
-            </section>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="d-flex justify-content-end">
+                  <pagination-controls autoHide="true" (pageChange)="favoritePageChange($event)" maxSize="5">
+                  </pagination-controls>
+                </div>
+              </div>
+            </div>
+          </section>
         </div>
         <div class="" *ngIf="mainTab == 'block'">
-            <section class="section-blacklist">
-              <div class="row">
-                <div class="form-group col-md-3 form-default">
-                  <div class="input-search">
-                    <input autocomplete="off" [(ngModel)]="blockListSetting.search" (keyup.enter)="searchAccBlocked()" type="text" class="form-control" >
-                    <i class="icon icon-search" (click)="searchAccBlocked()"></i>
+          <section class="section-blacklist">
+            <div class="row">
+              <div class="form-group col-md-3 form-default">
+                <div class="input-search">
+                  <input autocomplete="off" [(ngModel)]="blockListSetting.search" (keyup.enter)="searchAccBlocked()"
+                    type="text" class="form-control">
+                  <i class="icon icon-search" (click)="searchAccBlocked()"></i>
+                </div>
+              </div>
+            </div>
+            <div class="mt-4">
+              <div class="row" *ngIf="listBlock?.length > 0">
+                <div class="col-md-6 col-lg-4" *ngFor="let item of listBlock | paginate: blockListSetting.paginate">
+                  <div class="item-panda">
+                    <div class="avatar-wrap">
+                      <img [src]="item.logo" alt="">
+                    </div>
+                    <p class="panda-name">{{item.displayName}}</p>
+                    <button class="btn btn-primary" (click)="unBlockPanda(item)">Bỏ chặn</button>
                   </div>
                 </div>
               </div>
-              <div class="mt-4">
-                <div class="row">
-                <div class="col-md-6 col-lg-4" *ngFor="let item of listBlock | paginate: blockListSetting.paginate">
-                    <div class="item-panda">
-                      <div class="avatar-wrap">
-                        <img [src]="item.avatar" alt="">
-                      </div>
-                      <p class="panda-name">{{item.name}}</p>
-                      <button class="btn btn-primary" (click)="unBlockPanda(item.id)">Bỏ chặn</button>
-                    </div>
-                </div>
+              <div *ngIf="listBlock?.length == 0">
+                <span>Không có tài khoản nào bạn đang chặn</span>
               </div>
               <div class="row" *ngIf="resultBlock">
                 <div class="col-md-12">
                   <p style="color: aliceblue;">{{resultBlock}}</p>
                 </div>
               </div>
-              </div>
-              <div class="row">
-                <div class="col-md-12">
-                  <div class="d-flex justify-content-end">
-                    <pagination-controls autoHide="true" (pageChange)="listBlockChange($event)" id ="blacklist" maxSize="5" ></pagination-controls>
-                  </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="d-flex justify-content-end">
+                  <pagination-controls autoHide="true" (pageChange)="listBlockChange($event)" id="blacklist"
+                    maxSize="5"></pagination-controls>
                 </div>
               </div>
-            </section>
+            </div>
+          </section>
         </div>
         <div class="" *ngIf="mainTab == 'changePass'">
-            <div class="row" class="changePass">
-              <div class="col-md-6">
-                <form method="post" [formGroup]="formChangePassword">
-                  <div class="form-group form-default">
-                    <label for="" class="isRequire">Mật khẩu hiệnt tại</label>
-                    <div class="relative">
-                      <input formControlName="oldPassword" placeholder="" type="password" class="form-control" id="oldPassword" (input)="changeInputCurrentPass()">
-                      <i [ngClass]="!isShowPassOld? 'fa fa-eye-slash icon-eye':'fa fa-eye icon-eye'" (click)="showPassword('oldPassword')" ></i>
-                    </div>
-                  
-                    <div class="text-danger error-form require" *ngIf="formChangePassword?.controls?.oldPassword?.errors?.required && formChangePassword?.controls?.oldPassword?.touched">
-                      Bạn chưa điền mật khẩu hiện tại
-                    </div>
-                    <div class="text-danger error-form require" *ngIf="!formChangePassword?.controls?.oldPassword?.errors?.required && sameCurrentPass">
-                      Mật khẩu hiện tại không chính xác                  
+          <div class="row" class="changePass">
+            <div class="col-md-6">
+              <form method="post" [formGroup]="formChangePassword">
+                <div class="form-group form-default">
+                  <label for="" class="isRequire">Mật khẩu hiệnt tại</label>
+                  <div class="relative">
+                    <input formControlName="oldPassword" placeholder="" type="password" class="form-control"
+                      id="oldPassword" (input)="changeInputCurrentPass()">
+                    <i [ngClass]="!isShowPassOld? 'fa fa-eye-slash icon-eye':'fa fa-eye icon-eye'"
+                      (click)="showPassword('oldPassword')"></i>
                   </div>
+
+                  <div class="text-danger error-form require"
+                    *ngIf="formChangePassword?.controls?.oldPassword?.errors?.required && formChangePassword?.controls?.oldPassword?.touched">
+                    Bạn chưa điền mật khẩu hiện tại
                   </div>
-                  <div class="form-group form-default">
-                    <label for="" class="isRequire" >Mật khẩu mới</label>
-                    <div class="relative">
-                      <input formControlName="newPassword" placeholder="" type="password" class="form-control" id="newPassword" minlength="8">
-                      <i [ngClass]="!isShowPassNew? 'fa fa-eye-slash icon-eye':'fa fa-eye icon-eye'" (click)="showPassword('newPassword')"></i>
-                    </div>
-    
-                    <div class="text-danger error-form require" *ngIf=" formChangePassword?.controls?.newPassword?.errors?.required && formChangePassword?.controls?.newPassword?.touched">
-                      Bạn chưa điền mật khẩu mới
-                    </div>
-  
-                    <small class="text-danger error-form regex" *ngIf="( formChangePassword?.controls?.newPassword?.errors?.minlength || formChangePassword.hasError('invalidPassword') )  && !formChangePassword?.controls?.newPassword?.errors?.required && formChangePassword?.controls?.newPassword?.touched && !formChangePassword.hasError('invalidSamePassword')">
-                      Mật khẩu mới chưa đúng định dạng
-                    </small>
-                    <small class="text-danger error-form notMatch" *ngIf="!formChangePassword?.controls?.newPassword?.errors?.minlength && formChangePassword.hasError('invalidSamePassword') && formChangePassword?.controls?.newPassword?.touched && !formChangePassword?.controls?.newPassword?.errors?.required">
-                      Mật khẩu mới không trùng mật khẩu cũ
-                    </small>
+                  <div class="text-danger error-form require"
+                    *ngIf="!formChangePassword?.controls?.oldPassword?.errors?.required && sameCurrentPass">
+                    Mật khẩu hiện tại không chính xác
                   </div>
-                  <div class="form-group form-default">
-                    <label for="" class="isRequire">Xác nhận mật khẩu</label>
-                    <div class="relative">
-                      <input formControlName="newRePassword" placeholder="" type="password" class="form-control" id="newRePassword" minlength="6">
-                      <i [ngClass]="!isShowPassNewRe? 'fa fa-eye-slash icon-eye':'fa fa-eye icon-eye'" (click)="showPassword('newRePassword')"></i>
-                    </div>
-                    <div class="text-danger error-form require" *ngIf=" formChangePassword?.controls?.newRePassword?.errors?.required && formChangePassword?.controls?.newRePassword?.touched">
-                      Vui lòng nhập lại mật khẩu để xác nhận
-                    </div>
-                    <small class="text-danger error-form regex" *ngIf="formChangePassword?.controls?.newRePassword?.errors?.minlength && !formChangePassword?.controls?.newRePassword?.errors?.required && formChangePassword?.controls?.newRePassword?.touched">
-                      Mật khẩu chưa đúng định dạng
-                    </small>
-                    <small class="text-danger error-form require" *ngIf="!formChangePassword?.controls?.newRePassword?.errors?.minlength && formChangePassword.hasError('invalidConfirmPassword') && formChangePassword?.controls?.newRePassword?.touched && !formChangePassword?.controls?.newRePassword?.errors?.required">
-                      Mật khẩu không trùng mật khẩu mới
-                    </small>
+                </div>
+                <div class="form-group form-default">
+                  <label for="" class="isRequire">Mật khẩu mới</label>
+                  <div class="relative">
+                    <input formControlName="newPassword" placeholder="" type="password" class="form-control"
+                      id="newPassword" minlength="8">
+                    <i [ngClass]="!isShowPassNew? 'fa fa-eye-slash icon-eye':'fa fa-eye icon-eye'"
+                      (click)="showPassword('newPassword')"></i>
                   </div>
-                  <button type="submit" class="btn btn-gradient submit" name="changePassword" value="Change Password" 
-                    (click)="changePassword()">Lưu</button>
-                </form>
-              </div>
+
+                  <div class="text-danger error-form require"
+                    *ngIf=" formChangePassword?.controls?.newPassword?.errors?.required && formChangePassword?.controls?.newPassword?.touched">
+                    Bạn chưa điền mật khẩu mới
+                  </div>
+
+                  <small class="text-danger error-form regex"
+                    *ngIf="( formChangePassword?.controls?.newPassword?.errors?.minlength || formChangePassword.hasError('invalidPassword') )  && !formChangePassword?.controls?.newPassword?.errors?.required && formChangePassword?.controls?.newPassword?.touched && !formChangePassword.hasError('invalidSamePassword')">
+                    Mật khẩu mới chưa đúng định dạng
+                  </small>
+                  <small class="text-danger error-form notMatch"
+                    *ngIf="!formChangePassword?.controls?.newPassword?.errors?.minlength && formChangePassword.hasError('invalidSamePassword') && formChangePassword?.controls?.newPassword?.touched && !formChangePassword?.controls?.newPassword?.errors?.required">
+                    Mật khẩu mới không trùng mật khẩu cũ
+                  </small>
+                </div>
+                <div class="form-group form-default">
+                  <label for="" class="isRequire">Xác nhận mật khẩu</label>
+                  <div class="relative">
+                    <input formControlName="newRePassword" placeholder="" type="password" class="form-control"
+                      id="newRePassword" minlength="6">
+                    <i [ngClass]="!isShowPassNewRe? 'fa fa-eye-slash icon-eye':'fa fa-eye icon-eye'"
+                      (click)="showPassword('newRePassword')"></i>
+                  </div>
+                  <div class="text-danger error-form require"
+                    *ngIf=" formChangePassword?.controls?.newRePassword?.errors?.required && formChangePassword?.controls?.newRePassword?.touched">
+                    Vui lòng nhập lại mật khẩu để xác nhận
+                  </div>
+                  <small class="text-danger error-form regex"
+                    *ngIf="formChangePassword?.controls?.newRePassword?.errors?.minlength && !formChangePassword?.controls?.newRePassword?.errors?.required && formChangePassword?.controls?.newRePassword?.touched">
+                    Mật khẩu chưa đúng định dạng
+                  </small>
+                  <small class="text-danger error-form require"
+                    *ngIf="!formChangePassword?.controls?.newRePassword?.errors?.minlength && formChangePassword.hasError('invalidConfirmPassword') && formChangePassword?.controls?.newRePassword?.touched && !formChangePassword?.controls?.newRePassword?.errors?.required">
+                    Mật khẩu không trùng mật khẩu mới
+                  </small>
+                </div>
+                <button type="submit" class="btn btn-gradient submit" name="changePassword" value="Change Password"
+                  (click)="changePassword()">Lưu</button>
+              </form>
             </div>
-    
+          </div>
+
         </div>
-        
+
       </div>
     </div>
-  
-      
-    </div>
+
+
   </div>
-  
+</div>
 
-  <!-- MODAL FOR CROP IMAGE -->
-  <ng-template #templateUserCropImage>
-    <div class="modal-header">
-      <h4 class="modal-title">Crop ảnh</h4>
-    </div>
-    <div class="modal-body text-center" style="padding: 15px;">
-      <image-cropper [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true" [aspectRatio]="4 / 4" format="jpeg" (imageCropped)="imageCropped($event)"></image-cropper>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-gradient pl-4 pr-4"  (click)="saveCropImage()">Crop</button>
-      <span class="btn btn-light" (click)="cancelCropImage()">Huỷ</span>
-    </div>
-  </ng-template>
 
-  
-  <!-- CHOOSE AVATAR -->
-  <ng-template #templateChooseAvatar>
-    <div class="modal-header">
-      <h4 class="modal-title">Chọn ảnh</h4>
-      <button type="button" class="close pull-right" aria-label="Close" (click)="closeChooseAvatar()">
-        <span aria-hidden="true">&times;</span>
-      </button>
+<!-- MODAL FOR CROP IMAGE -->
+<ng-template #templateUserCropImage>
+  <div class="modal-header">
+    <h4 class="modal-title">Crop ảnh</h4>
+  </div>
+  <div class="modal-body text-center" style="padding: 15px;">
+    <image-cropper [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true" [aspectRatio]="4 / 4"
+      format="jpeg" (imageCropped)="imageCropped($event)"></image-cropper>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-gradient pl-4 pr-4" (click)="saveCropImage()">Crop</button>
+    <span class="btn btn-light" (click)="cancelCropImage()">Huỷ</span>
+  </div>
+</ng-template>
+
+
+<!-- CHOOSE AVATAR -->
+<ng-template #templateChooseAvatar>
+  <div class="modal-header">
+    <h4 class="modal-title">Chọn ảnh</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="closeChooseAvatar()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body text-center" style="padding: 15px;">
+    <div class="uploadFromComputer">
+      <label class="white bold pull-left mb-0 " style="cursor: pointer;" for="uploadYourAvatar">
+        <i class="icon icon-upload" aria-hidden="true"></i>&nbsp; &nbsp;Chọn ảnh từ thư viện: <small
+          class="text-secondary">Ảnh tối đa 2MB</small>
+        &nbsp;</label>
     </div>
-    <div class="modal-body text-center" style="padding: 15px;">
-      <div class="uploadFromComputer">
-        <label class="white bold pull-left mb-0 " style="cursor: pointer;" for="uploadYourAvatar">
-          <i class="icon icon-upload" aria-hidden="true"></i>&nbsp; &nbsp;Chọn ảnh từ thư viện: <small class="text-secondary">Ảnh tối đa 2MB</small>
-          &nbsp;</label>
-        </div>
-      <input id="uploadYourAvatar" type="file" accept="image/*" (change)="chooseAvatar($event)" style="display: none;">
-      <label class="white bold pull-left mb-0 pt-3" style="text-align: left; width: 100%;">Chọn ảnh mặc định:
-      </label>
-      <div class="row">
-        <div class="col-md-2 col-6" style="margin: 10px 0; cursor: pointer;" *ngFor="let i of listAvatarDefault">
-          <img src="{{i.fullsrc}}" alt="avatar{{i.id}}" id="{{i.id}}" class="img-fluid"
-            (click)="selectedImagetoAvatar(i.id);" [ngClass]="i.selected==true?'selected':''">
-        </div>
+    <input id="uploadYourAvatar" type="file" accept="image/*" (change)="chooseAvatar($event)" style="display: none;">
+    <label class="white bold pull-left mb-0 pt-3" style="text-align: left; width: 100%;">Chọn ảnh mặc định:
+    </label>
+    <div class="row">
+      <div class="col-md-2 col-6" style="margin: 10px 0; cursor: pointer;" *ngFor="let i of listAvatarDefault">
+        <img src="{{i.fullsrc}}" alt="avatar{{i.id}}" id="{{i.id}}" class="img-fluid"
+          (click)="selectedImagetoAvatar(i.id);" [ngClass]="i.selected==true?'selected':''">
       </div>
-  
     </div>
-    <div class="modal-footer">
-      <button class="btn btn-gradient pl-4 pr-4" (click)="setImagetoAvatar()" [disabled]="">Lưu ảnh</button>
-    </div>
-  </ng-template>
-  
-  
+
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-gradient pl-4 pr-4" (click)="setImagetoAvatar()" [disabled]="">Lưu ảnh</button>
+  </div>
+</ng-template>
