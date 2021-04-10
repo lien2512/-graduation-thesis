@@ -187,7 +187,7 @@ export class AccSettingComponent implements OnInit {
     // this.userProfile.birthday = res.birthday;
   }
   async updateBeeProfile() {
-    
+
     this.firebaseService.updateRef('users', this.userProfile.uid, this.userProfile).then((res) => {
 
     }).catch(err => {
@@ -210,7 +210,7 @@ export class AccSettingComponent implements OnInit {
     this.userProfile.birthday = moment(this.userProfile.birthday , 'DD/MM/YYYY').format('YYYY-MM-DD');
     console.log(this.userProfile.logo);
     let status = true;
-    
+
     if (!this.userProfile.gender) {
       status = false;
     }
@@ -277,13 +277,10 @@ export class AccSettingComponent implements OnInit {
       listBock: firebase.firestore.FieldValue.arrayRemove(item)
     });
     let beeInfo: any = await this.firebaseService.getRefById('users', item.id) ;
-    debugger;
     let userInfo = beeInfo.blockedBy.find((item) => {return item.id == this.userProfile.id})
-    console.log(1, userInfo)
       firebase.firestore().collection('users').doc(item.id).update({
         blockedBy: firebase.firestore.FieldValue.arrayRemove(userInfo)
       });
-    console.log(2);
     // let index = this.listBlock.findIndex((item: any) => {
     //   item.id == id
     // })
@@ -296,7 +293,7 @@ export class AccSettingComponent implements OnInit {
     // })
     // listBlocked.splice(userBlock, 1);
     // firebase.firestore().collection('users').doc(id).update('blockedBy', listBlocked);
-    
+
     this.getListBlock();
   }
   listBlockChange(type) {}
@@ -433,7 +430,7 @@ export class AccSettingComponent implements OnInit {
       case 'booked':
         this.listFavorite = [];
         break;
-      case 'follower': 
+      case 'follower':
         this.listFavorite = this.userProfile.follow
     }
     console.log(this.listFavorite);
