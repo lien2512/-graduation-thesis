@@ -10,39 +10,31 @@
                     <button class="btn btn-outline-danger mb-4 mr-5" (click)="call()">Call</button>
                     <button class="btn btn-outline-danger mb-4 mr-5" (click)="openModalBook()">Book</button>
                     <button class="btn btn-outline-danger mb-4 mr-5">Chat</button>
-                    <button class="btn btn-outline-danger mb-4 mr-5">Subcriber</button>
                 </div>
             </div>
             <div class="col-md-9">
                 <div class="info-header">
                     <div class="nameBee">
-                        <p *ngIf="1 > 0">Bamboo </p>
+                        <p *ngIf="1 > 0">{{beeProfile.displayName}} </p>
                         <i class="fa fa-home" aria-hidden="true"></i>
                     </div>
                     <div class="rate">
 
                     </div>
                     <div class="box-action">
-                        <button class="btn btn-outline-danger">Follow</button>
+                        <button class="btn btn-outline-danger" [ngClass]="{'followed': isFollowed}" (click)="follow()">{{isFollowed ? 'Followed' : "Follow"}}</button>
                         <button class="btn btn-outline-danger" (click)="blockAccount(report)">Report</button>
-                        <button class="btn btn-outline-danger">Block</button>
+                        <button class="btn btn-outline-danger" (click)="blockPanda(beeProfile.id)">Block</button>
                     </div>
                 </div>
                 <div class="box-total d-flex flex-row-center">
                     <div class="box-item pl-3">
                         <p class="title">Age</p>
-                        <p>20</p>
+                        <p>{{ageOfBee}} tuổi</p>
                     </div>
                     <div class="box-item">
                         <p class="title">Followers</p>
-                        <p>13 peoples</p>
-
-                    </div>
-                    <div class="box-item">
-                        <p class="title">
-                            Subscribers
-                        </p>
-                        <p>2 peoples</p>
+                        <p>{{beeProfile.follow.length}} người theo dõi</p>
 
                     </div>
                     <div class="box-item">
@@ -70,13 +62,35 @@
                 </div>
                 <div class="box-description">
                     <p class="title-box">Description</p>
-
+                    <div>
+                        <p>{{beeProfile.bio}}
                 </div>
                 <div class="box-advise">
                     <p class="title-box">Advise</p>
+                    <div *ngFor="let item of beeProfile.advise">
+                        <p>{{item.title}}</p>
+                        <p>{{item.content}}</p>
+                    </div>
                 </div>
                 <div class="box-reviews">
                     <p class="title-box">Reviews</p>
+                    <div class="list-review">
+                        <div class="review-container" *ngFor="let r of beeProfile.review | paginate: { itemsPerPage: 6, currentPage: pageNum, totalItems: beeProfile.review.length }" >
+                          <div class="avatar-wrap">
+                            <img src="{{r.logo}}" alt="">
+                          </div>
+                          <div class="review-content">
+                            <div class="review-title d-flex">
+                              <p class="reviewer-name pr-2">{{r.name}}</p>
+                              <div class="review-rating">
+                                <span class="pr-1">{{r.reviewScore}}</span>
+                                <i class="fa fa-star" aria-hidden="true" style="color: deeppink;"></i>
+                            </div>
+                            </div>
+                            <p class="review-text">{{r.contentReview}}</p>
+                          </div>
+                        </div>
+                      </div>
                     <!-- <app-rating (ratingNumber)='0%' ></app-rating> -->
                 </div>
 
@@ -91,16 +105,16 @@
           <span aria-hidden="true">&times;</span>
         </button>
     </div>
-    <div class="modal-body report">
+    <div class="modal-body report" [formGroup]="formReport">
         <h5>Báo cáo người dùng này</h5>
         <p>Giúp chúng tôi hiểu rõ báo cáo này bằng cách cung cấp lý do cụ thể</p>
         <div class="default-reason" *ngFor="let item of listItemDefault">
-            <input type="checkbox" value="item.checked" class="mr-2">
-            <label>{{item.reason}}</label>
+            <input type="radio" id="{{item}}" formControlName = "defaultReason" value="{{item}}" class="mr-2">
+            <label>{{item}}</label>
         </div>
         <div>
             <p>Other reason </p>
-            <textarea class="other-reason" *ngIf="1 > 0"></textarea>
+            <textarea formControlName="reportContent" class="other-reason"></textarea>
         </div>
         <div>
             <div class="row-img">
@@ -121,7 +135,10 @@
               </div>
         </div>
     </div>
-    <div class="modal-footer"></div>
+    <div class="modal-footer">
+        <button class="btn btn-primary mr-1" (click)="sendReport()">Xác nhận</button>
+        <button class="btn btn-light" (click)="cancelReport()">Huỷ</button>
+    </div>
 
 </ng-template>
 <ng-template #book>
@@ -161,7 +178,9 @@
               </div>
         </div>
     </div>
-    <div class="modal-footer"></div>
+    <div class="modal-footer">
+        
+    </div>
 
 </ng-template>
 <ng-template #templateInputHours>

@@ -5,30 +5,60 @@ import { AgoraLocalComponent } from 'angular-agora-rtc';
 import firebase from 'firebase';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { CookieService } from 'ngx-cookie-service';
+import { LoginComponent } from 'src/app/component/login/login.component';
+import { PopUpConfirmComponent } from 'src/app/component/pop-up-confirm/pop-up-confirm.component';
 import { FirebaseService } from 'src/app/services/firebase.service';
+import { HelperService } from 'src/app/services/helper.service';
 import { SubjectService } from 'src/app/services/subject.service';
 import { AgoraCallComponent } from '../agora-call/agora-call.component';
 
 @Component({
   selector: 'app-bee-profile',
   templateUrl: './bee-profile.component.html',
-  styleUrls: ['./bee-profile.component.scss']
+  styleUrls: ['./bee-profile.component.scss'],
 })
 export class BeeProfileComponent implements OnInit {
-
   modalReport: BsModalRef;
   modalCall: BsModalRef | null;
   modalInputHours: BsModalRef | null;
+  modalConfirmBlock: BsModalRef;
+  modalLogin: BsModalRef;
   listItemDefault: any;
   listIMG: any = [];
   statusCall: any;
-  beeProfile: any;
+  pageNum: any;
+  beeProfile: any = {
+    avatar: '',
+    avatarUrl: '',
+    bio: '',
+    birthday: '',
+    city: '',
+    displayName: '',
+    email: '',
+    emailVerified: false,
+    follow: [],
+    gender: '',
+    id: '',
+    imageMember: [],
+    languages: [],
+    logo: '',
+    role: '',
+    status: '',
+    tags: [],
+    uid: '',
+    video: [],
+    advise: [],
+    review: []
+  };
   userInfo: any;
   connectingCall = false;
   id: any;
   infoTheCall: any;
+  isFollowed: boolean;
+  ageOfBee: any;
   @ViewChild('templateCall') callingModal: TemplateRef<any>;
   @ViewChild('templateInputHours') inputHoursModal: TemplateRef<any>;
+  public formReport: FormGroup;
   public formMeetNow: FormGroup;
   modalCallingOpened: boolean = false;
   constructor(
@@ -38,47 +68,43 @@ export class BeeProfileComponent implements OnInit {
     private subjectService: SubjectService,
     private cookie: CookieService,
     private fb: FormBuilder,
-
-  ) { }
+    private helperService: HelperService
+  ) {}
 
   ngOnInit(): void {
     this.formMeetNow = this.fb.group({
       bookType: ['video'],
       promoCode: [''],
-  });
-    this.listItemDefault = [{
-      checked: false,
-      reason: 'Spam'
-    },
-    {
-      checked: false,
-      reason: 'Nội dung nhạy cảm'
-    },
-    {
-      checked: false,
-      reason: 'Bạo lực'
-    },
-    {
-      checked: false,
-      reason: 'Nội dung bị cấm'
-    },
-    {
-      checked: false,
-      reason: 'Gây hiểu nhầm hoặc lừa đảo'
-    }]
-    this.activatedRoute.params.subscribe(res => {
+    });
+    this.formReport = this.fb.group({
+      defaultReason: [''],
+      reportContent: [''],
+      imgReport: [''],
+    });
+    this.listItemDefault = [
+      'Nội dung nhạy cảm',
+      'Bạo lực',
+      'Nội dung bị cấm',
+      'Gây hiểu nhầm hoặc lừa đảo',
+    ];
+    this.activatedRoute.params.subscribe((res) => {
       if (res.id) {
-          this.id = res.id;
-          this.getBeeProfile();
-      }})
-      this.subjectService.userInfo.subscribe((res) => {
-        this.userInfo = res;
-        if (!this.userInfo && this.cookie.get('account_info') && this.cookie.get('account_info') != '') {
-          this.userInfo = JSON.parse(this.cookie.get('account_info'));
-          
-        }
-      })
-      firebase.firestore()
+        this.id = res.id;
+        this.getBeeProfile();
+      }
+    });
+    this.subjectService.userInfo.subscribe((res) => {
+      this.userInfo = res;
+      if (
+        !this.userInfo &&
+        this.cookie.get('account_info') &&
+        this.cookie.get('account_info') != ''
+      ) {
+        this.userInfo = JSON.parse(this.cookie.get('account_info'));
+      }
+    });
+    firebase
+      .firestore()
       .collection('call')
       .where('callee', '==', this.userInfo.id)
       .onSnapshot((querySnapshot) => {
@@ -90,21 +116,32 @@ export class BeeProfileComponent implements OnInit {
           logs.push(tempObject);
         });
         console.log(logs);
-        if (logs.find((item) => { return item.status == 'cancel'})) {
-          let info = logs.find((item) => { return item.status == 'cancel'});
+        if (
+          logs.find((item) => {
+            return item.status == 'cancel';
+          })
+        ) {
+          let info = logs.find((item) => {
+            return item.status == 'cancel';
+          });
           if (info.action == 'turn_off') {
-            if (info.closeUser == 'receiver')
-            {
+            if (info.closeUser == 'receiver') {
               this.modalCall.hide();
             } else if (info.closeUser == 'caller') {
-              alert("bạn đã huỷ cuộc gọi");
+              alert('bạn đã huỷ cuộc gọi');
               // this.deleteCollection(firebase.firestore(),"call", this.userInfo.id + '-' + this.id)
             }
           }
         }
-        if (logs.find((item) => { return item.status == 'calling'})) {
-          let info = logs.find((item) => { return item.status == 'calling'});
-         this.modalCall =  this.modalService.show(AgoraCallComponent, {
+        if (
+          logs.find((item) => {
+            return item.status == 'calling';
+          })
+        ) {
+          let info = logs.find((item) => {
+            return item.status == 'calling';
+          });
+          this.modalCall = this.modalService.show(AgoraCallComponent, {
             class: 'modal-default',
             initialState: {
               token: info.token,
@@ -113,30 +150,66 @@ export class BeeProfileComponent implements OnInit {
           });
           this.modalCall.content.onEndcall.subscribe(() => {
             this.modalCall.hide();
-            firebase.firestore().collection("call").doc(info.idCall).update("status", 'end_call')
-        });
+            firebase
+              .firestore()
+              .collection('call')
+              .doc(info.idCall)
+              .update('status', 'end_call');
+          });
         }
       });
   }
   blockAccount(template: TemplateRef<any>) {
     this.modalReport = this.modalService.show(template, {
       class: 'modal-default',
-    })
+    });
   }
+  sendReport() {
+    this.formReport.patchValue({ imgReport: this.listIMG });
+    if (
+      !this.formReport.get('defaultReason').value &&
+      this.listIMG.length == 0 &&
+      !this.formReport.get('reportContent').value
+    ) {
+      this.helperService.showError('', 'Nhập lý do báo cáo');
+      return;
+    }
+    firebase
+      .firestore()
+      .collection('report')
+      .doc(this.beeProfile.id)
+      .set(this.formReport.value);
+    this.modalReport.hide();
+
+    setTimeout(() => {
+      this.listIMG = [];
+      this.formReport.reset();
+    }, 6000);
+  }
+  cancelReport() {
+    this.modalReport.hide();
+    this.listIMG = [];
+    this.formReport.reset();
+  }
+
   getBeeProfile() {
-    this.firebaseService.getRefById('users', this.id).then((res) => {
-      this.beeProfile = res;
-      console.log(this.beeProfile);
-    }).catch(err => {});
+    debugger;
+    this.firebaseService
+      .getRefById('users', this.id)
+      .then((res: any) => {
+        this.beeProfile = res;
+        this.beeProfile.follow = res.follow;
+        this.isFollowed =
+          this.beeProfile.follow.findIndex((item) => item == this.userInfo.id) >
+          -1;
+        console.log(this.beeProfile);
+        this.ageOfBee = this.CalculateAge(new Date(res.birthday));
+      })
+      .catch((err) => {});
   }
-  chooseImage(event) {
-
-  }
-  removeEachImage(oder, id) {
-
-  }
-  openModalBook() {
-  }
+  chooseImage(event) {}
+  removeEachImage(oder, id) {}
+  openModalBook() {}
   call() {
     this.openModalInputHours(this.inputHoursModal);
   }
@@ -147,68 +220,173 @@ export class BeeProfileComponent implements OnInit {
       idCall: idcall,
       status: this.statusCall,
       time: '30',
-      participant : [this.userInfo.id, this.id],
-      recipientCall : this.id,
+      participant: [this.userInfo.id, this.id],
+      recipientCall: this.id,
       callee: this.userInfo.id,
       chanel: 'test1',
       // chanel: this.userInfo.displayName + '-' + this.beeProfile.displayName,
-      token: '00668839fbf8dcc423f87c2f89fa52e975bIAB/I63YmJo4kaXwBHtsL8mPiX9p4n6Y9heP4OP7c0YhuOLcsooAAAAAEAAeXT+c54tqYAEAAQDni2pg'
-    }
+      token:
+        '00668839fbf8dcc423f87c2f89fa52e975bIAB/I63YmJo4kaXwBHtsL8mPiX9p4n6Y9heP4OP7c0YhuOLcsooAAAAAEAAeXT+c54tqYAEAAQDni2pg',
+    };
     this.firebaseService.createCall(idcall, dataCall);
     this.waitingForCall();
     this.closeModalInputHours();
   }
   waitingForCall() {
     this.openModalCalling(this.callingModal);
-}
-openModalCalling(template: TemplateRef<any>) {
-  this.modalCall = this.modalService.show(template, {
+  }
+  openModalCalling(template: TemplateRef<any>) {
+    this.modalCall = this.modalService.show(template, {
       class: 'modal-sm popup-calling modal-dialog-centered ',
       backdrop: true,
       ignoreBackdropClick: true,
-  });
-  this.modalCallingOpened = true;
-}
-cancelCall() {
-  this.modalCall.hide();
-  this.modalCallingOpened = false;
-  firebase.firestore().collection("call").doc(this.userInfo.id + '-' + this.id).update('action', 'turn_off', 'closeUser', 'caller', 'status', 'cancel');
-}
-closeModalInputHours() {
-  this.formMeetNow.reset();
-  this.modalInputHours.hide();
-}
-openModalInputHours(template: TemplateRef<any>) {
-  this.modalInputHours = this.modalService.show(template, { class: 'modal-sm popup-calling modal-dialog-centered', ignoreBackdropClick: true });
-}
-async deleteCollection(db, collectionPath, batchSize) {
-  const collectionRef = db.collection(collectionPath);
-  const query = collectionRef.orderBy('__name__').limit(batchSize);
-
-  return new Promise((resolve, reject) => {
-    this.deleteQueryBatch(db, query, resolve).catch(reject);
-  });
-}
-
-async deleteQueryBatch(db, query, resolve) {
-  const snapshot = await query.get();
-  const batchSize = snapshot.size;
-  if (batchSize === 0) {
-    // When there are no documents left, we are done
-    resolve();
-    return;
+    });
+    this.modalCallingOpened = true;
   }
-  // Delete documents in a batch
-  const batch = db.batch();
-  snapshot.docs.forEach((doc) => {
-    batch.delete(doc.ref);
-  });
-  await batch.commit();
-  // Recurse on the next process tick, to avoid
-  // exploding the stack.
-  // process.nextTick(() => {
-  //   this.deleteQueryBatch(db, query, resolve);
-  // });
-}
+  cancelCall() {
+    this.modalCall.hide();
+    this.modalCallingOpened = false;
+    firebase
+      .firestore()
+      .collection('call')
+      .doc(this.userInfo.id + '-' + this.id)
+      .update('action', 'turn_off', 'closeUser', 'caller', 'status', 'cancel');
+  }
+  closeModalInputHours() {
+    this.formMeetNow.reset();
+    this.modalInputHours.hide();
+  }
+  openModalInputHours(template: TemplateRef<any>) {
+    this.modalInputHours = this.modalService.show(template, {
+      class: 'modal-sm popup-calling modal-dialog-centered',
+      ignoreBackdropClick: true,
+    });
+  }
+  async deleteCollection(db, collectionPath, batchSize) {
+    const collectionRef = db.collection(collectionPath);
+    const query = collectionRef.orderBy('__name__').limit(batchSize);
 
+    return new Promise((resolve, reject) => {
+      this.deleteQueryBatch(db, query, resolve).catch(reject);
+    });
+  }
+
+  async deleteQueryBatch(db, query, resolve) {
+    const snapshot = await query.get();
+    const batchSize = snapshot.size;
+    if (batchSize === 0) {
+      // When there are no documents left, we are done
+      resolve();
+      return;
+    }
+    // Delete documents in a batch
+    const batch = db.batch();
+    snapshot.docs.forEach((doc) => {
+      batch.delete(doc.ref);
+    });
+    await batch.commit();
+    // Recurse on the next process tick, to avoid
+    // exploding the stack.
+    // process.nextTick(() => {
+    //   this.deleteQueryBatch(db, query, resolve);
+    // });
+  }
+  follow() {
+    this.isFollowed = !this.isFollowed;
+    let listFollow = [];
+    this.firebaseService
+      .getRefById('users', this.userInfo.id)
+      .then((res: any) => {
+        listFollow = res.follow;
+      })
+      .catch((err) => {});
+    if (this.isFollowed) {
+      listFollow.push(this.beeProfile.id);
+    } else {
+      let index = listFollow.findIndex((item) => item == this.beeProfile.id);
+      listFollow.splice(index, 1);
+    }
+
+    firebase
+      .firestore()
+      .collection('users')
+      .doc(this.userInfo.id)
+      .update('follow', listFollow);
+    let listFollower = [];
+    this.firebaseService
+      .getRefById('users', this.beeProfile.id)
+      .then((res: any) => {
+        listFollower = res.follow;
+      })
+      .catch((err) => {});
+    // listFollower.push(this.userInfo.id);
+    if (this.isFollowed) {
+      listFollower.push(this.userInfo.id);
+    } else {
+      let index = listFollow.findIndex((item) => item == this.userInfo.id);
+      listFollower.splice(index, 1);
+    }
+    firebase
+      .firestore()
+      .collection('users')
+      .doc(this.beeProfile.id)
+      .update('follow', listFollower);
+  }
+  blockPanda(id) {
+    if (!this.userInfo) {
+      this.openLoginModal();
+      return false;
+    } else {
+      this.modalConfirmBlock = this.modalService.show(PopUpConfirmComponent, {
+        class: 'modal-default',
+        initialState: {
+          confirmText: 'Chặn người dùng này',
+          confirmButton: 'Đồng ý',
+          cancelButton: 'Huỷ',
+          confirmTitle: 'Block',
+        },
+      });
+      this.modalConfirmBlock.content.onCancel.subscribe(() => {
+        this.modalConfirmBlock.hide();
+      });
+      this.modalConfirmBlock.content.onConfirm.subscribe(() => {
+        this.modalConfirmBlock.hide();
+        let listBlock = [];
+        this.firebaseService
+          .getRefById('users', this.beeProfile.id)
+          .then((res: any) => {
+            listBlock = res.listBock;
+          })
+          .catch((err) => {});
+        listBlock.push(this.beeProfile.id);
+        firebase
+          .firestore()
+          .collection('users')
+          .doc(this.userInfo.id)
+          .update('listBock', listBlock);
+        // this.apiService.blockAccount(id).subscribe((res: any) => {
+        //     if (res.code == STATUS_CODE.SUCCESS) {
+        //         this.helperService.showSuccess(this.transService.instant('MESSAGE.SUCCESS'), this.transService.instant('MESSAGE.BLOCK_SUCCESS'));
+        //         this.isBlocked = true;
+        //         this.chatService.globalBlock(id);
+        //     } else {
+        //     }
+        // })
+      });
+    }
+  }
+  openLoginModal() {
+    this.modalLogin = this.modalService.show(LoginComponent, {
+      class: 'modal-sign-in',
+    });
+    this.modalLogin.content.onClose.subscribe(() => {
+      this.modalLogin.hide();
+    });
+  }
+  CalculateAge(birthday) { // birthday is a date
+    var diff_ms = Date.now() - birthday.getTime();
+    var age_dt = new Date(diff_ms); 
+  
+    return Math.abs(age_dt.getUTCFullYear() - 1970);
+  }
 }

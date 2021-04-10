@@ -39,7 +39,7 @@ export class FirebaseService {
    getBeeByStatus(attribute, status) {
     let listBee = [];
     return new Promise((resolve, reject) => {
-      firebase.firestore().collection("users").where(attribute, "==", status).get().then((snapshot) => {
+      firebase.firestore().collection("users").where("role", "==", "bee").where(attribute, "==", status).get().then((snapshot) => {
         snapshot.forEach((doc) => {
           listBee.push(doc.data())
         })
@@ -62,7 +62,8 @@ export class FirebaseService {
  getListAcc(document) {
    let listBee = []
   return new Promise((resolve, reject) => {
-    firebase.firestore().collection(document).get().then((snapshot) => {
+    firebase.firestore().collection("users")
+    .where("role", "==", "bee").get().then((snapshot) => {
       snapshot.forEach((doc) => {
         listBee.push(doc.data())
       })

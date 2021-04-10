@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import firebase from 'firebase';
+import moment from 'moment';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
 import { Account } from 'src/app/class/account';
@@ -8,6 +9,7 @@ import { PopUpConfirmComponent } from 'src/app/component/pop-up-confirm/pop-up-c
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { HelperService } from 'src/app/services/helper.service';
+import { PresenceService } from 'src/app/services/presence.service';
 import * as uuid from 'uuid';
 
 @Component({
@@ -63,7 +65,9 @@ export class AccSettingComponent implements OnInit {
     email: '',
     emailVerified: false,
     avatar: '',
-    logo: ''
+    logo: '',
+    advise: [],
+    review: []
   } ;
   listFavorite: any;
   listAvatarDefault = [
@@ -81,6 +85,7 @@ export class AccSettingComponent implements OnInit {
   modalChooseAvatar: BsModalRef;
   modalCropImage: BsModalRef;
   maxUploadSize: number = 2000000; //max upload file size 2Mb
+  presence$: any;
   @ViewChild('templateChooseAvatar') templateChooseAvatar: TemplateRef<any>;
   @ViewChild('templateUserCropImage') cropImageModal: TemplateRef<any>;
   @ViewChild('image', { static: false }) image: ElementRef;
@@ -89,7 +94,8 @@ export class AccSettingComponent implements OnInit {
     private firebaseService: FirebaseService,
     private authService: AuthService,
     private modalService: BsModalService,
-    private helperService: HelperService
+    private helperService: HelperService,
+    private presence: PresenceService
 
   ) {
     this.initForm();
@@ -98,6 +104,8 @@ export class AccSettingComponent implements OnInit {
 
   async ngOnInit() {
     await this.getData();
+    console.log(this.userProfile.id);
+
   }
   selectTab(type) {
     this.mainTab = type;
@@ -165,9 +173,12 @@ export class AccSettingComponent implements OnInit {
     this.userProfile.displayName = res.displayName;
     this.userProfile.bio = res.bio ? res.bio : '';
     this.userProfile.gender = res.gender ;
-    this.userProfile.birthday = res.birthday;
+    this.userProfile.birthday  = moment(res.birthday).format('DD-MM-YYYY');
+
+    // this.userProfile.birthday = res.birthday;
   }
   async updateBeeProfile() {
+    
     this.firebaseService.updateRef('users', this.userProfile.uid, this.userProfile).then((res) => {
 
     }).catch(err => {
@@ -187,6 +198,8 @@ export class AccSettingComponent implements OnInit {
 
   }
   async saveUserProfile() {
+    this.userProfile.birthday = moment(this.userProfile.birthday , 'DD/MM/YYYY').format('YYYY-MM-DD');
+    console.log(this.userProfile.logo);
     let status = true;
     
     if (!this.userProfile.gender) {
@@ -208,8 +221,24 @@ export class AccSettingComponent implements OnInit {
         this.firebaseService.updateLogo('users', this.userProfile.id, '');
         this.isRemoveLogo = false;
       }
+      let advise = {
+        title: "Tip dưỡng da",
+        content: 'Chăm sóc cho da nhạy cảm, với những kinh nghiệm từ chính bản thân mình'
+      }
+      this.userProfile.advise.push(advise);
+      let review = {
+        logo: '',
+        idUser: 'DagOskGsz4bmgBmJJZJRF4SULQZ2',
+        name: 'liennt1401@yopmail.com',
+        reviewScore: 4,
+        contentReview: "Cực kỳ nhiệt tình và thân thiện"
+      }
+      this.userProfile.review.push(review);
+      console.log(this.userProfile.review);
       this.firebaseService.updateRef('users', this.userProfile.id,  this.userProfile);
       alert("thành công rồi");
+      this.userProfile.birthday = moment(this.userProfile.birthday).format('DD-MM-YYYY');
+
     }
   }
   initTabFavorite() {
@@ -280,7 +309,7 @@ export class AccSettingComponent implements OnInit {
   }
   removeImage() {
     this.image.nativeElement.value = '';
-    this.imageUrl = '../../../assets/img/blank-profile.png';
+    this.userProfile.logo = '../../../assets/img/blank-profile.png';
     this.userProfile.avatar = '';
     this.isRemoveLogo = true;
   }
@@ -321,7 +350,7 @@ export class AccSettingComponent implements OnInit {
     const reader = new FileReader();
     reader.readAsDataURL(this.fileData);
     reader.onload = (event) => {
-      this.imageUrl = reader.result;
+      this.userProfile.logo = String(reader.result);
     };
   }
   fileChangeEvent(event: any): void {

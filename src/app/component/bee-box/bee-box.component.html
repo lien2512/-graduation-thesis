@@ -1,17 +1,18 @@
 <div class="box-bee" (click)="navigateDetail()">
     <div class="avatar">
-        <img src="{{info.avatar}}">
+        <img src="{{info.logo}}">
     </div>
-    <div class="follow"><button type="button" class="btn btn-outline-danger" (click)="follow()">Follow</button>
+    <div class="follow">
+        <button type="button" class="btn btn-outline-danger" [ngClass]="{'followed': isFollowed}" (click)="follow()">Follow</button>
     </div>
     <div class="info">
         <div class="row">
-            <span class="name">{{info.name}}</span>
+            <span class="name">{{info.displayName}}</span>
             <div class="state d-flex flex-row align-items-center">
                 <span class="status mr-1"
-                    [ngClass]="{'online': info.online == '1', 'offline': info.online == '0', 'busy': info.online == '2'}">
+                    [ngClass]="info.status">
                 </span>
-                <span>online</span>
+                <span>{{info.status}}</span>
             </div>
 
             <span class="audio">
