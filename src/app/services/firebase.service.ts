@@ -59,6 +59,17 @@ export class FirebaseService {
     })
   })
 }
+getRecomnendBee() {
+  let listBee = [];
+  return new Promise((resolve, reject) => {
+    firebase.firestore().collection('users').orderBy('follow_count').limit(10).get().then((snapshot) => {
+      snapshot.forEach((doc) => {
+        listBee.push(doc.data())
+      })
+      resolve(listBee);
+    })
+  })
+}
  getListAcc(document) {
    let listBee = []
   return new Promise((resolve, reject) => {

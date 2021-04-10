@@ -331,6 +331,11 @@ export class BeeProfileComponent implements OnInit {
       .collection('users')
       .doc(this.beeProfile.id)
       .update('follow', listFollower);
+      firebase
+      .firestore()
+      .collection('users')
+      .doc(this.beeProfile.id)
+      .update('follow_count', listFollower.length);
   }
   blockPanda(id) {
     if (!this.userInfo) {

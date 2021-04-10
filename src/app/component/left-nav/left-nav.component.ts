@@ -29,13 +29,16 @@ export class LeftNavComponent implements OnInit {
         this.userInfo = JSON.parse(this.cookie.get('account_info'));
       };
     });
+    this.getListBee();
   }
   navigateToDetail(name, id) {
     this.router.navigate(['/bee', name, id]);
   }
   async getListBee() {
    this.follower_bee = await this.firebaseService.getBeeByService('follow', this.userInfo.id);
-   this.recommended_bee = await this.db.collection('users').orderBy('follow').limit(10).get();
+   console.log(this.follower_bee);
+   this.recommended_bee = await this.firebaseService.getRecomnendBee();
+   console.log(this.recommended_bee);
   }
 
 }
