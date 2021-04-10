@@ -1,29 +1,27 @@
 <div class="left-nav">
-    <div class="recommend">
-        <div class="">
-            <span>
-                <img >
-            </span>
-            <span class="name"></span>
-            <span class="status"></span>
+    <div id="sidebar" class="sidebar-left col-md-3 col-xl-2 collapse">
+        <div class="list-group" *ngIf="follower_bee?.length > 0">
+          <h3 class="sub-title">Bee bạn đang theo dõi</h3>
+          <ul class="list-item">
+            <li class="d-flex justify-content-between align-items-center align-items-center" *ngFor="let item of follower_bee">
+              <div class="d-flex" (click)="navigateToDetail(item.displayName,item.id)">
+                <img src="{{item.logo}}" alt="avata" />
+                <p class="nav-name">{{item.name}} </p>
+              </div>
+              <span class="status {{item.status}}"></span>
+            </li>
+          </ul>
         </div>
-    </div>
-    <div class="followed">
-        <div class="">
-            <span>
-                <img src="">
-            </span>
-            <span class="name"></span>
-            <span class="status"></span>
+        <div class="list-group" *ngIf="recommended_bee?.length > 0">
+          <h3 class="sub-title">Bee được gợi ý</h3>
+          <ul class="list-item">
+            <li class="d-flex justify-content-between align-items-center" *ngFor="let item of recommended_bee; index as i" >
+              <div class="d-flex" (click)="navigateToDetail(item.displayName,item.id)" *ngIf="i < 10">
+                <img src="{{item.logo}}" alt="avata" />
+              </div>
+              <span *ngIf="i < 10" class="status {{item.status}}" ></span>
+            </li>
+          </ul>
         </div>
-    </div>
-    <div class="subcribed">
-        <div class="">
-            <span>
-                <img >
-            </span>
-            <span class="name"></span>
-            <span class="status"></span>
-        </div>
-    </div>
+      </div>
 </div>
