@@ -14,3 +14,72 @@
   .btn.followed {
       background: deeppink;
   }
+  .sidebar-left{
+    // max-width: 270px;
+    // width: 100%;
+    max-width: 100%;
+    background:#382f6c5c;
+    position: sticky;
+    top: 0;
+  
+    .list-group{
+      border-bottom: 1px solid #f0f0f2ad;
+      padding: 15px 0;
+      top: 0;
+      &:last-child{
+        border-bottom: 0;
+      }
+    }
+    .list-item{
+      padding-left: 0;
+      margin: 0;
+      li{
+        cursor: pointer;
+        padding: 5px 0;
+        list-style: none;
+        color: #fff;
+        >div{
+          max-width: calc(100% - 30px);
+        }
+        p{
+          margin: 0;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        .status{
+          width: 10px;
+          height: 10px;
+          display: inline-block;
+          border-radius: 50%;
+          min-width: 10px;
+          &.offline{
+            background: #999999;
+          }
+          &.online{
+            background: #10D300;
+          }
+          &.busy {
+            background: red;
+          }
+        }
+      }
+      img{
+        width: 30px;
+        height: 30px;
+        object-fit: cover;
+        border-radius: 50%;
+        margin-right: 10px;
+      }
+    }
+    .sub-title{
+      font-size: 1rem;
+      color: #52068c;
+      font-weight: 600;
+      text-transform: uppercase;
+      margin-bottom: 15px;
+    }
+    ~ .col-md-9{
+  
+    }
+  }
+  

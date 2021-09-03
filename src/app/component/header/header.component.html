@@ -37,9 +37,10 @@
               <!-- <div class="header-right" > -->
         <ul class="navbar-nav">
           <li class="nav-item active position-relative meetpandas">
-            <a id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link" [routerLink]="['/pandas']" routerLinkActive="router-link-active">Gặp gỡ chuyên gia <i class="fa fa-caret-down pl-2" aria-hidden="true"></i></a>
+            <a id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link" [routerLink]="['/bees']" routerLinkActive="router-link-active">Gặp gỡ chuyên gia <i class="fa fa-caret-down pl-2" aria-hidden="true"></i></a>
             <ul class="dropdown-list dropdown-menu" aria-labelledby="dropdownMenuLink">
               <li><a [routerLink]="['/bees']">Toàn bộ Bee</a></li>
+              <li><a [routerLink]="['/bees']" [queryParams]="{p:'online'}">Bee đang hoạt động</a></li>
               <li><a [routerLink]="['/bees']" [queryParams]="{p:'skin'}">Chăm sóc da</a></li>
               <li><a [routerLink]="['/bees']" [queryParams]="{p:'hair'}">Chăm sóc tóc</a></li>
               <li><a [routerLink]="['/bees']" [queryParams]="{p:'body'}">Chăm sóc body</a></li>

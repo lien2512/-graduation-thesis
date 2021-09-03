@@ -48,13 +48,14 @@ export class BeeProfileComponent implements OnInit {
     uid: '',
     video: [],
     advise: [],
-    review: []
+    review: [],
   };
   userInfo: any;
   connectingCall = false;
   id: any;
   infoTheCall: any;
   isFollowed: boolean;
+  isBlock: boolean
   ageOfBee: any;
   @ViewChild('templateCall') callingModal: TemplateRef<any>;
   @ViewChild('templateInputHours') inputHoursModal: TemplateRef<any>;
@@ -158,6 +159,7 @@ export class BeeProfileComponent implements OnInit {
           });
         }
       });
+     this.checkBlocked();
   }
   blockAccount(template: TemplateRef<any>) {
     this.modalReport = this.modalService.show(template, {
@@ -198,11 +200,11 @@ export class BeeProfileComponent implements OnInit {
       .getRefById('users', this.id)
       .then((res: any) => {
         this.beeProfile = res;
-        this.beeProfile.follow = res.follow;
-        this.isFollowed =
-          this.beeProfile.follow.findIndex((item) => item == this.userInfo.id) >
-          -1;
-        console.log(this.beeProfile);
+        this.beeProfile.follower = res.follower;
+        this.isFollowed = this.beeProfile.follower.findIndex((item) => item.id == this.userInfo.id) > -1;
+        if (res.listBock.length > 0) {
+          this.isBlock = res.listBock.findIndex((item) => item.id == this.userInfo.id) > -1;
+        }
         this.ageOfBee = this.CalculateAge(new Date(res.birthday));
       })
       .catch((err) => {});
@@ -293,46 +295,24 @@ export class BeeProfileComponent implements OnInit {
   }
   follow() {
     this.isFollowed = !this.isFollowed;
-    let listFollow = [];
-    this.firebaseService
-      .getRefById('users', this.userInfo.id)
-      .then((res: any) => {
-        listFollow = res.follow;
-      })
-      .catch((err) => {});
     if (this.isFollowed) {
-      listFollow.push(this.beeProfile.id);
+      firebase.firestore().collection('users').doc(this.userInfo.id).update({
+        follow: firebase.firestore.FieldValue.arrayUnion(this.beeProfile)
+      });
+      firebase.firestore().collection('users').doc(this.beeProfile.id).update({
+        follower: firebase.firestore.FieldValue.arrayUnion(this.userInfo)
+      });
     } else {
-      let index = listFollow.findIndex((item) => item == this.beeProfile.id);
-      listFollow.splice(index, 1);
+      firebase.firestore().collection('users').doc(this.userInfo.id).update({
+        follow: firebase.firestore.FieldValue.arrayRemove(this.beeProfile)
+      });
+      firebase.firestore().collection('users').doc(this.beeProfile.id).update({
+        follower: firebase.firestore.FieldValue.arrayRemove(this.userInfo)
+      });
     }
 
-    firebase
-      .firestore()
-      .collection('users')
-      .doc(this.userInfo.id)
-      .update('follow', listFollow);
-    let listFollower = [];
-    this.firebaseService
-      .getRefById('users', this.beeProfile.id)
-      .then((res: any) => {
-        listFollower = res.follow;
-      })
-      .catch((err) => {});
-    // listFollower.push(this.userInfo.id);
-    if (this.isFollowed) {
-      listFollower.push(this.userInfo.id);
-    } else {
-      let index = listFollow.findIndex((item) => item == this.userInfo.id);
-      listFollower.splice(index, 1);
-    }
-    firebase
-      .firestore()
-      .collection('users')
-      .doc(this.beeProfile.id)
-      .update('follow', listFollower);
   }
-  blockPanda(id) {
+   blockPanda(id) {
     if (!this.userInfo) {
       this.openLoginModal();
       return false;
@@ -351,27 +331,26 @@ export class BeeProfileComponent implements OnInit {
       });
       this.modalConfirmBlock.content.onConfirm.subscribe(() => {
         this.modalConfirmBlock.hide();
-        let listBlock = [];
-        this.firebaseService
-          .getRefById('users', this.beeProfile.id)
-          .then((res: any) => {
-            listBlock = res.listBock;
-          })
-          .catch((err) => {});
-        listBlock.push(this.beeProfile.id);
-        firebase
-          .firestore()
-          .collection('users')
-          .doc(this.userInfo.id)
-          .update('listBock', listBlock);
-        // this.apiService.blockAccount(id).subscribe((res: any) => {
-        //     if (res.code == STATUS_CODE.SUCCESS) {
-        //         this.helperService.showSuccess(this.transService.instant('MESSAGE.SUCCESS'), this.transService.instant('MESSAGE.BLOCK_SUCCESS'));
-        //         this.isBlocked = true;
-        //         this.chatService.globalBlock(id);
-        //     } else {
-        //     }
-        // })
+        firebase.firestore().collection('users').doc(this.userInfo.id).update({
+          listBock: firebase.firestore.FieldValue.arrayUnion(this.beeProfile)
+        });
+        firebase.firestore().collection('users').doc(this.beeProfile.id).update({
+          blockedBy: firebase.firestore.FieldValue.arrayUnion(this.userInfo)
+        });
+        // let listBlock = [];
+        // this.firebaseService
+        //   .getRefById('users', this.userInfo.id)
+        //   .then((res: any) => {
+        //     listBlock = res.listBock;
+        //   })
+        //   .catch((err) => {});
+        // listBlock.push({id: this.beeProfile.id, logo: this.beeProfile.logo, displayName: this.beeProfile.displayName});
+        // firebase
+        //   .firestore()
+        //   .collection('users')
+        //   .doc(this.userInfo.id)
+        //   .update('listBock', listBlock);
+        this.isBlock = true;
       });
     }
   }
@@ -388,5 +367,11 @@ export class BeeProfileComponent implements OnInit {
     var age_dt = new Date(diff_ms); 
   
     return Math.abs(age_dt.getUTCFullYear() - 1970);
+  }
+  async checkBlocked() {
+    let res: any = await this.firebaseService.getRefById('users',this.userInfo.id);
+    this.isBlock = res.listBock.findIndex((item) => {
+      return item.id == this.beeProfile.id;
+    }) > -1;
   }
 }

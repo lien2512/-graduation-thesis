@@ -39,7 +39,6 @@ firebase.initializeApp(firebaseConfig);
 const agoraConfig: AgoraConfig = {
   AppID: '68839fbf8dcc423f87c2f89fa52e975b',
 };
-
 @NgModule({
   declarations: [
     AppComponent,
