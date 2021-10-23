@@ -7,25 +7,32 @@ import { FormsModule } from '@angular/forms';
 import { LoginComponent } from './login/login.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { PopUpConfirmComponent } from './pop-up-confirm/pop-up-confirm.component';
-
+import { FullCalendarModule } from '@fullcalendar/angular';
+import { OrderComponent } from './order/order.component';
+import { OrdersComponent } from './orders/orders.component';
 
 @NgModule({
   declarations: [
     HeaderComponent,
     FooterComponent,
     LoginComponent,
-    PopUpConfirmComponent
+    PopUpConfirmComponent,
+    OrderComponent,
+    OrdersComponent
   ],
   imports: [
     CommonModule,
     RouterModule,
     FormsModule,
     ReactiveFormsModule,
+    FullCalendarModule
   ],
   exports: [
     HeaderComponent,
     FooterComponent,
-    PopUpConfirmComponent
+    PopUpConfirmComponent,
+    OrderComponent,
+    OrdersComponent
   ]
 })
 export class ComponentModule { }

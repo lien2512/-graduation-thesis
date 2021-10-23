@@ -71,7 +71,6 @@
     margin-bottom: 30px;
     flex-wrap: wrap;
     .avatar-wrap {
-      
       width: 200px;
       height: 200px;
       margin-right: 20px;
@@ -113,7 +112,6 @@
         left: 0;
         margin: 0;
       }
-      
     }
     .main-infor {
       flex: 1;
@@ -198,10 +196,10 @@
           background: #2ecc71;
         }
         &.offline {
-          background: #999999
+          background: #999999;
         }
         &.busy {
-          background:  #eb088c;
+          background: #eb088c;
         }
       }
       width: 36px;
@@ -297,77 +295,118 @@ img.selected {
   }
 }
 .nav {
-    display: flex;
-    flex-wrap: wrap;
-    padding-left: 0;
-    margin-bottom: 0;
-    list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  padding-left: 0;
+  margin-bottom: 0;
+  list-style: none;
 }
 .tab-default .nav-tabs {
-    border-bottom: 1px solid hsla(0,0%,100%,.3);
+  border-bottom: 1px solid hsla(0, 0%, 100%, 0.3);
 }
 .tab-default .nav-tabs .nav-item {
-    flex: 1;
+  flex: 1;
 }
 .tab-default .nav-tabs .nav-item .nav-link {
-    background: transparent;
-    border: none;
-    font-size: 20px;
-    text-align: center;
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  text-align: center;
 }
 .pd-horizontal-tabs {
-    .tab {
-      display: flex;
-      align-items: center;
-      
-      .tablinks {
-        font: normal normal 600 20px/22px Archer;
-        letter-spacing: 0px;
-        color: rgb(255, 255, 255, 0.5);
-        text-align: center;
-        padding: 10px 20px 5px;
-        border: none;
-        border-top-right-radius: 10px;
-        border-top-left-radius: 10px;
-        background: #141447;
-        position: relative;
-        top: 7px;
-      
-        &.flex-1 {
-          flex: 1;
-        }
-        cursor: pointer;
-  
-        &.active {
-          background: #262853;
-          color: rgb(255, 255, 255, 1);
-          padding-bottom: 15px;
-          padding-top: 15px;
-          top: 0;
-        }
-        &:hover {
-          color: rgb(255, 255, 255, 1);
-        }
+  .tab {
+    display: flex;
+    align-items: center;
+
+    .tablinks {
+      font: normal normal 600 20px/22px Archer;
+      letter-spacing: 0px;
+      color: rgb(255, 255, 255, 0.5);
+      text-align: center;
+      padding: 10px 20px 5px;
+      border: none;
+      border-top-right-radius: 10px;
+      border-top-left-radius: 10px;
+      background: #141447;
+      position: relative;
+      top: 7px;
+
+      &.flex-1 {
+        flex: 1;
       }
-      
+      cursor: pointer;
+
+      &.active {
+        background: #262853;
+        color: rgb(255, 255, 255, 1);
+        padding-bottom: 15px;
+        padding-top: 15px;
+        top: 0;
+      }
+      &:hover {
+        color: rgb(255, 255, 255, 1);
+      }
     }
-    .tabcontent {
-      margin: 0;
-      padding: 24px;
-      background: #2a3166;
-      // border-top-right-radius: 10px;
-      border-bottom-left-radius: 10px;
-      border-bottom-right-radius: 10px;
+  }
+  .tabcontent {
+    margin: 0;
+    padding: 24px;
+    background: #2a3166;
+    // border-top-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
     .main-infor-title {
       color: white;
       section {
         color: white;
       }
-      
     }
     .box-subtitle {
       color: white;
     }
-    }
+  }
+}
+.img-profile .pre-upload {
+  width: 400px;
+}
+.nav-tabs .nav-item.show .nav-link,
+.nav-tabs .nav-link {
+  color: #9e0c61;
+  font-family: cursive;
+  font-weight: 600;
+  &.active {
+    color: #fff;
+    background-color: #9e0c61;
+    border-color: #dee2e6 #dee2e6 #fff;
+  }
+}
+section.section-availablility {
+  .calendar-status-text,
+  p {
+    color: #fff;
+  }
+  .calendar-status.available {
+    background: #B953BF;
   }
   
+}
+.row-des-calendar .calendar-status {
+  display: inline-block;
+  margin-right: 5px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+}
+.row-des-calendar {
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+}
+.row-des-calendar .each-status-calendar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-right: 15px;
+}

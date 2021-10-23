@@ -1,0 +1,187 @@
+<div class="main-content main-bg profile profile-settings">
+    <div class="container">
+      <p class="title">Kiểm tra audio và video</p>
+      <div class="tab-default tab-permission">
+        <button  (click)="changeActiveTab('audio')" [ngClass]="{'active': mainTab == 'audio'}" >Âm thanh</button>
+          <section class="permission audio">
+            <div class="row">
+              <div class="col-md-10">
+                <div *ngIf="microPhoneStatus === 'prompt'" class="micro-block">
+                  <p class="text-guide">Trước khi bắt đầu cuộc gặp, hãy đảm bảo rằng kết nối âm thanh của bạn đang hoạt động bình thường. Vui lòng Nhấp vào 'Kiểm tra Micrô' và Cho phép Truy cập vào Micrô</p>
+                </div>
+                <div *ngIf="microPhoneStatus === 'denied'" class="micro-denied">
+                  <p class="text-guide">Quyền truy cập vào Micrô hiện bị chặn. Vui lòng kiểm tra kỹ cài đặt Micrô trong trình duyệt của bạn để bật lại</p>
+                </div>
+              </div>
+              <div class="col-md-8 d-flex flex-row flex-wrap mt-3">
+                <div class="row col-md-5">
+                  <div class="row" *ngIf="microPhoneStatus === 'prompt'">
+                    <div class="col-md-7">
+                      <button type="submit" class="btn btn-gradient" spkpandasLoadingButton
+                        (click)="allowPermissionAudio()">
+                        Kiểm tra micro</button>
+                    </div>
+                    <div class="col-md-5 device-title text-center">
+                      <p>Trạng thái
+                      </p>
+                      <p>Chưa cho phép</p>
+                    </div>
+                  </div>
+                  <div class="device-title text-center w-100" *ngIf="microPhoneStatus !== 'prompt'">
+                    <p>Trạng thái
+                        {{microPhoneStatus === "granted" ? 'Cho phép' :  'Không cho phép'}}
+                      <!-- {{microPhoneStatus === "granted" ? ('Cho phép' :  'Không cho phép')}} -->
+                    </p>
+                  </div>
+                </div>
+                <div class="col-md-7 row">
+                  <div class="col-md-4 device-title">
+                    <p>Thiết bị đầu ra</p>
+                  </div>
+                  <div class="select-default col-md-8">
+                    <div class="input-group mb-3">
+                      <select *ngIf="listInput.length !== 0" class="custom-select form-control">
+                        <option *ngFor="let item of listInput; let i = index" [value]="item.deviceId">{{item.label}}
+                        </option>
+                      </select>
+                      <select *ngIf="listInput.length === 0" class="custom-select form-control">
+                        <option selected>Không được phát hiện</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-8 d-flex flex-row flex-wrap mt-3">
+                <div class="col-md-5 row"></div>
+                <div class="col-md-7 row">
+                  <div class="col-md-4 device-title">
+                    <p>Thiết bị đầu vào</p>
+                  </div>
+                  <div class="select-default col-md-8">
+                    <div class="input-group mb-3">
+                      <select *ngIf="listOutput.length !== 0" class="custom-select form-control">
+                        <option *ngFor="let item of listOutput; let i = index" [value]="item.deviceId">{{item.label}}
+                        </option>
+                      </select>
+                      <select *ngIf="listOutput.length === 0" class="custom-select form-control">
+                        <option selected>Không được phát hiện</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row" *ngIf="inputAudio">
+              <div class="col-md-8 d-flex flex-row flex-wrap mt-3">
+                <div class="col-md-5 row"></div>
+                <div class="col-md-7 row">
+                  <div class="col-md-4 device-title">
+                    <p>Mức độ đầu vào</p>
+                  </div>
+                  <div class="select-default col-md-8">
+                    <div class="input-group mb-3 pids-wrapper">
+                        <div class="pid"></div>
+                        <div class="pid"></div>
+                        <div class="pid"></div>
+                        <div class="pid"></div>
+                        <div class="pid"></div>
+                        <div class="pid"></div>
+                        <div class="pid"></div>
+                        <div class="pid"></div>
+                        <div class="pid"></div>
+                        <div class="pid"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+  
+  
+          </section>
+        <button  id="tab1" (click)="changeActiveTab('video')"   [ngClass]="{'active': mainTab === 'video'}">Video</button>
+          <section class="permission-video" *ngIf="mainTab === 'video'">
+            <div class="row" class="ml-0">
+              <webcam *ngIf="cameraStatus === 'granted'" (initError)="handleInitError($event)"></webcam>
+              <div class="d-flex flex-wrap align-items-start mb-3" [ngClass]="{'checkCamera':  cameraStatus === 'prompt'}">
+                <div class="camera-block" *ngIf="cameraStatus !== 'granted'">
+                  <div *ngIf="cameraStatus === 'prompt'" class="camera-denied">
+                    <div *ngIf="userInfo?.role == 'pandas'">
+                      <p><i>
+                        Để tham gia ngày phát video và kết nối thành công với khách hàng của bạn, hãy đảm bảo quyền truy cập máy ảnh của bạn được phép. Vui lòng nhấp vào nút 'Kiểm tra Máy ảnh' bên dưới và nhấp vào 'Cho phép'.</i></p>
+                    </div>
+                    <div *ngIf="userInfo?.role != 'pandas'">
+                      <p><i>Để tham gia ngày phát video và kết nối với Bee của bạn thành công, hãy đảm bảo quyền truy cập máy ảnh của bạn được phép. Vui lòng nhấp vào nút 'Kiểm tra Máy ảnh' bên dưới và nhấp vào 'Cho phép'.</i></p>
+                    </div>
+                    <!-- <p class="text-guide">In order to join a video playdate and connect with your Pandas successfully, make sure your camera access is allowed. Please click "Check Camera" button below and Click "Allow"</p> -->
+                  </div>
+                  <div *ngIf="cameraStatus === 'denied'" class="camera-guide">
+                    <p class="text-guide">Quyền truy cập máy ảnh hiện bị chặn. Vui lòng làm theo các bước sau để kích hoạt lại:
+                    </p>
+                    <p class="text-guide text-normal">1. Tìm và nhấp vào biểu tượng Khóa trên thanh Địa chỉ URL</p>
+                    <img src="assets/images/url-bar.png" alt="">
+                    <p class="text-guide text-normal">2. Thông báo Quyền truy cập Máy ảnh: Thay đổi 'Bị chặn' thành 'Cho phép'</p>
+                    <img src="assets/images/url-access.png" alt="">
+                    <p class="text-guide text-normal">
+                        3. Làm mới trang và tận hưởng!</p>
+                  </div>
+                </div>
+                <div class="modal-guide white" *ngIf="cameraStatus === 'prompt'">
+                  <p><b>Không có máy ảnh?</b></p>
+                  <div *ngIf="userInfo?.role == 'pandas'">
+                    <span >
+                        Bạn vẫn có thể cung cấp dịch vụ chỉ gồm âm thanh</span><br>
+                    <span >(Nhưng bạn có thể kiếm được nhiều hơn thế từ dịch vụ video.)</span>
+                  </div>
+                  <div *ngIf="userInfo?.role != 'pandas'">
+                    <p >Đừng lo lắng, bạn vẫn có thể đặt trước, tham gia một ngày phát video và xem những Bee yêu thích của mình, nhưng họ sẽ không nhìn thấy bạn</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-7 d-flex flex-row flex-wrap mt-3">
+                <div class="row col-md-5">
+                  <div class="row" *ngIf="cameraStatus === 'prompt'">
+                    <div class="col-md-7">
+                      <button type="submit" class="btn btn-gradient" spkpandasLoadingButton
+                        (click)="allowPermissionVideo()">
+                        Kiểm tra camera</button>
+                    </div>
+                    <div class="col-md-5 device-title text-center pr-0">
+                      <p>Trạng thái
+                      </p>
+                      <p>Không cho phép</p>
+                    </div>
+                  </div>
+                  <div class="device-title text-center w-100" *ngIf="cameraStatus !== 'prompt'">
+                    <p>Trạng thái
+                      {{cameraStatus === "granted" ? 'Cho phép' :  'Không cho phép'}}
+                    </p>
+                  </div>
+                </div>
+                <div class="col-md-7 row">
+                  <div class="col-md-4 device-title">
+                    <p>Thiết bị đầu vào</p>
+                  </div>
+                  <div class="select-default col-md-8">
+                    <div class="input-group mb-3">
+                      <select *ngIf="cameraStatus === 'granted'" class="custom-select form-control">
+                        <option *ngFor="let item of listVideoInput; let i = index" [value]="item.deviceId">
+                          {{item.label}}
+                        </option>
+                      </select>
+                      <select *ngIf="cameraStatus !== 'granted'" class="custom-select form-control">
+                        <option selected>Không được phát hiện</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+      </div>
+    </div>
+  </div>
+  

@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
+import { HttpClientModule, HTTP_INTERCEPTORS, HttpClient, HttpBackend } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BeeBoxComponent } from './component/bee-box/bee-box.component';
@@ -26,6 +26,16 @@ import { ImageCropperModule } from 'ngx-image-cropper';
 import { TagInputModule } from 'ngx-chips';
 import { AngularAgoraRtcModule, AgoraConfig } from 'angular-agora-rtc';
 import { AngularFireModule } from '@angular/fire';
+import timeGridPlugin from '@fullcalendar/timegrid';
+import interactionPlugin from '@fullcalendar/interaction'; // for selectable
+import dayGridPlugin from '@fullcalendar/daygrid'; // a plugin
+import { MyOrderComponent } from './component/my-order/my-order.component';
+import { OrdersComponent } from './component/orders/orders.component';
+FullCalendarModule.registerPlugins([ // register FullCalendar plugins
+  timeGridPlugin,
+  interactionPlugin,
+  dayGridPlugin
+]);
 const firebaseConfig = {
   apiKey: 'AIzaSyAY0q9PonWzSoujGQh6GGsqQ6LufCglB30',
   authDomain: 'beauty-garden-5d096.firebaseapp.com',
@@ -47,12 +57,15 @@ const agoraConfig: AgoraConfig = {
     ListBeesComponent,
     BeeProfileComponent,
     DashboardComponent,
-  ],
+    MyOrderComponent,
+    ],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    FullCalendarModule,
     ModalModule.forRoot(),
     BrowserAnimationsModule,
+    HttpClientModule,
     CommonModule,
     FullCalendarModule,
     RouterModule,

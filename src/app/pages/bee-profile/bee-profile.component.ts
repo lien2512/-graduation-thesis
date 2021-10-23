@@ -6,6 +6,7 @@ import firebase from 'firebase';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { CookieService } from 'ngx-cookie-service';
 import { LoginComponent } from 'src/app/component/login/login.component';
+import { OrderComponent } from 'src/app/component/order/order.component';
 import { PopUpConfirmComponent } from 'src/app/component/pop-up-confirm/pop-up-confirm.component';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { HelperService } from 'src/app/services/helper.service';
@@ -23,6 +24,7 @@ export class BeeProfileComponent implements OnInit {
   modalInputHours: BsModalRef | null;
   modalConfirmBlock: BsModalRef;
   modalLogin: BsModalRef;
+  modalRef: BsModalRef
   listItemDefault: any;
   listIMG: any = [];
   statusCall: any;
@@ -211,7 +213,16 @@ export class BeeProfileComponent implements OnInit {
   }
   chooseImage(event) {}
   removeEachImage(oder, id) {}
-  openModalBook() {}
+  openModalBook() {
+    if (this.userInfo) {
+      this.modalRef = this.modalService.show(OrderComponent, { backdrop: 'static', class: 'modal-lg modal-dialog-centered popup-book', initialState: { beeId: this.beeProfile.id, beeName: this.beeProfile.name } });
+      this.modalRef.content.onClose.subscribe(() => {
+        this.modalRef.hide();
+      })
+  } else {
+      this.openLoginModal();
+  }
+  }
   call() {
     this.openModalInputHours(this.inputHoursModal);
   }
@@ -370,7 +381,7 @@ export class BeeProfileComponent implements OnInit {
   }
   async checkBlocked() {
     let res: any = await this.firebaseService.getRefById('users',this.userInfo.id);
-    this.isBlock = res.listBock.findIndex((item) => {
+    this.isBlock = res.listBock?.findIndex((item) => {
       return item.id == this.beeProfile.id;
     }) > -1;
   }

@@ -10,6 +10,8 @@ import { BecomeBeeComponent } from './become-bee/become-bee.component';
 import { TagInputModule } from 'ngx-chips';
 import { AgoraCallComponent } from './agora-call/agora-call.component';
 import { MeetingComponent } from './meeting/meeting.component';
+import { FullCalendarModule } from '@fullcalendar/angular';
+import { ComponentModule } from '../component/component.module';
 
 
 @NgModule({
@@ -22,7 +24,9 @@ import { MeetingComponent } from './meeting/meeting.component';
     NgxPaginationModule,
     BsDatepickerModule.forRoot(),
     ImageCropperModule,
-    TagInputModule
+    TagInputModule,
+    FullCalendarModule,
+    ComponentModule
 
   ],
   exports: [AccSettingComponent, BecomeBeeComponent]

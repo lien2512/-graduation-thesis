@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FirebaseService } from 'src/app/services/firebase.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -8,9 +9,9 @@ import { Component, OnInit } from '@angular/core';
 export class DashboardComponent implements OnInit {
   listImgBanner: any = [];
   listHightlightBees: any = [];
-  constructor() {}
+  constructor(private firebaseService: FirebaseService) {}
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.listImgBanner = [
       {
         btn_text: null,
@@ -33,46 +34,45 @@ export class DashboardComponent implements OnInit {
         type: 'banner',
       },
     ];
-    this.listHightlightBees = [
-      {
-        avatar:
-          'assets/images/bee1.png',
-        date_of_birth: '1989-10-14',
-        followed: false,
-        followed_count: 10,
-        gender: 'male',
-        id: 529,
-        name: 'YooyooBaby',
-        online_status: 0,
-        review_score: 4.5,
-        tag_name: ['yolo', 'stayfoolish', 'stay hungry'],
-      },
-      {
-        avatar:
-        'assets/images/bee2.png',
-        date_of_birth: '2001-01-25',
-        followed: false,
-        followed_count: 10,
-        gender: 'female',
-        id: 583,
-        name: 'Ninh PT diojap',
-        online_status: 0,
-        review_score: 4.5,
-        tag_name: ['Fun'],
-      },
-      {
-        avatar:
-        'assets/images/bee3.png',
-        date_of_birth: '2002-11-30',
-        followed: false,
-        followed_count: 5,
-        gender: 'female',
-        id: 628,
-        name: 'SilverWings',
-        online_status: 0,
-        review_score: null,
-        tag_name: ['Sweet Voice'],
-      },
-    ];
+    // this.listHightlightBees = [
+    //   {
+    //     avatar: 'assets/images/bee1.png',
+    //     date_of_birth: '1989-10-14',
+    //     followed: false,
+    //     followed_count: 10,
+    //     gender: 'male',
+    //     id: 529,
+    //     name: 'YooyooBaby',
+    //     online_status: 0,
+    //     review_score: 4.5,
+    //     tag_name: ['yolo', 'stayfoolish', 'stay hungry'],
+    //   },
+    //   {
+    //     avatar: 'assets/images/bee2.png',
+    //     date_of_birth: '2001-01-25',
+    //     followed: false,
+    //     followed_count: 10,
+    //     gender: 'female',
+    //     id: 583,
+    //     name: 'Ninh PT diojap',
+    //     online_status: 0,
+    //     review_score: 4.5,
+    //     tag_name: ['Fun'],
+    //   },
+    //   {
+    //     avatar: 'assets/images/bee3.png',
+    //     date_of_birth: '2002-11-30',
+    //     followed: false,
+    //     followed_count: 5,
+    //     gender: 'female',
+    //     id: 628,
+    //     name: 'SilverWings',
+    //     online_status: 0,
+    //     review_score: null,
+    //     tag_name: ['Sweet Voice'],
+    //   },
+    // ];
+    this.listHightlightBees = await this.firebaseService.getRecomnendBee();
+    console.log(this.listHightlightBees);
   }
 }

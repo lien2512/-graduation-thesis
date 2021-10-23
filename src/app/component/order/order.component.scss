@@ -1,0 +1,33 @@
+@import "../../../assets/scss/variables";
+
+.main-content {
+  background-image: url(../../../assets/images/banner3.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+  padding-top: 50px;
+}
+.promonotexist {
+  padding-left: 22%;
+}
+@media (max-width: 480px) {
+  .main-content-order {
+  #bookStep2 {
+    .modal-body {
+      .chooseService  {
+        padding: 0px !important;
+      }
+      .addPromoCode {
+        .form-group.form-default {
+          padding-left: 15px !important;
+        }
+      }
+    }
+  }
+  
+}
+  
+  
+}
+
+

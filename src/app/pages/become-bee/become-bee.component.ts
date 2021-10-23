@@ -6,13 +6,13 @@ import { CookieService } from 'ngx-cookie-service';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
 import { HelperService } from 'src/app/services/helper.service';
 import { SubjectService } from 'src/app/services/subject.service';
-import {BLOCK_TIME} from 'src/app/class/contants'
+import { BLOCK_TIME } from 'src/app/class/contants';
 import * as uuid from 'uuid';
 import { FirebaseService } from 'src/app/services/firebase.service';
 @Component({
   selector: 'app-become-bee',
   templateUrl: './become-bee.component.html',
-  styleUrls: ['./become-bee.component.scss']
+  styleUrls: ['./become-bee.component.scss'],
 })
 export class BecomeBeeComponent implements OnInit {
   @ViewChild('templateCropImage') cropImageModal: TemplateRef<any>;
@@ -22,7 +22,7 @@ export class BecomeBeeComponent implements OnInit {
   maxUploadVideoSize = 50000000; //max upload video size 50Mb
   self_introduction = {
     en: '',
-    zh: ''
+    zh: '',
   };
   beeProfile = {
     displayName: '',
@@ -37,7 +37,7 @@ export class BecomeBeeComponent implements OnInit {
     languages: [],
     bio: [],
     gender: 'Select Gender',
-    role: ''
+    role: '',
   };
   fromPage = '';
   previewAvatar: any = [];
@@ -52,7 +52,7 @@ export class BecomeBeeComponent implements OnInit {
   modalCropImage: BsModalRef | null;
   modalChooseAvatar: BsModalRef;
   previewVideo: any = [];
-  today = new Date;
+  today = new Date();
   previewMember = [];
   previewNonMember: any = [];
   cropLoading = false;
@@ -61,21 +61,56 @@ export class BecomeBeeComponent implements OnInit {
     banner: 'banner',
     avatar: 'avatar',
     imageNonMember: 'membership',
-    imageMember: 'non-membership'
+    imageMember: 'non-membership',
   };
   modalConfirmDeleteImage: BsModalRef;
   listAvatarDefault = [
-    { id: '1', fullsrc: 'https://api.sparklepandas.uat4.pgtest.co/'+'images/avatar/avatar_01.jpg', src: 'images/avatar/avatar_01.jpg', selected: false },
-    { id: '2', fullsrc: 'https://api.sparklepandas.uat4.pgtest.co/'+'images/avatar/avatar_02.jpg', src: 'images/avatar/avatar_02.jpg', selected: false },
-    { id: '3', fullsrc: 'https://api.sparklepandas.uat4.pgtest.co/'+'images/avatar/avatar_03.jpg', src: 'images/avatar/avatar_03.jpg', selected: false },
-    { id: '4', fullsrc: 'https://api.sparklepandas.uat4.pgtest.co/'+'images/avatar/avatar_04.jpg', src: 'images/avatar/avatar_04.jpg', selected: false },
-  ]
+    {
+      id: '1',
+      fullsrc:
+        'https://api.sparklepandas.uat4.pgtest.co/' +
+        'images/avatar/avatar_01.jpg',
+      src: 'images/avatar/avatar_01.jpg',
+      selected: false,
+    },
+    {
+      id: '2',
+      fullsrc:
+        'https://api.sparklepandas.uat4.pgtest.co/' +
+        'images/avatar/avatar_02.jpg',
+      src: 'images/avatar/avatar_02.jpg',
+      selected: false,
+    },
+    {
+      id: '3',
+      fullsrc:
+        'https://api.sparklepandas.uat4.pgtest.co/' +
+        'images/avatar/avatar_03.jpg',
+      src: 'images/avatar/avatar_03.jpg',
+      selected: false,
+    },
+    {
+      id: '4',
+      fullsrc:
+        'https://api.sparklepandas.uat4.pgtest.co/' +
+        'images/avatar/avatar_04.jpg',
+      src: 'images/avatar/avatar_04.jpg',
+      selected: false,
+    },
+  ];
   tags: any = [];
-  tagsEN = ['Fun', 'Pretty', 'Cute', 'Sweet Voice', 'Epic Gamer', 'Cosplay', 'Asian', 'Blonde', 'Talents'];
+  tagsEN = [
+    'Fun',
+    'Pretty',
+    'Cute',
+    'Sweet Voice',
+    'Epic Gamer',
+    'Cosplay',
+    'Asian',
+    'Blonde',
+    'Talents',
+  ];
   autocompleteTags = this.tagsEN;
-
-
-
 
   constructor(
     private helperService: HelperService,
@@ -87,40 +122,49 @@ export class BecomeBeeComponent implements OnInit {
     private firebaseService: FirebaseService
   ) {
     if (this.router.getCurrentNavigation().extras.state) {
-      this.fromPage = this.router.getCurrentNavigation().extras.state.from_page ? this.router.getCurrentNavigation().extras.state.from_page : '';
+      this.fromPage = this.router.getCurrentNavigation().extras.state.from_page
+        ? this.router.getCurrentNavigation().extras.state.from_page
+        : '';
     }
   }
 
   ngOnInit(): void {
     this.subjectService.userInfo.subscribe((res: any) => {
       this.userInfo = res;
-      if (!this.userInfo && this.cookie.get('account_info') && this.cookie.get('account_info') != '') {
+      if (
+        !this.userInfo &&
+        this.cookie.get('account_info') &&
+        this.cookie.get('account_info') != ''
+      ) {
         this.userInfo = JSON.parse(this.cookie.get('account_info'));
-      };
-      if (!this.userInfo)
-        this.router.navigate(['']);
+      }
+      if (!this.userInfo) this.router.navigate(['']);
     });
     this.getRegisterInfo();
   }
 
   async getRegisterInfo() {
     this.previewAvatar = [];
-    let res: any = await this.firebaseService.getRefById('users',this.userInfo.id);
+    let res: any = await this.firebaseService.getRefById(
+      'users',
+      this.userInfo.id
+    );
     this.beeProfile.displayName = res.displayName;
     this.beeProfile.gender = res.gender;
     this.beeProfile.birthday = res.gender;
     this.beeProfile.id = res.id;
     this.beeProfile.bio = res.bio;
-    this.previewAvatar.push({url: res.logo });
+    this.previewAvatar.push({ url: res.logo });
     // console.log(await this.firebaseService.getRefById('users',this.userInfo.id));
   }
 
   popupChooseAvatarDefault() {
     this.modalChooseAvatar = this.modalService.show(this.templateChooseAvatar, {
-      class: 'modal-dialog-centered modal-dialog modal-lg modal-default chooseAvatar',
-      ignoreBackdropClick: true
+      class:
+        'modal-dialog-centered modal-dialog modal-lg modal-default chooseAvatar',
+      ignoreBackdropClick: true,
     });
-  };
+  }
 
   chooseImageAvatar(e, type) {
     this.beeProfile.avatar = e.target.files;
@@ -131,15 +175,17 @@ export class BecomeBeeComponent implements OnInit {
       this.previewImage(this.beeProfile.avatar[i], type, () => {
         if (!this.uploadGif) {
           this.imageChangedEvent = e;
-          const _originAvatar = (this.previewAvatar[0].origin !== undefined && this.previewAvatar[0].origin) ? this.previewAvatar[0].origin : this.previewAvatar[0].url;
-          this.previewAvatar = [
-            { url: e, size: null, origin: _originAvatar }
-          ];
+          const _originAvatar =
+            this.previewAvatar[0].origin !== undefined &&
+            this.previewAvatar[0].origin
+              ? this.previewAvatar[0].origin
+              : this.previewAvatar[0].url;
+          this.previewAvatar = [{ url: e, size: null, origin: _originAvatar }];
           this.avatarDefault = '';
           // Open crop modal
           this.modalCropImage = this.modalService.show(this.cropImageModal, {
             class: 'modal-dialog-centered modal-dialog modal-lg modal-default',
-            ignoreBackdropClick: true
+            ignoreBackdropClick: true,
           });
         }
       });
@@ -153,9 +199,9 @@ export class BecomeBeeComponent implements OnInit {
 
   previewImage(file, type, callback, index = null) {
     let mimeType = file?.type;
-    if(!mimeType || mimeType == undefined ) return;
+    if (!mimeType || mimeType == undefined) return;
     if (mimeType.match(/image\/*/) == null) {
-      this.helperService.showError('', "Vui lòng chọn ảnh");
+      this.helperService.showError('', 'Vui lòng chọn ảnh');
       return;
     }
 
@@ -171,7 +217,7 @@ export class BecomeBeeComponent implements OnInit {
         this.helperService.showError('', 'CHọn ảnh có dung lượng nhỏ hơn 2MB');
         this.beeProfile.avatar = [];
       } else {
-        if (type == this.imageType.avatar){
+        if (type == this.imageType.avatar) {
           this.previewAvatar = [];
           this.previewAvatar.push({ url: reader.result, size: file.size });
         }
@@ -184,24 +230,24 @@ export class BecomeBeeComponent implements OnInit {
     };
   }
 
-  setImagetoAvatar(){
-    let url = this.listAvatarDefault.filter(x => x.selected).map(y => y.src);
-    if (url.length > 0){
+  setImagetoAvatar() {
+    let url = this.listAvatarDefault
+      .filter((x) => x.selected)
+      .map((y) => y.src);
+    if (url.length > 0) {
       this.previewAvatar = [];
       this.avatarDefault = url[0];
-      this.previewAvatar.push({ url: ``+url, size: 0 });
+      this.previewAvatar.push({ url: `` + url, size: 0 });
       this.closeChooseAvatar();
     }
   }
 
   dataURItoBlob(dataURI) {
-
     // convert base64/URLEncoded data component to raw binary data held in a string
     var byteString;
     if (dataURI.split(',')[0].indexOf('base64') >= 0)
       byteString = atob(dataURI.split(',')[1]);
-    else
-      byteString = unescape(dataURI.split(',')[1]);
+    else byteString = unescape(dataURI.split(',')[1]);
 
     // separate out the mime component
     var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
@@ -231,7 +277,7 @@ export class BecomeBeeComponent implements OnInit {
       this.cropLoading = false;
       this.modalCropImage.hide();
     }, 1000);
-  };
+  }
 
   setGender(gender) {
     this.beeProfile.gender = gender;
@@ -241,42 +287,41 @@ export class BecomeBeeComponent implements OnInit {
     this.tags.push($event.value);
   }
 
-  onTagRemoved($event){
+  onTagRemoved($event) {
     let index = this.tags.indexOf($event);
     this.tags.splice(index, 1);
   }
 
   chooseImage(e: any, type): void {
     let fileData = e.target.files;
-    let previewImgCount = (type == this.imageType.imageNonMember ? this.previewNonMember.length : this.previewMember.length);
+    let previewImgCount =
+      type == this.imageType.imageNonMember
+        ? this.previewNonMember.length
+        : this.previewMember.length;
     let count = 10 - previewImgCount;
     for (let i = 0; i < count; i++) {
       if (i >= 10) {
         fileData.splice(i, 1); //remove
       } else {
-        this.previewImage(fileData[i], type, () => { });
+        this.previewImage(fileData[i], type, () => {});
       }
     }
-    
   }
 
   removeEachImage(index, type, idImg?) {
-    
-      
-        this.previewMember.splice(index, 1);
-      if (idImg) {
-        // this.apiService.removeEachImage(idImg).subscribe(response => {
-        //   if (response['code'] == STATUS_CODE.SUCCESS) {
-        //   }
-        // });
-      }
-
+    this.previewMember.splice(index, 1);
+    if (idImg) {
+      // this.apiService.removeEachImage(idImg).subscribe(response => {
+      //   if (response['code'] == STATUS_CODE.SUCCESS) {
+      //   }
+      // });
+    }
   }
 
   previewVideos(file) {
     let mimeType = file.type;
     if (mimeType.match(/video\/*/) == null) {
-      this.helperService.showError('', "Vui lòng chọn ảnh");
+      this.helperService.showError('', 'Vui lòng chọn ảnh');
       return;
     }
 
@@ -285,11 +330,11 @@ export class BecomeBeeComponent implements OnInit {
       reader.readAsDataURL(file);
       reader.onload = (event) => {
         if (file.size >= this.maxUploadVideoSize) {
-          this.helperService.showError('', "Dung lượng tối đa 5MB");
+          this.helperService.showError('', 'Dung lượng tối đa 5MB');
         } else {
           this.previewVideo = (<FileReader>event.target).result;
         }
-      }
+      };
     }
   }
 
@@ -306,49 +351,54 @@ export class BecomeBeeComponent implements OnInit {
   }
 
   async updateBeeProfile() {
-    debugger;
     this.beeProfile.tags = this.tags;
     this.beeProfile.imageMember = this.previewMember;
     if (this.beeProfile.imageMember.length > 0) {
       let avtUrls = [];
       this.beeProfile.imageMember.forEach(async (item) => {
         console.log(item);
-        let avtUrl = await this.firebaseService.uploadLogo(item.url, 'userAvt/');
+        let avtUrl = await this.firebaseService.uploadLogo(
+          item.url,
+          'userAvt/'
+        );
         avtUrls.push(avtUrl);
-      })
+      });
       this.beeProfile.imageMember = avtUrls;
     }
     this.beeProfile.avatar = this.previewAvatar;
     let status = true;
-    if (!this.beeProfile.bio ){
-      this.helperService.showError('Fail!', "Vui lòng giới thiệu bản thân");
+    if (!this.beeProfile.bio) {
+      this.helperService.showError('Fail!', 'Vui lòng giới thiệu bản thân');
       status = false;
     }
-    if (this.beeProfile.tags.length == 0){
-      this.helperService.showError('Fail!', "Vui lòng chọn hastag");
+    if (this.beeProfile.tags.length == 0) {
+      this.helperService.showError('Fail!', 'Vui lòng chọn hastag');
       status = false;
     }
-    if (!this.beeProfile.birthday){
-      this.helperService.showError('Fail!', "Vui lòng nhập ngày sinh");
+    if (!this.beeProfile.birthday) {
+      this.helperService.showError('Fail!', 'Vui lòng nhập ngày sinh');
       status = false;
     }
-    
-    if (this.beeProfile.gender == 'Select Gender'){
-      this.helperService.showError('Fail!', "Vui lòng chọn giới tính");
+
+    if (this.beeProfile.gender == 'Select Gender') {
+      this.helperService.showError('Fail!', 'Vui lòng chọn giới tính');
       status = false;
     }
     if (this.beeProfile.avatar.length == 0 && this.avatarDefault == '') {
-      this.helperService.showError('Fail!', "Hãy chọn ảnh đại diện");
+      this.helperService.showError('Fail!', 'Hãy chọn ảnh đại diện');
       status = false;
     }
     if (this.beeProfile.imageMember.length == 0) {
-      this.helperService.showError('Fail!', "Hãy tải một ảnh nào đó");
+      this.helperService.showError('Fail!', 'Hãy tải một ảnh nào đó');
       status = false;
     }
     if (status == false) return false;
-    this.beeProfile.birthday = moment(this.beeProfile.birthday , 'DD/MM/YYYY').format('YYYY-MM-DD');
+    this.beeProfile.birthday = moment(
+      this.beeProfile.birthday,
+      'DD/MM/YYYY'
+    ).format('YYYY-MM-DD');
     this.helperService.showFullLoading();
-    
+
     // var id = setInterval(() => {
     //   if ((this.beeProfile.video.length == 0 || this.statusUpVideo) && this.statusUpdate) {
     //     clearInterval(id);
@@ -375,18 +425,17 @@ export class BecomeBeeComponent implements OnInit {
         // });
         // this.onSubmitImage([_imageFile], 'avatar');
       }
-    } else if (this.avatarDefault){
+    } else if (this.avatarDefault) {
       this.beeProfile.avatarUrl = this.avatarDefault;
     }
     this.beeProfile.role = 'bee';
     this.beeProfile.displayName = this.userInfo.displayName;
-    this.beeProfile.video = []
+    this.beeProfile.video = [];
     console.log(1111, this.beeProfile);
-    this.firebaseService.updateRef('users',this.userInfo.id,  this.beeProfile);
-      alert("thành công");
-      this.subjectService.userInfo.next(this.beeProfile);
-      this.router.navigate(['/account-setting'])
-
+    this.firebaseService.updateRef('users', this.userInfo.id, this.beeProfile);
+    alert('thành công');
+    this.subjectService.userInfo.next(this.beeProfile);
+    this.router.navigate(['/account-setting']);
   }
 
   onSubmitVideo(fileData) {
@@ -394,7 +443,6 @@ export class BecomeBeeComponent implements OnInit {
     for (let i = 0; i < fileData.length; i++) {
       myFormData.append('video', fileData[i]);
     }
-    
   }
 
   onSubmitImage(fileData, type) {
@@ -403,11 +451,11 @@ export class BecomeBeeComponent implements OnInit {
       myFormData.append('image[]', fileData[i]);
     }
     myFormData.append('type', type);
-
-    
   }
 }
-function PopupConfirmComponent(PopupConfirmComponent: any, arg1: { class: string; initialState: { confirmText: any; }; }): any {
+function PopupConfirmComponent(
+  PopupConfirmComponent: any,
+  arg1: { class: string; initialState: { confirmText: any } }
+): any {
   throw new Error('Function not implemented.');
 }
-

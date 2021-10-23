@@ -1,0 +1,54 @@
+@import '../../../assets/scss/_variables.scss';
+.title {
+  font-size: 36px;
+  font-weight: bold;
+  color: white;
+  text-transform: capitalize;
+}
+.calendar-status-text, p {
+  color: #fff;
+}
+.row-des-calendar .calendar-status {
+  display: inline-block;
+  margin-right: 5px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+}
+.row-des-calendar {
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+.row-des-calendar .each-status-calendar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-right: 15px;
+}
+
+.calendar-status {
+  display: inline-block;
+  margin-right: 5px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  &.available {
+    background: #B953BF;
+  }
+  &.booked {
+    background: $darkGray;
+  }
+  &.not-avai {
+    background: white;
+  }
+  &.booked-by-you {
+    background: $blue;
+  }
+  &.confirming {
+    background: #26ABE2;
+  }
+}

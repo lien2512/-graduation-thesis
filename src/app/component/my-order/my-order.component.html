@@ -1,0 +1,57 @@
+<div class="row-des-calendar">
+    <div class="each-status-calendar">
+      <span class="calendar-status available"></span>
+      <span class="calendar-status-text">Khoảng khả dụng</span>
+    </div>
+    <div class="each-status-calendar">
+      <span class="calendar-status confirming"></span>
+      <span class="calendar-status-text">Chờ Xác nhận</span>
+    </div>
+    <div class="each-status-calendar">
+      <span class="calendar-status booked"></span>
+      <span class="calendar-status-text">Sắp diễn ra</span>
+    </div>
+  
+  </div>
+  <full-calendar #myOrderCalendar [options]="calendar"></full-calendar>
+  
+  <br><br>
+    <button>Lịch hẹn của tôi</button>
+  <div class="row" id="tab-order">
+    <div class="form-group form-default col-md-3">
+      <input type="text" class="form-control" placeholder="Tìm kiếm..." (keyup.enter)="fillOrdertable()" [(ngModel)]="searchString" (ngModelChange)="this.searchStringUpdate.next($event)">
+    </div>
+  </div>
+  <!-- <tabset class="tab-default">
+    <tab heading="{{ 'ORDERS.ALL' | translate }}" id="all" (selectTab)="selectTab($event)">
+      <spkpandas-table-data (onApplySort)="apllySort($event)" (onChat)="openChatBox($event)" (onOrderCancel)="cancelOrder($event)" (onOrderDelete)="deleteOrder($event)" (onOrderConfirm)="confirmOrder($event)" [userId]="userInfo.id" [tableHeader]="tableHeader"
+        [data]="tableData"  [noItemTitle]="'PAYMENT.NO_PLAYDATE' | translate"></spkpandas-table-data>
+    </tab>
+    <tab heading="{{ 'ORDERS.WAITINGTOCONFIRM' | translate }}" id="waittoconfirm" [active]="showMeeting == 0" (selectTab)="selectTab($event)"> 
+      <spkpandas-table-data (onApplySort)="apllySort($event)" (onChat)="openChatBox($event)" (onOrderCancel)="cancelOrder($event)" (onOrderDelete)="deleteOrder($event)" (onOrderConfirm)="confirmOrder($event)" [userId]="userInfo.id" [tableHeader]="tableHeader"
+        [data]="tableData"  [noItemTitle]="'PAYMENT.NO_PLAYDATE' | translate"></spkpandas-table-data>
+    </tab>
+    <tab heading="{{ 'ORDERS.UPCOMMING' | translate }}" id="upcoming" [active]="showMeeting == 1" (selectTab)="selectTab($event)"> 
+      <spkpandas-table-data (onApplySort)="apllySort($event)" (onChat)="openChatBox($event)" (onOrderCancel)="cancelOrder($event)" (onOrderDelete)="deleteOrder($event)" (onOrderConfirm)="confirmOrder($event)" [userId]="userInfo.id" [tableHeader]="tableHeader"
+        [data]="tableData"  [noItemTitle]="'PAYMENT.NO_PLAYDATE' | translate"></spkpandas-table-data>
+    </tab>
+    <tab heading="{{ 'ORDERS.COMPLETED' | translate }}" id="completed" [active]="showMeeting == 2" (selectTab)="selectTab($event)">
+      <spkpandas-table-data (onApplySort)="apllySort($event)" (onChat)="openChatBox($event)" (onOrderDelete)="deleteOrder($event)" [userId]="userInfo.id" [tableHeader]="tableHeader"
+        [data]="tableData"  [noItemTitle]="'PAYMENT.NO_PLAYDATE' | translate"></spkpandas-table-data>
+    </tab>
+    <tab heading="{{ 'ORDERS.STATUS_CANCELLED' | translate }}" [active]="showMeeting == 3 || showMeeting == 4" id="cancelled" (selectTab)="selectTab($event)">
+      <spkpandas-table-data (onApplySort)="apllySort($event)" (onChat)="openChatBox($event)" (onOrderDelete)="deleteOrder($event)" [userId]="userInfo.id" [tableHeader]="tableHeader"
+        [data]="tableData"  [noItemTitle]="'PAYMENT.NO_PLAYDATE' | translate"></spkpandas-table-data>
+    </tab>
+  </tabset> -->
+  <div class="row">
+    <div class="col-md-12">
+      <div class="d-flex justify-content-end">
+        <!-- <pagination-controls autoHide="true" (pageChange)="changePage(tableData, $event)" id="spk-panda-orders" maxSize="5" ></pagination-controls> -->
+      </div>
+    </div>
+  </div>
+    
+  
+  
+  

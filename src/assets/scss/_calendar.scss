@@ -1,0 +1,79 @@
+.fc {
+  border: 8px solid #9e0c61 ;
+  border-radius: 6px;
+  .fc-toolbar.fc-header-toolbar {
+    color: $pink;
+    padding: 15px;
+    margin-bottom: 0 !important;
+    background: white;
+    border-top-left-radius: 6px;
+    overflow: hidden;
+    border-top-right-radius: 6px;
+  }
+  .fc-view-harness {
+    background: white;
+    .fc-col-header {
+      .fc-scrollgrid-sync-inner {
+        color: $pink;
+      }
+    }
+    &.fc-view-harness-active {
+      min-height: 400px;
+    }
+  }
+  .fc-timegrid-slots {
+    >table {
+      tbody {
+        tr {
+          &:nth-child(odd) {
+            .fc-timegrid-slot {
+              background-color: $calendar-row;
+            }
+          }
+        }
+      }
+    }
+  }
+  .fc-timegrid-col-frame {
+    z-index: 9;
+  }
+}
+
+.fc-media-screen {
+  .fc-timegrid-event-harness {
+    position: absolute;
+    left: -2px !important;
+    right: -5px !important;
+  }
+  .fc-timegrid-event {
+    bottom: 0 !important;
+  }
+  .fc-timegrid-cols {
+    z-index: 3;
+    .fc-timegrid-col.fc-day.fc-day-past {
+      background: rgb(156 156 156 / 30%);
+      cursor: not-allowed;
+    }
+  }
+}
+
+#general-calendar.fc-media-screen {
+  th.fc-day-today {
+    background: transparent;
+  }
+  .fc-timegrid-cols {
+    .fc-timegrid-col.fc-day.fc-day-today, .fc .fc-day-today {
+      background: transparent;
+    }
+    .fc-timegrid-col.fc-day.fc-day-past {
+      background: transparent;
+    }
+  }
+}
+
+.calendar-min-mobile {
+  @media (max-width: 768px) {
+    table.fc-scrollgrid.fc-scrollgrid-liquid {min-width: 900px;}
+  }
+ 
+}

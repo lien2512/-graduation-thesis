@@ -18,13 +18,13 @@ import { stringify } from '@angular/compiler/src/util';
   providers: [FormBuilder]
 })
 export class LoginComponent implements OnInit {
+  @Output() onClose = new EventEmitter();
+  @Output() onLoginSuccess = new EventEmitter();
   public emailPattern = '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$';
   public formLogin: FormGroup;
   public formSignUp: FormGroup;
-  back= false;
-  isShowPass = false
-  @Output() onClose = new EventEmitter();
-  @Output() onLoginSuccess = new EventEmitter();
+  back = false;
+  isShowPass = false;
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
@@ -50,7 +50,6 @@ export class LoginComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
       c_password: ['', Validators.required],
-     
     }, {
         validator: [this.checkConfirmPassword, this.validatePassword]
       });
@@ -58,13 +57,12 @@ export class LoginComponent implements OnInit {
   validatePassword(group: FormGroup) {
     const password = group.get('password').value;
     const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
-      const validPass = regex.test(password);
-      if (validPass) {
+    const validPass = regex.test(password);
+    if (validPass) {
         return true;
       } else {
         return { invalidPassword: true };
       }
-    
   }
   checkConfirmPassword(group: FormGroup) {
     const password = group.get('password').value;
@@ -80,42 +78,37 @@ export class LoginComponent implements OnInit {
     this.authService.login(this.formLogin.value).then((res: any) => {
         const user: firebase.User = res.user;
         // if (user.emailVerified) {
-          const newUser: Account = {} as Account;
-          newUser.displayName = user.displayName
-          newUser.id = user.uid;
-          newUser.email = this.formLogin.value.email;
-          newUser.emailVerified = false;
-          newUser.role = 'user';
-          newUser.status = 'online';
-          this.firebaseService.updateRef('users', user.uid,  newUser );
-          localStorage.setItem('user_data', JSON.stringify({
+        const newUser: Account = {} as Account;
+        newUser.displayName = user.displayName;
+        newUser.id = user.uid;
+        newUser.email = this.formLogin.value.email;
+        newUser.emailVerified = false;
+        newUser.role = 'user';
+        newUser.status = 'online';
+        this.firebaseService.updateRef('users', user.uid,  newUser );
+        localStorage.setItem('user_data', JSON.stringify({
             token: user.refreshToken,
             data: newUser
-          }))
-          this.cookie.set('jwt_access_token', user.refreshToken, 365, '/');
-          this.cookie.set('account_info', JSON.stringify(newUser), 365, '/')
-          debugger;
-          this.subjectService.userInfo.next(newUser);
-          
+          }));
+        this.cookie.set('jwt_access_token', user.refreshToken, 365, '/');
+        this.cookie.set('account_info', JSON.stringify(newUser), 365, '/');
+        this.subjectService.userInfo.next(newUser);
           // this.router.navigate(['/account-settings']);
-  
         // } else {
         //   this.helperService.showError('error', "Đăng nhập thất bại");
         // }
         this.closeLoginModal();
-      
     }).catch(err => {
-      debugger
       switch (err.code) {
         case 'auth/user-not-found':
           this.helperService.showError('error', 'Tài khoản chưa được đăng ký');
           break;
         default:
-          this.helperService.showError('error', "Đăng nhập thất bại");
-          alert('Đăng nhập thất bại')
+          this.helperService.showError('error', 'Đăng nhập thất bại');
+          alert('Đăng nhập thất bại');
           break;
       }
-    })
+    });
 
   }
   signUp() {
@@ -127,21 +120,20 @@ export class LoginComponent implements OnInit {
       this.createUserInfo(newUser);
       newUser.sendEmailVerification();
       this.closeLoginModal();
-      this.helperService.showSuccess('success', 'Đăng ký thành công');        
+      this.helperService.showSuccess('success', 'Đăng ký thành công');
     }).catch(err => {
       this.helperService.showError('error', err.message);
-    })
+    });
   }
   async sendEmailVerify() {
     firebase.auth().currentUser.sendEmailVerification().then((res) => {
       console.log('sended');
-    })
+    });
   }
   showPassword() {
 
   }
   loginSuccess(res) {
-    debugger;
     const accessToken = res.data.access_token;
     const userInfo = res.data.user_infos;
     localStorage.setItem('user_data', JSON.stringify({
@@ -157,6 +149,7 @@ export class LoginComponent implements OnInit {
       this.subjectService.userInfo.next(userInfo);
     }, 200);
   }
+
   createUserInfo(userInfo) {
     console.log(this.formSignUp);
     const user: Account = {} as Account;

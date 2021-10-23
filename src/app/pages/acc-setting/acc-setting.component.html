@@ -3,7 +3,29 @@
     <p class="title">Trang cá nhân của bạn</p>
     <div class="pd-horizontal-tabs">
       <div class="tab">
-        <button class="tablinks flex-1" [ngClass]="{'active': mainTab == 'account'}"
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link" [ngClass]="{'active': mainTab == 'account'}" id="account-tab" data-toggle="tab" href="#account" role="tab" aria-controls="profile" aria-selected="false" (click)="selectTab('account')">Thông tin
+              cá nhân</a>
+          </li>
+          <li class="nav-item"  >
+            <a class="nav-link" [ngClass]="{'active': mainTab == 'myOrder'}" id="myOrder-tab" data-toggle="tab" href="#myOrder" role="tab" aria-controls="profile" aria-selected="false" (click)="selectTab('myOrder')">Lịch
+              cá nhân</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" [ngClass]="{'active': mainTab == 'favourite'}" id="favourite-tab" data-toggle="tab" href="#favourite" role="tab" aria-controls="contact" aria-selected="false" (click)="selectTab('favourite')">Danh sách yêu thích</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" [ngClass]="{'active': mainTab == 'block'}"  id="block-tab" data-toggle="tab" href="#block" role="tab" aria-controls="contact" aria-selected="false" (click)="selectTab('block')">Danh sách hạn chế</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link"  [ngClass]="{'active': mainTab == 'changePass'}" id="changePass-tab" data-toggle="tab" href="#changePass" role="tab" aria-controls="contact" aria-selected="false" (click)="selectTab('changePass')">Đổi mật khẩu</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" [ngClass]="{'active': mainTab == 'calendar'}" id="calendar-tab" data-toggle="tab" href="#calendar" role="tab" aria-controls="contact" aria-selected="false" (click)="selectTab('calendar')">Lịch khả dụng</a>
+          </li>
+        </ul>
+        <!-- <button class="tablinks flex-1" [ngClass]="{'active': mainTab == 'account'}"
           (click)="selectTab('account')">Thông tin cá nhân</button>
         <button class="tablinks flex-1" [ngClass]="{'active': mainTab == 'myOrder'}" (click)="selectTab('myOrder')">Lịch
           cá nhân</button>
@@ -13,10 +35,10 @@
           sách hạn chế</button>
         <button class="tablinks flex-1" [ngClass]="{'active': mainTab == 'changePass'}"
           (click)="selectTab('changePass')">Đổi mật khẩu</button>
-        <!-- <button class="tablinks flex-1">Danh sách hạn chế</button> -->
+        <button class="tablinks flex-1" [ngClass]="{'active': mainTab == 'calendar'}" (click)="getAvailableTime()">Lịch rảnh</button> -->
       </div>
-      <div class="tabcontent">
-        <div class="" *ngIf="mainTab == 'account'">
+      <div class="tab-content">
+        <div class="tab-pane fade" id="account" role="tabpanel" aria-labelledby="home-tab" [ngClass]="{'show active': mainTab == 'account'}">
           <section>
 
             <div class="row-account-info">
@@ -234,12 +256,14 @@
 
           </section>
         </div>
-        <div class="" *ngIf="mainTab == 'myOrder'">
+        <div class="tab-pane fade" [ngClass]="{'show active': mainTab == 'myOrder'}" id="myOrder" role="tabpanel" aria-labelledby="home-tab">
           <!-- <tab heading="Lịch hẹn của tôi" (selectTab)="initTabChangeOrder()" [active]="showMeeting != null || mainTab == 'order'">
           <spkpandas-user-orders [showMeeting]="showMeeting" [userInfo]="userInfo" #UserOrder></spkpandas-user-orders>
         </tab> -->
+        <!-- <app-my-order ></app-my-order> -->
+        <app-orders [showMeeting]="showMeeting" [userInfo]="userProfile" #UserOrder></app-orders>
         </div>
-        <div class="" *ngIf="mainTab == 'favourite'">
+        <div class="tab-pane fade" [ngClass]="{'show active': mainTab == 'favourite'}" id="favourite" role="tabpanel" aria-labelledby="home-tab">
           <section class="section-favorite">
             <div class="row">
               <div class="form-group col-md-3 form-default">
@@ -295,7 +319,42 @@
             </div>
           </section>
         </div>
-        <div class="" *ngIf="mainTab == 'block'">
+        <div class="tab-pane fade" [ngClass]="{'show active': mainTab == 'calendar'}" id="calendar" role="tabpanel" aria-labelledby="home-tab">
+          <section class="section-availablility">
+            <div class="box box-general-avaiable">
+              <div class="option-generate-available">
+                <div class="input-group form-radio">
+                  <!-- <input name="show-available-time" id="show-available-time" type="checkbox" [(ngModel)]="showAvailability" (ngModelChange)="toggleAvailableTime($event)" aria-label="">
+                  <label style="font-size: 120%;" class="label" for="show-available-time">
+                    Tôi muốn chấp nhận các ngày chơi trong tương lai
+                  </label> -->
+                </div>
+                <p style="color: #fff; font-size: 14px; margin-top: 10px;"><i>Bằng cách chấp nhận các ngày chơi trong tương lai, khách hàng có thể yêu cầu các ngày chơi với bạn vào những thời điểm có sẵn trong tương lai trong bộ lịch của bạn như bên dưới</i></p>
+              </div>
+            </div>
+            <div class="row-des-calendar">
+              <div class="each-status-calendar">
+                <span class="calendar-status available"></span>
+                <span class="calendar-status-text"> Có sẵn
+                </span>
+              </div>
+              <p class="timezone">Dựa trên múi giờ của bạn ({{currentTimezone}})</p>
+            </div>
+            <div *ngIf="calendar">
+              <div class="box box-general-avaiable">
+                <div class="calendar-wrap calendar-min-mobile">
+                  <div class="calendar-overlay" *ngIf="!showAvailability"></div>
+                  <full-calendar #fullcalendarPandaProfileSetting [options]="calendar"></full-calendar>
+                </div>
+              </div>
+              <div class="available-actions mt-3">
+                <button style="position: relative; z-index: 3;" class="btn btn-primary btn-footer mr-3"  (click)="updateAvailableTime()"> Lưu</button>
+                <button class="btn btn-light btn-footer" (click)="clearCalendar()" [disabled]="!showAvailability">Huỷ bỏ</button>
+              </div>
+            </div>
+          </section>
+        </div>
+        <div  class="tab-pane fade" [ngClass]="{'show active': mainTab == 'block'}" id="block" role="tabpanel" aria-labelledby="home-tab">
           <section class="section-blacklist">
             <div class="row">
               <div class="form-group col-md-3 form-default">
@@ -337,7 +396,7 @@
             </div>
           </section>
         </div>
-        <div class="" *ngIf="mainTab == 'changePass'">
+        <div class="tab-pane fade" [ngClass]="{'show active': mainTab == 'changePass'}" id="changePass" role="tabpanel" aria-labelledby="home-tab" >
           <div class="row" class="changePass">
             <div class="col-md-6">
               <form method="post" [formGroup]="formChangePassword">

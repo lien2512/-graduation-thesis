@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import firebase from 'firebase'
+import firebase from 'firebase';
 import { FirebaseService } from '../firebase.service';
 @Injectable({
   providedIn: 'root'
@@ -10,7 +10,6 @@ export class AuthService {
     private firebaseService: FirebaseService
   ) { }
   async signup(req) {
-    debugger
     return new Promise(async (resolve, reject) => {
       try {
         const res = await firebase.auth().createUserWithEmailAndPassword(req.email, req.password);
@@ -20,6 +19,7 @@ export class AuthService {
       }
     });
   }
+
   login(req) {
       return new Promise(async (resolve, reject) => {
         try {
@@ -28,19 +28,20 @@ export class AuthService {
           this.firebaseService.updateRef('user', uId, { lastJoin: firebase.firestore.Timestamp.fromDate(new Date())});
           resolve(res);
         }
-        catch(error) {
-          reject(error)
+        catch (error) {
+          reject(error);
         }
-      })
+      });
   }
+
   logOut(): Promise<any> {
     return new Promise((resolve, reject) => {
       firebase.auth().signOut().then(res => {
         resolve(res);
       }).catch(error => {
-        reject(error)
-      })
-    })
+        reject(error);
+      });
+    });
   }
   getCurrentUser() {
     return new Promise<any>((resolve, reject) => {

@@ -1,0 +1,174 @@
+.container {
+    .title {
+      font-size: 36px;
+      font-weight: bold;
+      color: white;
+      text-transform: capitalize;
+    }
+    .device-title {
+      color: white;
+      font-weight: 600;
+      line-height: 35px;
+      text-align: right;
+    }
+    .camera-block {
+      // display: block;
+      // width: 640px;
+      // padding: 30px;
+      // // height: 480px;
+      // padding-bottom: 370px;
+      // background: black;
+      display: block;
+      width: 640px;
+      padding: 60px 30px 30px;
+      background: black;
+      height: 580px;
+      p {
+        color: white;
+        padding: 0;
+      }
+    }
+    .camera-denied {
+      text-align: left;
+      margin: 0 auto;
+    }
+    .camera-guide {
+      padding-top: 15%;
+      padding-left: 50px;
+      p {
+        padding-left: 0px;
+      }
+      img {
+        margin-bottom: 10px;
+      }
+    }
+  }
+  .tab-permission {
+    ul.nav-tabs {
+      width: 50% !important;
+    }
+  }
+  .text-guide {
+    color: white;
+    font-style: italic;
+    padding-left: 15px;
+  }
+  .text-normal {
+    font-style: normal !important;
+  }
+  .pids-wrapper {
+    width: 100%;
+  }
+  .pid {
+    width: calc(12% - 8px);
+    height: 12px;
+    display: inline-block;
+    margin: 5px 1px;
+  }
+  .modal-guide {
+    background: #00a2e8;
+    width: 345px;
+    max-width: 400px;
+    transform: rotate(3deg);
+    padding: 15px;
+    border-radius: 5px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 80px;
+    > p,
+    > div {
+      transform: rotate(-3deg);
+    }
+    b {
+      text-decoration: underline;
+    }
+    &::before {
+      content: "";
+      position: absolute;
+      background: url(https://i.postimg.cc/ZRdwXgS3/step-min-L.png);
+      width: 300px;
+      top: calc(100% - 36px);
+      left: calc(100% - 250px);
+      height: 90vh;
+      background-position: 100% 0;
+      background-size: contain;
+      z-index: 0;
+      background-repeat: no-repeat;
+    }
+  }
+  @media screen and (max-width: 1199px) {
+    .permission-video {
+      .d-flex.flex-wrap.align-items-start.checkCamera {
+        padding-bottom: 370px;
+      }
+    }
+    .container .camera-block {
+      min-height: 20vh;
+      height: auto;
+    }
+  }
+  
+  @media screen and (max-width: 736px) {
+    .container .camera-block {
+      width: 100%;
+      padding: 15px;
+    }
+    .modal-guide {
+      width: 100%;
+      max-width: 270px;
+    }
+    .tab-permission ul.nav-tabs {
+      width: 100% !important;
+    }
+    .permission.audio > .row,
+    .permission-video > .row {
+      margin: 0;
+      .text-guide {
+        padding-left: 0;
+      }
+      div {
+        padding-left: 0;
+        padding-right: 0;
+        &.row.col-md-5 {
+          > div {
+            flex-wrap: nowrap;
+          }
+        }
+      }
+    }
+    .row {
+      width: 100%;
+      .row {
+        margin-left: 0;
+        margin-right: 0;
+      }
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .container .device-title {
+      text-align: left;
+      display: flex;
+    }
+  }
+  @media (max-width: 480px) {
+    .container .tab-default.tab-permission.tab-container {
+      .permission-video .camera-guide{
+        img {
+          width: 95%;
+        }
+      }
+      .modal-guide {
+        max-width: 250px;
+        &::before {
+          content: "";
+          width: 250px;
+        top: calc(100% - 15px);
+        left: calc(100% - 230px);
+        height: 50vh;
+        }
+      }
+      
+    }
+  }
+  

@@ -1,0 +1,33 @@
+.row-des-calendar .calendar-status {
+    display: inline-block;
+    margin-right: 5px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+  }
+  .row-des-calendar {
+      margin-top: 10px;
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+  }
+  .row-des-calendar .each-status-calendar {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-right: 15px;
+  }
+  .calendar-status {
+      &.available {
+        background: #B953BF;
+      }
+      &.confirming {
+        background: #26ABE2;
+      }
+      &.booked {
+        background:  rgb(12, 175, 12);
+      }
+
+  }
