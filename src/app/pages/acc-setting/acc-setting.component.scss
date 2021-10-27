@@ -371,12 +371,12 @@ img.selected {
 }
 .nav-tabs .nav-item.show .nav-link,
 .nav-tabs .nav-link {
-  color: #9e0c61;
+  color: #eb088c;
   font-family: cursive;
   font-weight: 600;
   &.active {
     color: #fff;
-    background-color: #9e0c61;
+    background-color: #eb088c;
     border-color: #dee2e6 #dee2e6 #fff;
   }
 }
@@ -386,9 +386,8 @@ section.section-availablility {
     color: #fff;
   }
   .calendar-status.available {
-    background: #B953BF;
+    background: #b953bf;
   }
-  
 }
 .row-des-calendar .calendar-status {
   display: inline-block;

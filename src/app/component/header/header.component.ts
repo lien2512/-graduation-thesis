@@ -41,11 +41,10 @@ export class HeaderComponent implements OnInit {
     private cookie: CookieService,
     private authService: AuthService,
     private router: Router
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.subjectService.userInfo.subscribe((res) => {
-      debugger;
       this.userInfo = res;
       if (
         !this.userInfo &&
@@ -53,14 +52,16 @@ export class HeaderComponent implements OnInit {
         this.cookie.get('account_info') != ''
       ) {
         this.userInfo = JSON.parse(this.cookie.get('account_info'));
-        this.userInfo.status = "online";
-        firebase.firestore().collection("users").doc(this.userInfo.id).update('status', "online")
+        this.userInfo.status = 'online';
+        firebase
+          .firestore()
+          .collection('users')
+          .doc(this.userInfo.id)
+          .update('status', 'online');
       }
       if (this.userInfo.role == 'bee') {
         this.showBecomePandaBtn = false;
       }
-      console.log(this.userInfo);
-      console.log(firebase.auth().currentUser);
     });
     this.ringingAudio = new Audio();
     this.ringingAudio.src = '/assets/audio/rings_call.wav';
@@ -69,12 +70,14 @@ export class HeaderComponent implements OnInit {
     this.handleCall();
   }
   redirectToUserSetting() {
-    this.router.navigate(['/account-setting']);
+    this.router.navigate(['/account-setting'], {
+      queryParams: { tab: 'account' },
+    });
   }
-  redirectToBeeSetting() { }
-  redirectToWallet() { }
-  redirectToPayMent() { }
-  redirectToTestDevice() { }
+  redirectToBeeSetting() {}
+  redirectToWallet() {}
+  redirectToPayMent() {}
+  redirectToTestDevice() {}
   signOut() {
     this.authService.logOut().then((res) => {
       document.cookie = `jwt_access_token=;expires=Thu, 01 Jan 1970 00:00:00 GMT`;
@@ -85,12 +88,12 @@ export class HeaderComponent implements OnInit {
       this.subjectService.userInfo.next(null);
     });
   }
-  toogleSearch() { }
+  toogleSearch() {}
   redirectBecomeBee() {
     this.router.navigate(['/become-bee']);
   }
-  notificationShowed() { }
-  openBoxChat() { }
+  notificationShowed() {}
+  openBoxChat() {}
   openLoginModal(event) {
     this.modalSignIn = this.modalService.show(LoginComponent, {
       class: 'modal-sign-in',
@@ -100,17 +103,20 @@ export class HeaderComponent implements OnInit {
       this.modalSignIn.hide();
     });
   }
-  onClickResultDetail(result) { }
-  shouldShowResults() { }
-  onSearchBoxChange() { }
-  onEnter() { }
-  move(event) { }
-  clickOutside() { }
-  hideModalFilter() { }
+  onClickResultDetail(result) {}
+  shouldShowResults() {}
+  onSearchBoxChange() {}
+  onEnter() {}
+  move(event) {}
+  clickOutside() {}
+  hideModalFilter() {}
   handleCall() {
     // let query = firebase.firestore().collection('call');
 
-    firebase.firestore().collection('call').where('recipientCall', '==', this.userInfo.id)
+    firebase
+      .firestore()
+      .collection('call')
+      .where('recipientCall', '==', this.userInfo.id)
       .onSnapshot((querySnapshot) => {
         let logs = [];
         let tempObject: any;
@@ -120,19 +126,34 @@ export class HeaderComponent implements OnInit {
           logs.push(tempObject);
         });
         console.log(logs);
-        this.infoTheCall = logs.find((item) => { return item.status == 'pending' });
+        this.infoTheCall = logs.find((item) => {
+          return item.status == 'pending';
+        });
 
-        if (logs.find((item) => { return item.status == 'pending' })) {
-          firebase.firestore().collection("users").doc(this.userInfo.id).update('status', 'pending');
+        if (
+          logs.find((item) => {
+            return item.status == 'pending';
+          })
+        ) {
+          firebase
+            .firestore()
+            .collection('users')
+            .doc(this.userInfo.id)
+            .update('status', 'pending');
           this.openCallingNotification(this.notificationCall);
-
         }
-        if (logs.find((item) => { return item.status == 'cancel' })) {
-          let info = logs.find((item) => { return item.status == 'cancel' })
+        if (
+          logs.find((item) => {
+            return item.status == 'cancel';
+          })
+        ) {
+          let info = logs.find((item) => {
+            return item.status == 'cancel';
+          });
           if (info.action == 'turn_off') {
             if (info.closeUser == 'caller') {
               this.hideNotiModal();
-              this.deleteCollection(firebase.firestore(), 'call', info.idCall)
+              this.deleteCollection(firebase.firestore(), 'call', info.idCall);
             }
           }
         }
@@ -150,13 +171,21 @@ export class HeaderComponent implements OnInit {
           logs.push(tempObject);
         });
         console.log(logs);
-        this.infoTheCall = logs.find((item) => { return item.status == 'cancel' })
-        if (logs.find((item) => { return item.status == 'cancel' })) {
-          let info = logs.find((item) => { return item.status == 'cancel' })
+        this.infoTheCall = logs.find((item) => {
+          return item.status == 'cancel';
+        });
+        if (
+          logs.find((item) => {
+            return item.status == 'cancel';
+          })
+        ) {
+          let info = logs.find((item) => {
+            return item.status == 'cancel';
+          });
           if (info.action == 'turn_off') {
             if (info.closeUser == 'receiver') {
-              alert("Người nghe từ chối");
-              this.deleteCollection(firebase.firestore(), 'call', info.idCall)
+              alert('Người nghe từ chối');
+              this.deleteCollection(firebase.firestore(), 'call', info.idCall);
             }
           }
         }
@@ -173,7 +202,6 @@ export class HeaderComponent implements OnInit {
     this.timeOutNotiModal = setTimeout(() => {
       if (this.notiModalShowing) {
         this.hideNotiModal();
-
       }
     }, 120000);
   }
@@ -190,7 +218,11 @@ export class HeaderComponent implements OnInit {
   pandaAcceptMeeting() {
     this.connectingCall = true;
     this.hideNotiModal();
-    firebase.firestore().collection("call").doc(this.infoTheCall.idCall).update('status', 'calling');
+    firebase
+      .firestore()
+      .collection('call')
+      .doc(this.infoTheCall.idCall)
+      .update('status', 'calling');
     this.modalCall = this.modalService.show(AgoraCallComponent, {
       class: 'modal-default',
       initialState: {
@@ -200,15 +232,33 @@ export class HeaderComponent implements OnInit {
     });
     this.modalCall.content.onEndcall.subscribe(() => {
       this.modalCall.hide();
-      firebase.firestore().collection("call").doc(this.infoTheCall.idCall).update("status", 'end_call');
+      firebase
+        .firestore()
+        .collection('call')
+        .doc(this.infoTheCall.idCall)
+        .update('status', 'end_call');
     });
   }
   declineMeeting() {
     this.statusCall = 'cancel';
     this.hideNotiModal();
-    firebase.firestore().collection("call").doc(this.infoTheCall.idCall).update('action', 'turn_off', 'closeUser', 'receiver', 'status', 'cancel');
-    firebase.firestore().collection("users").doc(this.userInfo.id).update('status', 'online');
-
+    firebase
+      .firestore()
+      .collection('call')
+      .doc(this.infoTheCall.idCall)
+      .update(
+        'action',
+        'turn_off',
+        'closeUser',
+        'receiver',
+        'status',
+        'cancel'
+      );
+    firebase
+      .firestore()
+      .collection('users')
+      .doc(this.userInfo.id)
+      .update('status', 'online');
   }
   async deleteCollection(db, collectionPath, batchSize) {
     const collectionRef = db.collection(collectionPath);
@@ -242,14 +292,20 @@ export class HeaderComponent implements OnInit {
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
-    firebase.firestore().collection("users").doc(this.userInfo.id).update("status", "offline");
+    firebase
+      .firestore()
+      .collection('users')
+      .doc(this.userInfo.id)
+      .update('status', 'offline');
   }
   async createToken() {
-    // firebase.functions().useEmulator("localhost", 5001); 
+    // firebase.functions().useEmulator("localhost", 5001);
 
-
-    const doCreateAgoraToken = firebase.app().functions().httpsCallable('doCreateAgoraToken');
-    const tokenResult = await doCreateAgoraToken({channelName:'abcd'}); // chanel name chỗ này đặt random nhé, new Date().getTime() cũng đc
+    const doCreateAgoraToken = firebase
+      .app()
+      .functions()
+      .httpsCallable('doCreateAgoraToken');
+    const tokenResult = await doCreateAgoraToken({ channelName: 'abcd' }); // chanel name chỗ này đặt random nhé, new Date().getTime() cũng đc
     console.log(tokenResult);
   }
 }
